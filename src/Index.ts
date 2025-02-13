@@ -9,6 +9,12 @@ app.get('/', (req, res) => {
    res.send('Hello, my server in Express.js')
 })
 
+app.get('/products', (req, res) => {
+  res.json({
+    product: 'Laptop'
+  })
+})
+
 app.listen(port, () => {
   console.log(`Listening in http://${ip}:${port}`)
 })
