@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { product } from "../interfaces/products"
-import generateProductList from "../db/products"
+import {createProduct, generateProductList} from "../db/products"
 
 const productRouter = Router()
 const products: product[] = generateProductList(30)
@@ -30,6 +30,19 @@ productRouter.get('/:id', (req, res) => {
   } else {
     res.status(404).json({ message: 'Not found' })
   }
+})
+
+productRouter.post('/', (req, res) => {
+  const { productName, id, isbn, product, adjetive, departament, price, material, description } = req.body
+
+  const newProduct = createProduct(productName, id, isbn, product, adjetive, departament, price, material, description)
+
+  if (newProduct) {
+    res.status(201).json({ message: 'Product created' })
+  } else {
+    res.status(500).json({message: 'Server error'})
+  }
+
 })
 
 export default productRouter

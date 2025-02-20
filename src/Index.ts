@@ -5,6 +5,7 @@ import { obtainIp } from './utils/functions';
 import routerApi from './routes';
 
 const app = express();
+app.use(express.json());
 const port = 3000;
 const ip = obtainIp();
 
