@@ -1,4 +1,4 @@
-import { product } from "../interfaces/routes";
+import { product } from "../interfaces/products";
 import { faker } from "@faker-js/faker"
 export default function generateProductList(numberOfProducts: number): product[] {
   const productArray = []
