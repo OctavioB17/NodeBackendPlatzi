@@ -3,6 +3,11 @@ import { faker } from "@faker-js/faker"
 
 let productArray: product[] = []
 
+export function findProductById(id: number): product | null {
+  const productFind = productArray.find(product => product.id === id)
+  return productFind ? productFind : null
+}
+
 export function generateProductList(numberOfProducts: number): product[] {
   for (let index = 0; index < numberOfProducts; index++) {
     const product: product = {
@@ -35,4 +40,30 @@ export function createProduct(productName: string, id: number, isbn: string, pro
   }
   productArray.push(newProduct)
   return newProduct
+}
+export function updateProduct(product: Partial<product>, id: number): product | null {
+  if (id != null) {
+    const productFind = findProductById(id)
+    if (productFind) {
+      productFind.productName = product.productName || productFind.productName;
+      productFind.isbn = product.isbn || productFind.isbn;
+      productFind.product = product.product || productFind.product;
+      productFind.adjetive = product.adjetive || productFind.adjetive;
+      productFind.department = product.department || productFind.department;
+      productFind.description = product.description || productFind.description;
+      productFind.price = product.price || productFind.price;
+      productFind.material = product.material || productFind.material;
+      return productFind;
+    }
+  }
+  return null;
+}
+
+export function deleteProductById(id: number): product | null {
+  const productIndex = productArray.findIndex(product => product.id === id)
+  if (productIndex !== -1) {
+    const [productPop] = productArray.splice(productIndex, 1)
+    return productPop
+  }
+  return null
 }

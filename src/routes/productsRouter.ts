@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { product } from "../interfaces/products"
-import {createProduct, generateProductList} from "../db/products"
+import {createProduct, deleteProductById, generateProductList, updateProduct} from "../db/products"
 
 const productRouter = Router()
 const products: product[] = generateProductList(30)
@@ -42,7 +42,31 @@ productRouter.post('/', (req, res) => {
   } else {
     res.status(500).json({message: 'Server error'})
   }
-
 })
+
+productRouter.patch('/:id', (req, res) => {
+  const product = req.body
+  const { id } = req.params
+
+  try {
+    const productUpdated = updateProduct(product, parseInt(id))
+    if (productUpdated) {
+      res.status(200).json(product)
+    }
+  } catch (error) {
+    res.status(500).json({message: 'Server error'})
+  }
+})
+
+productRouter.delete('/:id', (req, res) => {
+  const { id } = req.params
+    const productDeleted = deleteProductById(parseInt(id))
+    if (productDeleted) {
+      res.status(204).json({message: 'Deleted sucessfully'})
+    } else {
+      res.status(404).json({message: 'Not found'})
+    }
+  }
+)
 
 export default productRouter

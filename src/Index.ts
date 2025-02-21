@@ -10,7 +10,6 @@ const port = 3000;
 const ip = obtainIp();
 
 routerApi(app);
-
 app.listen(port, () => {
   console.log(`Listening in http://${ip}:${port}`)
 })
