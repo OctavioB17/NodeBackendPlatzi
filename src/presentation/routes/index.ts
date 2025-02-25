@@ -1,7 +1,7 @@
 import productRouter from "./productsRouter"
 import express, { Router } from "express"
 import dotenv from 'dotenv';
-import userRouter from "./usersRouter";
+import userRouter from "./UserRoutes";
 dotenv.config();
 
 const apiPrefix = process.env.API_PREFIX
