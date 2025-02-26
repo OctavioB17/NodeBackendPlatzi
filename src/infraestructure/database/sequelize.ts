@@ -1,10 +1,7 @@
-import path from "path";
-import 'dotenv/config'
 import { Sequelize } from "sequelize-typescript";
 import { UserModel } from "./models/UserModel";
-const envPath = path.resolve(__dirname, '../../var.env');
-require('dotenv').config({path: envPath })
-
+import { config } from 'dotenv';
+config()
 
 const sequelize = new Sequelize({
   dialect: 'postgres',
@@ -14,7 +11,6 @@ const sequelize = new Sequelize({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   models: [UserModel],
-  logging: false,
 });
 
 

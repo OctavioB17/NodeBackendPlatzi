@@ -3,18 +3,18 @@ import { IUserModel } from '../../../domain/interfaces/user/IUserModel';
 
 @Table({ tableName: 'users', timestamps: true })
 export class UserModel extends Model<UserModel> implements IUserModel {
-  @Column({ type: DataType.UUIDV4, primaryKey: true })
+  @Column({ type: DataType.UUID, primaryKey: true })
   declare id: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  name!: string;
+  declare name: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  surname!: string;
+  declare surname: string;
 
   @Column({ type: DataType.STRING, allowNull: false, unique: true })
-  email!: string;
+  declare email: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  password!: string;
+  declare password: string;
 }
