@@ -18,6 +18,11 @@ export default class CreateUser implements ICreateUser {
 
   async execute(userDTO: UserDTO): Promise<IUser> {
     try {
+      const existingUser = await this.userRepository.findByEmail(userDTO.email);
+      if (existingUser) {
+        throw new Error('Email registered.');
+      }
+
       const userId = this.idGenerator.generate();
       const user = new User(userId, userDTO.name, userDTO.surname, userDTO.password, userDTO.email);
       const userMapped = userMapper.map<User, IUser>(user, {} as IUser);

@@ -22,7 +22,13 @@ const app = express();
 app.use(express.json());
 const port = 3000;
 const ip = obtainIp();
-await syncDatabase()
+syncDatabase()
+  .then(() => {
+    console.log('Base de datos sincronizada correctamente.');
+  })
+  .catch((error) => {
+    console.error('Error al sincronizar la base de datos:', error);
+  });
 container.get<ICreateUser>(USER_TYPES.ICreateUser);
 container.get<IIdGenerator>(USER_TYPES.IIdGenerator);
 container.get<IUserRepository>(USER_TYPES.IUserRepository);
@@ -34,7 +40,6 @@ container.get<IFindUserByEmail>(USER_TYPES.IFindUserByEmail)
 container.get<IFindUserByEmailNoPassword>(USER_TYPES.IFindUserByEmailNoPassword)
 container.get<IChangePassword>(USER_TYPES.IChangePassword)
 container.get<IDeleteUser>(USER_TYPES.IDeleteUser)
-
 container.get<UserController>(UserController);
 routerApi(app);
 app.listen(port, () => {

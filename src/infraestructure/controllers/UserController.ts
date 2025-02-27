@@ -30,14 +30,19 @@ export default class UserController {
     try {
       const userDTO = req.body as unknown as UserDTO;
       const user = await this.createUser.execute(userDTO);
+      console.log(user)
       if (user) {
         const userDTO: UserNoPasswordDTO = userMapper.map(user, {} as UserNoPasswordDTO);
         res.status(201).json(userDTO)
       } else {
         res.status(400).json({ error: 'Can not create user' })
       }
-    } catch (error) {
-      res.status(500).json({ error: 'Server Error' })
+    } catch (error: any) {
+      if (error.message === 'Failed to create user: Error: Email registered.') {
+        res.status(400).json('User already registered')
+      } else {
+        res.status(500).json({ error: 'Server Error', details: error.message })
+      }
     }
   }
 
