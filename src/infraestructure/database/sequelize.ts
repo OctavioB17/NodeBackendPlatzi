@@ -3,13 +3,12 @@ import { UserModel } from "./models/UserModel";
 import { config } from 'dotenv';
 config()
 
-const sequelize = new Sequelize({
+const USER = process.env.DB_USER ? encodeURIComponent(process.env.DB_USER) : '';
+const PASSWORD = process.env.DB_PASSWORD ? encodeURIComponent(process.env.DB_PASSWORD) : ''
+const URI = `postgres://${USER}:${PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+
+const sequelize = new Sequelize(URI, {
   dialect: 'postgres',
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
   models: [UserModel],
 });
 

@@ -42,6 +42,7 @@ container.get<IChangePassword>(USER_TYPES.IChangePassword)
 container.get<IDeleteUser>(USER_TYPES.IDeleteUser)
 container.get<UserController>(UserController);
 routerApi(app);
+
 app.listen(port, () => {
   console.log(`Listening in http://${ip}:${port}`)
 })

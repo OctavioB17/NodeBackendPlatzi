@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "wsl ./start-dev.bash"
+    "dev": "bash start-dev.bash"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +24,7 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "@sequelize/postgres": "^7.0.0-alpha.45",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "inversify": "^6.2.2",
