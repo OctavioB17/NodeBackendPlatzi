@@ -1,46 +1,22 @@
-import { TypeMapper } from "ts-mapper"
-import { IUserModel } from "../../domain/interfaces/user/IUserModel";
-import { IUser } from "../../domain/interfaces/user/IUser";
-import { UserNoPasswordDTO } from "../../app/dtos/UserDTO";
-import User from "../../domain/entities/User";
+import { plainToInstance } from "class-transformer";
+import { UserModel } from "../database/models/UserModel";
+import UserDTO from "../dtos/UserDTO";
+import UserNoPasswordDTO from "../dtos/UserNoPasswordDTO";
 
-export class UserMapper extends TypeMapper {
-  constructor() {
-    super();
-    this.config()
+export default class UserMapper {
+  static toDTO(userModel: UserModel): UserDTO {
+    return plainToInstance(UserDTO, userModel);
   }
 
-  private config(): void {
-    this.createMap<IUser, IUserModel>()
-      .map(src => src.id, dest => dest.id)
-      .map(src => src.name, dest => dest.name)
-      .map(src => src.surname, dest => dest.surname)
-      .map(src => src.password, dest => dest.password)
-      .map(src => src.email, dest => dest.email);
+  static toNoPasswordDTO(userModel: UserModel): UserNoPasswordDTO {
+    return plainToInstance(UserNoPasswordDTO, userModel);
+  }
 
-    this.createMap<IUserModel, IUser>()
-      .map(src => src.id, dest => dest.id)
-      .map(src => src.name, dest => dest.name)
-      .map(src => src.surname, dest => dest.surname)
-      .map(src => src.password, dest => dest.password)
-      .map(src => src.email, dest => dest.email);
+  static toDTOList(userModels: UserModel[]): UserDTO[] {
+    return userModels.map(user => this.toDTO(user))
+  }
 
-    this.createMap<IUser, UserNoPasswordDTO>()
-      .map(src => src.name, dest => dest.name)
-      .map(src => src.surname, dest => dest.surname)
-      .map(src => src.email, dest => dest.email);
-
-    this.createMap<IUserModel, UserNoPasswordDTO>()
-      .map(src => src.name, dest => dest.name)
-      .map(src => src.surname, dest => dest.surname)
-      .map(src => src.email, dest => dest.email);
-
-    this.createMap<User, IUser>()
-      .map(src => src.getId(), dest => dest.id)
-      .map(src => src.getName(), dest => dest.name)
-      .map(src => src.getSurname(), dest => dest.surname)
-      .map(src => src.getEmail(), dest => dest.email);
+  static toNoPasswordDTOList(userModels: UserModel[]): UserDTO[] {
+    return userModels.map(user => this.toDTO(user))
   }
 }
-
-export const userMapper = new UserMapper();

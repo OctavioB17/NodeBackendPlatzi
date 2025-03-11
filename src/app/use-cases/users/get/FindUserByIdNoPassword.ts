@@ -1,9 +1,12 @@
 import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
-import { userMapper } from "../../../../infraestructure/mappers/UserMapper";
 import {USER_TYPES} from "../../../../types";
 import { IFindUserByIdNoPassword } from "../../../interfaces/users/get/IFindUserByIdNoPassword";
-import { UserNoPasswordDTO } from "../../../dtos/UserDTO";
+import { DomainError } from "../../../../domain/entities/DomainError";
+import { ErrorType } from "../../../../domain/interfaces/Error";
+import { plainToInstance } from "class-transformer";
+import UserNoPasswordDTO from "../../../../infraestructure/dtos/UserNoPasswordDTO";
+import UserMapper from "../../../../infraestructure/mappers/UserMapper";
 
 
 @injectable()
@@ -12,16 +15,27 @@ export default class FindUserIdNoPassword implements IFindUserByIdNoPassword {
     @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
   ) {}
 
-  async execute(id: string): Promise<UserNoPasswordDTO| null> {
+  async execute(id: string): Promise<UserNoPasswordDTO | null> {
     try {
       const user = await this.userRepository.findById(id)
-      if (user) {
-        return userMapper.map(user, {} as UserNoPasswordDTO)
-      } else {
-        return null
+      if (!user) {
+        throw new DomainError({
+          message: `User ${id} Not Found`,
+          type: ErrorType.NOT_FOUND,
+          statusCode: 404
+        })
       }
+
+      return UserMapper.toNoPasswordDTO(user)
     } catch (error) {
-      throw new Error(`Failed to find users: ${error}`)
+      if (error instanceof DomainError) {
+        throw error;
+      }
+      throw new DomainError({
+        message: `Error finding user`,
+        type: ErrorType.INTERNAL_ERROR,
+        statusCode: 500
+      })
     }
   }
 }

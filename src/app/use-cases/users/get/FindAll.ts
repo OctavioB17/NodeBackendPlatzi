@@ -1,9 +1,11 @@
 import { inject, injectable } from "inversify";
 import { IUser } from "../../../../domain/interfaces/user/IUser";
 import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
-import { userMapper } from "../../../../infraestructure/mappers/UserMapper";
 import {USER_TYPES} from "../../../../types";
 import { IFindAll } from "../../../interfaces/users/get/IFindAll";
+import { DomainError } from "../../../../domain/entities/DomainError";
+import { ErrorType } from "../../../../domain/interfaces/Error";
+import UserMapper from "../../../../infraestructure/mappers/UserMapper";
 
 
 @injectable()
@@ -12,16 +14,27 @@ export default class FindAll implements IFindAll {
     @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
   ) {}
 
-  async execute(): Promise<IUser[] | null> {
+  async execute(): Promise<IUser[]> {
     try {
-      const user = await this.userRepository.findAll()
-      if (user) {
-        return userMapper.mapCollection(user, {} as IUser[])
-      } else {
-        return null
+      const users = await this.userRepository.findAll()
+      if (!users) {
+        throw new DomainError({
+          message: `Users not found`,
+          type: ErrorType.NOT_FOUND,
+          statusCode: 404
+        })
       }
+
+      return UserMapper.toDTOList(users)
     } catch (error) {
-      throw new Error(`Failed to find users: ${error}`)
+      if (error instanceof DomainError) {
+        throw error;
+      }
+      throw new DomainError({
+        message: `Error finding user`,
+        type: ErrorType.INTERNAL_ERROR,
+        statusCode: 500
+      })
     }
   }
 }

@@ -1,92 +1,66 @@
 import { injectable } from "inversify";
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import { UserModel } from "../database/models/UserModel";
-import { userMapper } from "../mappers/UserMapper";
-import { IUserModel } from "../../domain/interfaces/user/IUserModel";
 import { IUser } from "../../domain/interfaces/user/IUser";
-import { UserNoPasswordDTO } from "../../app/dtos/UserDTO";
+import { plainToInstance } from "class-transformer";
 
 @injectable()
 export default class UserRepository implements IUserRepository {
 
   // Post - User creation
 
-  async createUser(user: IUser): Promise<IUser> {
+  async createUser(user: IUser): Promise<boolean> {
     try {
-      const newUser = await UserModel.create(userMapper.map(user, {} as IUserModel))
-      return userMapper.map(newUser, {} as IUser)
+      const userModel = plainToInstance(UserModel, user)
+      const newUser = await UserModel.create(userModel);
+      return newUser ? true : false
     } catch (error) {
       throw new Error(`Error creating user in repository: ${error}`)
     }
   }
 
   // Get - Find user
-  async findById(id: string): Promise<IUser | null> {
+  async findById(id: string): Promise<UserModel | null> {
     try {
       const user = await UserModel.findByPk(id)
-      return user ? userMapper.map(user, {} as IUser) : null
-    } catch (error) {
-      throw new Error(`Error finding user: ${error}`)
-    }
-  }
-
-
-  async findByEmail(email: string): Promise<IUser | null> {
-    try {
-      const user = await UserModel.findOne({ where: { email } })
-      return user ? userMapper.map(user, {} as IUser) : null
-    } catch (error) {
-      throw new Error(`Error finding user: ${error}`)
-    }
-  }
-
-  async findAll(): Promise<IUser[] | null> {
-    try {
-      const users = await UserModel.findAll();
-      if (users) {
-        return userMapper.mapCollection(users, {} as IUser)
-      } else {
+      if(!user) {
         return null
       }
+      return user
+    } catch (error) {
+      throw new Error(`Error finding user: ${error}`)
+    }
+  }
+
+
+  async findByEmail(email: string): Promise<UserModel | null> {
+    try {
+      const user = await UserModel.findOne({ where: { email } })
+      if (!user) {
+        return null
+      }
+      return user
+    } catch (error) {
+      throw new Error(`Error finding user: ${error}`)
+    }
+  }
+
+  async findAll(): Promise<UserModel[] | null> {
+    try {
+      const users = await UserModel.findAll();
+
+      if (!users || users.length === 0) {
+        return null
+      }
+
+      return users
     } catch (error) {
       throw new Error(`Error finding users: ${error}`)
     }
   }
 
-  async findByIdNoPassword(id: string): Promise<UserNoPasswordDTO | null> {
-    try {
-      const user = await UserModel.findByPk(id)
-      return user ? userMapper.map(user, {} as UserNoPasswordDTO) : null
-    } catch (error) {
-      throw new Error(`Error finding user: ${error}`)
-    }
-  }
-
-
-  async findByEmailNoPassword(email: string): Promise<UserNoPasswordDTO | null> {
-    try {
-      const user = await UserModel.findOne({ where: { email } })
-      return user ? userMapper.map(user, {} as UserNoPasswordDTO) : null
-    } catch (error) {
-      throw new Error(`Error finding user: ${error}`)
-    }
-  }
-
-  async findAllNoPassword(): Promise<UserNoPasswordDTO[] | null> {
-    try {
-      const users = await UserModel.findAll();
-      if (users) {
-        return userMapper.mapCollection(users, {} as UserNoPasswordDTO)
-      } else {
-        return null
-      }
-    } catch (error) {
-      throw new Error(`Error finding users: ${error}`)
-    }
-  }
-
-  // Patch - Change user
-  async changePassword(password: string, email: string): Promise<IUser | null> {
+  // Patch - Update user
+  async changePassword(password: string, email: string): Promise<UserModel | null> {
     try {
       const user = await UserModel.findOne({ where: { email } });
       if (user) {
@@ -94,7 +68,7 @@ export default class UserRepository implements IUserRepository {
           {password: password},
           {where: { email }}
         )
-        return userMapper.map(user, {} as IUser)
+       return user
       } else {
         throw new Error("User not found")
       }

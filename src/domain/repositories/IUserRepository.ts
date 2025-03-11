@@ -1,14 +1,11 @@
-import { UserNoPasswordDTO } from "../../app/dtos/UserDTO";
+import { UserModel } from "../../infraestructure/database/models/UserModel";
 import { IUser } from "../interfaces/user/IUser";
 
 export interface IUserRepository {
-  createUser(user: IUser): Promise<IUser>;
-  findById(id: string): Promise<IUser | null>
-  findByEmail(email: string): Promise<IUser | null>;
-  findAll(): Promise<IUser[] | null>;
-  findByIdNoPassword(id: string): Promise<UserNoPasswordDTO | null>
-  findByEmailNoPassword(email: string): Promise<UserNoPasswordDTO | null>;
-  findAllNoPassword(): Promise<UserNoPasswordDTO[] | null>
-  changePassword(password: string, email: string): Promise<IUser | null>
+  createUser(user: IUser): Promise<boolean>;
+  findById(id: string): Promise<UserModel | null>
+  findByEmail(email: string): Promise<UserModel | null>;
+  findAll(): Promise<UserModel[] | null>;
+  changePassword(password: string, email: string): Promise<UserModel | null>
   deleteUser(id: string): Promise<boolean>
 }

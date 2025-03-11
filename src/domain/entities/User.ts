@@ -1,17 +1,32 @@
 export default class User {
+  private id: string;
+  private name: string;
+  private surname: string;
+  private password: string;
+  private email: string;
+  private role: string;
+
   constructor(
-    private id: string,
-    private name: string,
-    private surname: string,
-    private password: string,
-    private email: string
+    id: string,
+    name: string,
+    surname: string,
+    password: string,
+    email: string,
+    role: string
   ) {
-    if (!id || !name || !surname || !password || !email) {
+    if (!id || !name || !surname || !password || !email || !role) {
       throw new Error('All fields are required');
     }
     if (!this.isValidEmail(email)) {
       throw new Error('Invalid email format');
     }
+
+    this.id = id;
+    this.name = name;
+    this.surname = surname;
+    this.email = email;
+    this.password = password;
+    this.role = role;
   }
 
   private isValidEmail(email: string): boolean {
@@ -32,5 +47,9 @@ export default class User {
 
   getSurname(): string {
     return this.surname;
+  }
+
+  getRole(): string {
+    return this.role
   }
 }

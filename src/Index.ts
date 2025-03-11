@@ -17,11 +17,12 @@ import { IFindUserByEmail } from './app/interfaces/users/get/IFindUserByEmail';
 import { IFindUserByEmailNoPassword } from './app/interfaces/users/get/IFindUserByEmailNoPassword';
 import { IDeleteUser } from './app/interfaces/users/delete/IDeleteUser';
 import { IChangePassword } from './app/interfaces/users/patch/IChangePassword';
+import { boomErrorHandling, errorHandlingMiddleware, logError } from './infraestructure/middlewares/httpError';
 
 const app = express();
 app.use(express.json());
 const port = 3000;
-const ip = obtainIp();
+const ip: string = /*obtainIp() ||*/ 'localhost';
 syncDatabase()
   .then(() => {
     console.log('Base de datos sincronizada correctamente.');
@@ -42,7 +43,9 @@ container.get<IChangePassword>(USER_TYPES.IChangePassword)
 container.get<IDeleteUser>(USER_TYPES.IDeleteUser)
 container.get<UserController>(UserController);
 routerApi(app);
-
-app.listen(port, () => {
+app.use(logError);
+app.use(boomErrorHandling);
+app.use(errorHandlingMiddleware);
+app.listen(port, ip, () => {
   console.log(`Listening in http://${ip}:${port}`)
 })

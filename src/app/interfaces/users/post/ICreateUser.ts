@@ -1,6 +1,5 @@
-import { IUser } from "../../../../domain/interfaces/user/IUser";
-import { UserDTO } from "../../../dtos/UserDTO";
+import UserDTO from "../../../../infraestructure/dtos/UserDTO";
 
 export interface ICreateUser {
-  execute(userDTO: UserDTO): Promise<IUser>
+  execute(userDTO: UserDTO): Promise<boolean>
 }

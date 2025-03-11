@@ -1,9 +1,11 @@
 import { inject, injectable } from "inversify";
-import { IUser } from "../../../../domain/interfaces/user/IUser";
 import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
-import { userMapper } from "../../../../infraestructure/mappers/UserMapper";
 import {USER_TYPES} from "../../../../types";
 import { IFindUserById } from "../../../interfaces/users/get/IFindUserById";
+import { DomainError } from "../../../../domain/entities/DomainError";
+import { ErrorType } from "../../../../domain/interfaces/Error";
+import UserMapper from "../../../../infraestructure/mappers/UserMapper";
+import UserDTO from "../../../../infraestructure/dtos/UserDTO";
 
 
 @injectable()
@@ -12,16 +14,27 @@ export default class FindUserById implements IFindUserById {
     @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
   ) {}
 
-  async execute(id: string): Promise<IUser| null> {
+  async execute(id: string): Promise<UserDTO> {
     try {
       const user = await this.userRepository.findById(id)
-      if (user) {
-        return userMapper.map(user, {} as IUser)
-      } else {
-        return null
+      if (!user) {
+        throw new DomainError({
+          message: `User ${id} Not Found`,
+          type: ErrorType.NOT_FOUND,
+          statusCode: 404
+        })
       }
+
+      return UserMapper.toDTO(user)
     } catch (error) {
-      throw new Error(`Failed to find users: ${error}`)
+      if (error instanceof DomainError) {
+        throw error;
+      }
+      throw new DomainError({
+        message: `Error finding user`,
+        type: ErrorType.INTERNAL_ERROR,
+        statusCode: 500
+      })
     }
   }
 }

@@ -24,7 +24,11 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "@hapi/boom": "^10.0.1",
     "@sequelize/postgres": "^7.0.0-alpha.45",
+    "@types/hapi__boom": "^9.0.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "inversify": "^6.2.2",
@@ -33,7 +37,6 @@
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.5",
     "sequelize-typescript": "^2.1.6",
-    "ts-mapper": "^1.2.4",
     "uuid": "^11.1.0"
   }
 }

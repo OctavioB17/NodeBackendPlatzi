@@ -1,8 +1,6 @@
 import { inject } from "inversify";
 import { ICreateUser } from "../../app/interfaces/users/post/ICreateUser";
-import { UserDTO, UserNoPasswordDTO } from "../../app/dtos/UserDTO";
-import { Response, Request } from "express";
-import { userMapper } from "../mappers/UserMapper";
+import { Response, Request, NextFunction } from "express";
 import {USER_TYPES} from "../../types";
 import { IFindAll } from "../../app/interfaces/users/get/IFindAll";
 import { IFindAllNoPassword } from "../../app/interfaces/users/get/IFindAllNoPassword";
@@ -26,14 +24,13 @@ export default class UserController {
     @inject(USER_TYPES.IChangePassword) private changePassword: IChangePassword
   ) {}
 
-  async register(req: Request, res: Response) {
+  async register(req: Request, res: Response, next: NextFunction) {
     try {
-      const userDTO = req.body as unknown as UserDTO;
+      const userDTO = req.body;
       const user = await this.createUser.execute(userDTO);
       console.log(user)
       if (user) {
-        const userDTO: UserNoPasswordDTO = userMapper.map(user, {} as UserNoPasswordDTO);
-        res.status(201).json(userDTO)
+        res.status(201).json(user)
       } else {
         res.status(400).json({ error: 'Can not create user' })
       }
@@ -46,7 +43,7 @@ export default class UserController {
     }
   }
 
-  async findAllUsers(req: Request, res: Response) {
+  async findAllUsers(req: Request, res: Response, next: NextFunction) {
     try {
       const users = await this.findAll.execute()
       if (users) {
@@ -55,11 +52,11 @@ export default class UserController {
         res.status(400).json('No users found')
       }
     } catch (error) {
-      res.status(500).json({ error: 'Server Error' })
+      next(error)
     }
   }
 
-  async findUserByMail(req: Request, res: Response) {
+  async findUserByMail(req: Request, res: Response, next: NextFunction) {
     const { email } = req.params
     try {
       const user = await this.findUserByEmail.execute(email)
@@ -69,11 +66,11 @@ export default class UserController {
         res.status(400).json('No users found')
       }
     } catch (error) {
-      res.status(500).json({ error: 'Server Error' })
+      next(error)
     }
   }
 
-  async getUserById(req: Request, res: Response) {
+  async getUserById(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params
     try {
       const user = await this.findUserById.execute(id)
@@ -83,11 +80,11 @@ export default class UserController {
         res.status(400).json('No users found')
       }
     } catch (error) {
-      res.status(500).json({ error: 'Server Error' })
+      next(error)
     }
   }
 
-  async findAllUsersNoPassword(req: Request, res: Response) {
+  async findAllUsersNoPassword(req: Request, res: Response, next: NextFunction) {
     try {
       const users = await this.findAllNoPassword.execute()
       if (users) {
@@ -96,11 +93,11 @@ export default class UserController {
         res.status(400).json('No users found')
       }
     } catch (error) {
-      res.status(500).json({ error: 'Server Error' })
+      next(error)
     }
   }
 
-  async findUserByMailNoPassword(req: Request, res: Response) {
+  async findUserByMailNoPassword(req: Request, res: Response, next: NextFunction) {
     const { email } = req.params
     try {
       const user = await this.findUserByEmailNoPassword.execute(email)
@@ -110,11 +107,11 @@ export default class UserController {
         res.status(400).json('No users found')
       }
     } catch (error) {
-      res.status(500).json({ error: 'Server Error' })
+      next(error)
     }
   }
 
-  async getUserByIdNoPassword(req: Request, res: Response) {
+  async getUserByIdNoPassword(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params
     try {
       const user = await this.findUserByIdNoPassword.execute(id)
@@ -124,11 +121,11 @@ export default class UserController {
         res.status(400).json('No users found')
       }
     } catch (error) {
-      res.status(500).json({ error: 'Server Error' })
+      next(error)
     }
   }
 
-  async changeUserPassword(req: Request, res: Response) {
+  async changeUserPassword(req: Request, res: Response, next: NextFunction) {
     const { password, email } = req.body
     try {
       const changePass = await this.changePassword.execute(password, email)
@@ -138,11 +135,11 @@ export default class UserController {
         res.status(400).json('No users found')
       }
     } catch (error) {
-      res.status(500).json({ error: 'Server Error' })
+      next(error)
     }
   }
 
-  async userDelete(req: Request, res: Response) {
+  async userDelete(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params
     try {
       const isUserDeleted = await this.deleteUser.execute(id);
@@ -152,7 +149,7 @@ export default class UserController {
         res.json(500).json('Failed to delete user')
       }
     } catch (error) {
-      res.status(500).json({ error: 'Server Error' })
+      next(error)
     }
   }
 }

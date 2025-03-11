@@ -60,3 +60,17 @@ echo "✅ PostgreSQL is ready. Starting the server... / PostgreSQL listo. Inicia
 # English: Start the server using concurrently.
 # Spanish: Inicia el servidor usando concurrently.
 npx concurrently "nodemon --exec tsx ./src/Index.ts"
+
+
+# If you see an error about the .env file not being found:
+# Make sure that a .env file exists in the same directory as this script. You can create one by
+# copying .env.example and renaming it to .env.
+# Asegúrate de que exista un archivo .env en el mismo directorio que este script. Puedes crearlo copiando .env.example y renombrándolo a .env.
+
+# If Docker Compose fails to initialize:
+# Verify that Docker is installed, running, and integrated with your WSL distro. Check Docker Desktop settings for WSL integration.
+# Verifica que Docker esté instalado, corriendo y que esté integrado con tu distribución WSL. Revisa la configuración de Docker Desktop para la integración con WSL.
+
+# If PostgreSQL is not ready:
+# Check the logs of the PostgreSQL container to see if there are any errors. Ensure that the database credentials in your .env file match those in your docker.compose.yml configuration.
+# Revisa los logs del contenedor de PostgreSQL para ver si hay errores. Asegúrate de que las credenciales de la base de datos en tu en tu archivo .env coincidan con las configuradas en docker.compose.yml.
