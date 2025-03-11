@@ -1,5 +1,5 @@
-import { IUser } from "../../../../domain/interfaces/user/IUser";
+import UserDTO from "../../../../infraestructure/dtos/UserDTO";
 
 export interface IFindUserByEmail {
-  execute(email: string): Promise<IUser | null>
+  execute(email: string): Promise<UserDTO | null>
 }

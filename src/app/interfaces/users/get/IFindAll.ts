@@ -1,5 +1,5 @@
-import { IUser } from "../../../../domain/interfaces/user/IUser";
+import UserDTO from "../../../../infraestructure/dtos/UserDTO";
 
 export interface IFindAll {
-  execute(): Promise<IUser[] | null>
+  execute(): Promise<UserDTO[] | null>
 }
