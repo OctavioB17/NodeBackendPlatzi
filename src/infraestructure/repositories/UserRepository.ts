@@ -38,7 +38,7 @@ export default class UserRepository implements IUserRepository {
       const user = await UserModel.findOne({ where: { email } })
       if (!user) {
         return null
-      }
+      } else
       return user
     } catch (error) {
       throw new Error(`Error finding user: ${error}`)
@@ -62,7 +62,7 @@ export default class UserRepository implements IUserRepository {
   // Patch - Update user
   async changePassword(password: string, email: string): Promise<UserModel | null> {
     try {
-      const user = await UserModel.findOne({ where: { email } });
+      const user = await this.findByEmail(email);
       if (user) {
         user.update(
           {password: password},

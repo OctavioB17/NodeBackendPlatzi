@@ -1,9 +1,6 @@
 import { Boom, isBoom } from "@hapi/boom";
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express"
-import { ErrorAdapter } from "../adapters/ErrorAdapter";
 import { BoomError } from "../../domain/entities/DomainError";
-
-const errorAdapter = new ErrorAdapter();
 
 export const logError: ErrorRequestHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
@@ -12,16 +9,19 @@ export const logError: ErrorRequestHandler = (err: Error, req: Request, res: Res
 
 export const boomErrorHandling: ErrorRequestHandler = (err: Error | Boom, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof BoomError) {
-    const boomError = errorAdapter.toBoom(err);
-    const { output } = boomError;
-    res.status(output.statusCode).json(output.payload)
+    const { message, statusCode } = err;
+    res.status(statusCode).json({
+      statusCode,
+      error: err.type,
+      message
+    });
   } else if (isBoom(err)) {
     const { output } = err;
-    res.status(output.statusCode).json(output.payload)
+    res.status(output.statusCode).json(output.payload);
   } else {
-    next(err)
+    next(err);
   }
-}
+};
 
 export const errorHandlingMiddleware: ErrorRequestHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   const statusCode = (err as any).statusCode || 500

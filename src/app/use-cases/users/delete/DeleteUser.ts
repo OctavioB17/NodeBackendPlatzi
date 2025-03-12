@@ -14,6 +14,14 @@ export default class DeleteUser implements IDeleteUser {
 
   async execute(id: string): Promise<boolean> {
     try {
+      const user = await this.userRepository.findById(id)
+      if (!user) {
+        throw new BoomError({
+          message: `User ID Not found`,
+          type: ErrorType.NOT_FOUND,
+          statusCode: 404
+        })
+      }
       const isUserDeleted = await this.userRepository.deleteUser(id)
       return isUserDeleted
     } catch (error) {
