@@ -1,6 +1,6 @@
 import { ErrorType, ErrorProps } from "../interfaces/Error";
 
-export class DomainError extends Error {
+export class BoomError extends Error {
   public readonly type: ErrorType;
   public readonly statusCode: number;
 
@@ -11,40 +11,40 @@ export class DomainError extends Error {
     this.name = this.constructor.name
   }
 
-  notFound(message: string): DomainError {
-    return new DomainError({
+  notFound(message: string): BoomError {
+    return new BoomError({
       message,
       type: ErrorType.NOT_FOUND,
       statusCode: 404
     })
   }
 
-  badRequest(message: string): DomainError {
-    return new DomainError({
+  badRequest(message: string): BoomError {
+    return new BoomError({
       message,
       type: ErrorType.BAD_REQUEST,
       statusCode: 400
     });
   }
 
-  validationError(message: string): DomainError {
-    return new DomainError({
+  validationError(message: string): BoomError {
+    return new BoomError({
       message,
       type: ErrorType.VALIDATION_ERROR,
       statusCode: 400
     });
   }
 
-  unauthorized(message: string): DomainError {
-    return new DomainError({
+  unauthorized(message: string): BoomError {
+    return new BoomError({
       message,
       type: ErrorType.UNAUTHORIZED,
       statusCode: 401
     });
   }
 
-  internalError(message: string): DomainError {
-    return new DomainError({
+  internalError(message: string): BoomError {
+    return new BoomError({
       message,
       type: ErrorType.INTERNAL_ERROR,
       statusCode: 500

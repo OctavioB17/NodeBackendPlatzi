@@ -1,9 +1,9 @@
 import { badData, badRequest, Boom, internal, notFound, unauthorized } from "@hapi/boom";
-import { DomainError } from "../../domain/entities/DomainError";
+import { BoomError } from "../../domain/entities/DomainError";
 import { ErrorType } from "../../domain/interfaces/Error";
 
 export class ErrorAdapter {
-  public toBoom(error: DomainError): Boom {
+  public toBoom(error: BoomError): Boom {
     switch (error.type) {
       case ErrorType.NOT_FOUND:
         return notFound(error.message);

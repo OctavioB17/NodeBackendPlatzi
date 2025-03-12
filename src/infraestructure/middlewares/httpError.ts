@@ -1,7 +1,7 @@
 import { Boom, isBoom } from "@hapi/boom";
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express"
 import { ErrorAdapter } from "../adapters/ErrorAdapter";
-import { DomainError } from "../../domain/entities/DomainError";
+import { BoomError } from "../../domain/entities/DomainError";
 
 const errorAdapter = new ErrorAdapter();
 
@@ -11,10 +11,7 @@ export const logError: ErrorRequestHandler = (err: Error, req: Request, res: Res
 }
 
 export const boomErrorHandling: ErrorRequestHandler = (err: Error | Boom, req: Request, res: Response, next: NextFunction) => {
-  console.log('Tipo de error:', err instanceof DomainError ? 'DomainError' : 'Otro');
-  console.log('Error completo:', err);
-
-  if (err instanceof DomainError) {
+  if (err instanceof BoomError) {
     const boomError = errorAdapter.toBoom(err);
     const { output } = boomError;
     res.status(output.statusCode).json(output.payload)

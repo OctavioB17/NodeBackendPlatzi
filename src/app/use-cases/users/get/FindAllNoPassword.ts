@@ -3,7 +3,7 @@ import { IUserRepository } from "../../../../domain/repositories/IUserRepository
 import {USER_TYPES} from "../../../../types";
 import { IFindAllNoPassword } from "../../../interfaces/users/get/IFindAllNoPassword";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import { DomainError } from "../../../../domain/entities/DomainError";
+import { BoomError } from "../../../../domain/entities/DomainError";
 import UserNoPasswordDTO from "../../../../infraestructure/dtos/UserNoPasswordDTO";
 import UserMapper from "../../../../infraestructure/mappers/UserMapper";
 
@@ -18,7 +18,7 @@ export default class FindAllNoPassword implements IFindAllNoPassword {
     try {
       const users = await this.userRepository.findAll()
       if (!users) {
-        throw new DomainError({
+        throw new BoomError({
           message: `Users Not Found`,
           type: ErrorType.NOT_FOUND,
           statusCode: 404
@@ -27,10 +27,10 @@ export default class FindAllNoPassword implements IFindAllNoPassword {
 
       return UserMapper.toNoPasswordDTOList(users)
     } catch (error) {
-        if (error instanceof DomainError) {
+        if (error instanceof BoomError) {
           throw error;
         }
-        throw new DomainError({
+        throw new BoomError({
           message: `Error finding user`,
           type: ErrorType.INTERNAL_ERROR,
           statusCode: 500

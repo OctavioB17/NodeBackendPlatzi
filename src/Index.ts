@@ -22,7 +22,7 @@ import { boomErrorHandling, errorHandlingMiddleware, logError } from './infraest
 const app = express();
 app.use(express.json());
 const port = 3000;
-const ip: string = /*obtainIp() ||*/ 'localhost';
+const ip: string = obtainIp() || 'localhost';
 syncDatabase()
   .then(() => {
     console.log('Base de datos sincronizada correctamente.');

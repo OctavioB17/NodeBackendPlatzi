@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
 import {USER_TYPES} from "../../../../types";
 import { IFindUserByEmailNoPassword } from "../../../interfaces/users/get/IFindUserByEmailNoPassword";
-import { DomainError } from "../../../../domain/entities/DomainError";
+import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import UserNoPasswordDTO from "../../../../infraestructure/dtos/UserNoPasswordDTO";
 import UserMapper from "../../../../infraestructure/mappers/UserMapper";
@@ -18,7 +18,7 @@ export default class FindUserByMailNoPassword implements IFindUserByEmailNoPassw
     try {
       const user = await this.userRepository.findByEmail(email)
       if (!user) {
-        throw new DomainError({
+        throw new BoomError({
           message: `User ${email} Not Found`,
           type: ErrorType.NOT_FOUND,
           statusCode: 404
@@ -27,10 +27,10 @@ export default class FindUserByMailNoPassword implements IFindUserByEmailNoPassw
 
       return UserMapper.toNoPasswordDTO(user)
     } catch (error) {
-      if (error instanceof DomainError) {
+      if (error instanceof BoomError) {
         throw error;
       }
-      throw new DomainError({
+      throw new BoomError({
         message: `Error finding user`,
         type: ErrorType.INTERNAL_ERROR,
         statusCode: 500

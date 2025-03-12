@@ -1,7 +1,7 @@
 import { inject } from "inversify";
 import { ICreateUser } from "../../app/interfaces/users/post/ICreateUser";
 import { Response, Request, NextFunction } from "express";
-import {USER_TYPES} from "../../types";
+import { USER_TYPES } from "../../types";
 import { IFindAll } from "../../app/interfaces/users/get/IFindAll";
 import { IFindAllNoPassword } from "../../app/interfaces/users/get/IFindAllNoPassword";
 import { IFindUserById } from "../../app/interfaces/users/get/IFindUserById";
@@ -10,6 +10,9 @@ import { IFindUserByEmail } from "../../app/interfaces/users/get/IFindUserByEmai
 import { IFindUserByEmailNoPassword } from "../../app/interfaces/users/get/IFindUserByEmailNoPassword";
 import { IDeleteUser } from "../../app/interfaces/users/delete/IDeleteUser";
 import { IChangePassword } from "../../app/interfaces/users/patch/IChangePassword";
+import { BoomError } from "../../domain/entities/DomainError";
+import { validate as validateUUID } from 'uuid';
+import { ErrorType } from "../../domain/interfaces/Error";
 
 export default class UserController {
   constructor(
@@ -28,17 +31,24 @@ export default class UserController {
     try {
       const userDTO = req.body;
       const user = await this.createUser.execute(userDTO);
-      console.log(user)
       if (user) {
-        res.status(201).json(user)
+        res.status(201).json({ message: 'User registration successful' })
       } else {
-        res.status(400).json({ error: 'Can not create user' })
+        throw new BoomError({
+          message: 'Can not create user',
+          type: ErrorType.BAD_REQUEST,
+          statusCode: 400
+        });
       }
     } catch (error: any) {
-      if (error.message === 'Failed to create user: Error: Email registered.') {
-        res.status(400).json('User already registered')
+      if (error instanceof BoomError) {
+        res.status(error.statusCode).json({ error: error.message, code: error.statusCode });
       } else {
-        res.status(500).json({ error: 'Server Error', details: error.message })
+        throw new BoomError({
+          message: 'Server Error',
+          type: ErrorType.INTERNAL_ERROR,
+          statusCode: 500
+        });
       }
     }
   }
@@ -49,7 +59,11 @@ export default class UserController {
       if (users) {
         res.status(200).json(users)
       } else {
-        res.status(400).json('No users found')
+        throw new BoomError({
+          message: 'No users found',
+          type: ErrorType.NOT_FOUND,
+          statusCode: 404
+        });
       }
     } catch (error) {
       next(error)
@@ -63,7 +77,11 @@ export default class UserController {
       if (user) {
         res.status(200).json(user)
       } else {
-        res.status(400).json('No users found')
+        throw new BoomError({
+          message: 'No users found',
+          type: ErrorType.NOT_FOUND,
+          statusCode: 404
+        });
       }
     } catch (error) {
       next(error)
@@ -73,11 +91,23 @@ export default class UserController {
   async getUserById(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params
     try {
+      if (!validateUUID(id)) {
+        throw new BoomError({
+          message: `Invalid UUID format`,
+          type: ErrorType.BAD_REQUEST,
+          statusCode: 400
+        });
+      }
+
       const user = await this.findUserById.execute(id)
       if (user) {
         res.status(200).json(user)
       } else {
-        res.status(400).json('No users found')
+        throw new BoomError({
+          message: 'No users found',
+          type: ErrorType.NOT_FOUND,
+          statusCode: 404
+        });
       }
     } catch (error) {
       next(error)
@@ -90,7 +120,11 @@ export default class UserController {
       if (users) {
         res.status(200).json(users)
       } else {
-        res.status(400).json('No users found')
+        throw new BoomError({
+          message: 'No users found',
+          type: ErrorType.NOT_FOUND,
+          statusCode: 404
+        });
       }
     } catch (error) {
       next(error)
@@ -104,7 +138,11 @@ export default class UserController {
       if (user) {
         res.status(200).json(user)
       } else {
-        res.status(400).json('No users found')
+        throw new BoomError({
+          message: 'No users found',
+          type: ErrorType.NOT_FOUND,
+          statusCode: 404
+        });
       }
     } catch (error) {
       next(error)
@@ -114,11 +152,23 @@ export default class UserController {
   async getUserByIdNoPassword(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params
     try {
+      if (!validateUUID(id)) {
+        throw new BoomError({
+          message: `Invalid UUID format`,
+          type: ErrorType.BAD_REQUEST,
+          statusCode: 400
+        });
+      }
+
       const user = await this.findUserByIdNoPassword.execute(id)
       if (user) {
         res.status(200).json(user)
       } else {
-        res.status(400).json('No users found')
+        throw new BoomError({
+          message: 'No users found',
+          type: ErrorType.NOT_FOUND,
+          statusCode: 404
+        });
       }
     } catch (error) {
       next(error)
@@ -132,7 +182,11 @@ export default class UserController {
       if (changePass) {
         res.status(200).json('Password changed')
       } else {
-        res.status(400).json('No users found')
+        throw new BoomError({
+          message: 'No users found',
+          type: ErrorType.NOT_FOUND,
+          statusCode: 404
+        });
       }
     } catch (error) {
       next(error)
@@ -144,9 +198,13 @@ export default class UserController {
     try {
       const isUserDeleted = await this.deleteUser.execute(id);
       if (isUserDeleted) {
-        res.json(204).json('User deleted')
+        res.status(204).json('User deleted')
       } else {
-        res.json(500).json('Failed to delete user')
+        throw new BoomError({
+          message: 'Failed to delete user',
+          type: ErrorType.INTERNAL_ERROR,
+          statusCode: 500
+        });
       }
     } catch (error) {
       next(error)

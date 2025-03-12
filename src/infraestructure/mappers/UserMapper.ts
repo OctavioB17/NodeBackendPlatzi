@@ -13,10 +13,10 @@ export default class UserMapper {
   }
 
   static toDTOList(userModels: UserModel[]): UserDTO[] {
-    return userModels.map(user => this.toDTO(user))
+    return userModels.map(user => this.toDTO(user.dataValues))
   }
 
   static toNoPasswordDTOList(userModels: UserModel[]): UserDTO[] {
-    return userModels.map(user => this.toDTO(user))
+    return userModels.map(user => this.toDTO(user.dataValues))
   }
 }

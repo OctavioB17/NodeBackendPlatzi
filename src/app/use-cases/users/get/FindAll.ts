@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
 import {USER_TYPES} from "../../../../types";
 import { IFindAll } from "../../../interfaces/users/get/IFindAll";
-import { DomainError } from "../../../../domain/entities/DomainError";
+import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import UserMapper from "../../../../infraestructure/mappers/UserMapper";
 import UserDTO from "../../../../infraestructure/dtos/UserDTO";
@@ -18,7 +18,7 @@ export default class FindAll implements IFindAll {
     try {
       const users = await this.userRepository.findAll()
       if (!users) {
-        throw new DomainError({
+        throw new BoomError({
           message: `Users not found`,
           type: ErrorType.NOT_FOUND,
           statusCode: 404
@@ -27,10 +27,10 @@ export default class FindAll implements IFindAll {
 
       return UserMapper.toDTOList(users)
     } catch (error) {
-      if (error instanceof DomainError) {
+      if (error instanceof BoomError) {
         throw error;
       }
-      throw new DomainError({
+      throw new BoomError({
         message: `Error finding user`,
         type: ErrorType.INTERNAL_ERROR,
         statusCode: 500
