@@ -12,20 +12,8 @@ export default class CategoriesModel extends Model<CategoriesModel> implements I
   declare name: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  declare surname: string;
-
-  @Column({ type: DataType.STRING, allowNull: false, unique: true })
-  declare email: string;
-
-  @Column({ type: DataType.STRING, allowNull: false})
-  declare role: string
-
-  @Column({ type: DataType.STRING, allowNull: false })
-  declare password: string;
-
-  @Column({ type: DataType.STRING, allowNull: false})
   declare description: string;
 
-  @Column({ type: DataType.STRING, allowNull: true})
+  @Column({ type: DataType.ARRAY(DataType.STRING), allowNull: true })
   declare products: Product[];
 }
