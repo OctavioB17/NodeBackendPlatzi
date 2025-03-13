@@ -1,8 +1,8 @@
-import { Table, Column, Model, DataType, AllowNull } from 'sequelize-typescript';
+import { Table, Column, Model, DataType } from 'sequelize-typescript';
 import { IUserModel } from '../../../domain/interfaces/user/IUserModel';
 
 @Table({ tableName: 'users', timestamps: true })
-export class UserModel extends Model<UserModel> implements IUserModel {
+export default class UserModel extends Model<UserModel> implements IUserModel {
   @Column({ type: DataType.UUID, primaryKey: true })
   declare id: string;
 

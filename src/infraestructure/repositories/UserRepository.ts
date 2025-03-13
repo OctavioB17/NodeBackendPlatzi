@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
-import { UserModel } from "../database/models/UserModel";
+import UserModel from "../database/models/UserModel";
 import { IUser } from "../../domain/interfaces/user/IUser";
 import { plainToInstance } from "class-transformer";
 

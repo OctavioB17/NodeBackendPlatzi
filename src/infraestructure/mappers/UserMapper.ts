@@ -1,5 +1,5 @@
 import { plainToInstance } from "class-transformer";
-import { UserModel } from "../database/models/UserModel";
+import UserModel from "../database/models/UserModel";
 import UserDTO from "../dtos/UserDTO";
 import UserNoPasswordDTO from "../dtos/UserNoPasswordDTO";
 

@@ -4,7 +4,7 @@ import { ICategoriesModel } from "../../../domain/interfaces/categories/ICategor
 import Product from "../../../domain/entities/Product";
 
 @Table({ tableName: 'categories', timestamps: true })
-export class CategoriesModel extends Model<CategoriesModel> implements ICategoriesModel {
+export default class CategoriesModel extends Model<CategoriesModel> implements ICategoriesModel {
   @Column({ type: DataType.UUID, primaryKey: true })
   declare id: string;
 

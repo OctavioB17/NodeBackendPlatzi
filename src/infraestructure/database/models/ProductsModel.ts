@@ -1,6 +1,6 @@
 import { Model } from "sequelize";
 import { IProductModel } from "../../../domain/interfaces/products/IProductModel";
-import { AllowNull, Column, DataType } from "sequelize-typescript";
+import { Column, DataType } from "sequelize-typescript";
 export default class ProductModel extends Model<ProductModel> implements IProductModel {
   @Column({ type: DataType.UUID, primaryKey: true, allowNull: false })
   declare id: string;

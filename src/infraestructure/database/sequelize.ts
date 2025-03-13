@@ -1,6 +1,8 @@
 import { Sequelize } from "sequelize-typescript";
-import { UserModel } from "./models/UserModel";
 import { config } from 'dotenv';
+import ProductModel from "./models/ProductsModel";
+import CategoriesModel from "./models/CategoriesModel";
+import UserModel from "./models/UserModel";
 config()
 
 const USER = process.env.DB_USER ? encodeURIComponent(process.env.DB_USER) : '';
@@ -9,8 +11,8 @@ const URI = `postgres://${USER}:${PASSWORD}@${process.env.DB_HOST}:${process.env
 
 const sequelize = new Sequelize(URI, {
   dialect: 'postgres',
-  models: [UserModel],
-});
+  models: [UserModel, ProductModel, CategoriesModel],
+} as any);
 
 
 

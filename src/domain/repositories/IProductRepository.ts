@@ -1,13 +1,14 @@
+import ProductModel from "../../infraestructure/database/models/ProductsModel";
 import { IProduct } from "../interfaces/products/IProducts";
 
-export interface IProductRepository {
-  createProduct(product: IProduct): Promise<boolean>
-  findById(id: string): Promise<IProduct | null>
-  findByName(email: string): Promise<IProduct | null>;
-  findAll(): Promise<IProduct[] | null>;
-  updateProduct(product: IProduct): Promise<IProduct | null>
-  deleteProduct(id: string): Promise<boolean>
-  findByCategory(categoryId: string): Promise<IProduct[] | null>
-  updateStock(id: string, stock: number): Promise<IProduct | null>
-  toggleProductPause(id: string): Promise<IProduct | null>
+export default interface IProductRepository {
+  createProduct(product: IProduct): Promise<boolean | null>
+  findById(id: string): Promise<ProductModel | null>
+  findByName(email: string): Promise<ProductModel | null>;
+  findAllByUserId(userId: string): Promise<IProduct[] | null>;
+  findAllByCategory(categoryId: string): Promise<ProductModel[] | null>;
+  updateProduct(product: IProduct): Promise<ProductModel | null>;
+  deleteProduct(id: string): Promise<boolean | null>;
+  updateStock(id: string, stock: number): Promise<ProductModel | null>;
+  toggleProductPause(id: string): Promise<ProductModel | null>;
 }
