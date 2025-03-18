@@ -15,7 +15,7 @@ echo "Script directory / Directorio del script: $script_dir"
 # Spanish: Verifica si existe el archivo .env y cárgalo. Sale si no se encuentra.
 if [ -f "$script_dir/.env" ]; then
   echo "Loading environment variables from .env file... / Cargando variables de entorno desde .env..."
-  export $(grep -v '^#' "$script_dir/.env" | xargs)
+  export $(grep -v '^#' "$script_dir/.env" | grep -v '^#' "$script_dir/.env.example" | xargs)
 else
   echo "ERROR: .env file not found in $script_dir."
   echo "ERROR: Archivo .env no encontrado en $script_dir."

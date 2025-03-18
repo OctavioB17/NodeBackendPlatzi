@@ -18,13 +18,14 @@ import { IChangePassword } from './app/interfaces/users/patch/IChangePassword';
 import { boomErrorHandling, errorHandlingMiddleware, logError } from './infraestructure/middlewares/httpError';
 import { IUserController } from './infraestructure/controllers/interfaces/IUserController';
 import syncDatabase from './infraestructure/database/DataBaseSync';
+import { corsConfig } from './infraestructure/server/corsConfig';
 
 const app = express();
 app.use(express.json());
+app.use(corsConfig)
 syncDatabase();
 const port = 3000;
 const ip: string = obtainIp() || 'localhost';
-
 container.get<ICreateUser>(USER_TYPES.ICreateUser);
 container.get<IIdGenerator>(USER_TYPES.IIdGenerator);
 container.get<IUserRepository>(USER_TYPES.IUserRepository);
