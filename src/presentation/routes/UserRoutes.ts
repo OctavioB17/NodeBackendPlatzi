@@ -1,5 +1,4 @@
 import { Router } from "express";
-import UserController from "../../infraestructure/controllers/UserController";
 import { container } from "../../infraestructure/inversify/container";
 import { createUserSchema, updateUserSchema, getUserSchema, updatePasswordUserSchema, getUserSchemaEmail } from "../../infraestructure/validators/UserSchema"
 import { validatorHandler } from "../../infraestructure/middlewares/validatorHandler";
@@ -7,7 +6,7 @@ import { IUserController } from "../../infraestructure/controllers/interfaces/IU
 import { USER_TYPES } from "../../types";
 
 
-const   router = Router();
+const router = Router();
 const userController = container.get<IUserController>(USER_TYPES.IUserController);
 
 router.post("/register", validatorHandler(createUserSchema, 'body'), (req, res, next) => userController.register(req, res, next));
