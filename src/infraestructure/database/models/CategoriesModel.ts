@@ -1,5 +1,4 @@
-import { Model } from "sequelize";
-import { Table, Column, DataType, AllowNull } from "sequelize-typescript";
+import { Table, Column, DataType, Model } from "sequelize-typescript";
 import { ICategoriesModel } from "../../../domain/interfaces/categories/ICategoryModel";
 import Product from "../../../domain/entities/Product";
 

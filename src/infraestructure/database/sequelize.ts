@@ -14,6 +14,4 @@ const sequelize = new Sequelize(URI, {
   models: [UserModel, ProductModel, CategoriesModel],
 } as any);
 
-
-
 export default sequelize

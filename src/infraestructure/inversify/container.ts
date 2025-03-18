@@ -2,7 +2,6 @@ import { Container } from "inversify";
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import UserRepository from "../repositories/UserRepository";
 import { ICreateUser } from "../../app/interfaces/users/post/ICreateUser";
-import UserController from "../controllers/UserController";
 import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
 import {USER_TYPES} from "../../types";
 import UuidGenerator from "../services/utils/UuidGenerator";
@@ -22,6 +21,9 @@ import { IChangePassword } from "../../app/interfaces/users/patch/IChangePasswor
 import ChangePassword from "../../app/use-cases/users/patch/ChangePassword";
 import { IDeleteUser } from "../../app/interfaces/users/delete/IDeleteUser";
 import DeleteUser from "../../app/use-cases/users/delete/DeleteUser";
+import UserController from "../controllers/UserController";
+import { IUserController } from "../controllers/interfaces/IUserController";
+import FindUserByMailNoPassword from "../../app/use-cases/users/get/FindUserByMailNoPassword";
 
 const container = new Container();
 
@@ -33,9 +35,9 @@ container.bind<IFindAllNoPassword>(USER_TYPES.IFindAllNoPassword).to(FindAllNoPa
 container.bind<IFindUserById>(USER_TYPES.IFindUserById).to(FindUserById)
 container.bind<IFindUserByIdNoPassword>(USER_TYPES.IFindUserByIdNoPassword).to(FindUserIdNoPassword)
 container.bind<IFindUserByEmail>(USER_TYPES.IFindUserByEmail).to(FindUserByMail)
-container.bind<IFindUserByEmailNoPassword>(USER_TYPES.IFindUserByEmailNoPassword).to(FindUserIdNoPassword)
+container.bind<IFindUserByEmailNoPassword>(USER_TYPES.IFindUserByEmailNoPassword).to(FindUserByMailNoPassword)
 container.bind<IChangePassword>(USER_TYPES.IChangePassword).to(ChangePassword)
 container.bind<IDeleteUser>(USER_TYPES.IDeleteUser).to(DeleteUser)
-container.bind<UserController>(UserController).toSelf()
+container.bind<IUserController>(USER_TYPES.IUserController).to(UserController)
 
 export { container }

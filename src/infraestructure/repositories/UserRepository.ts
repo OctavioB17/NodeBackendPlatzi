@@ -35,13 +35,14 @@ export default class UserRepository implements IUserRepository {
 
   async findByEmail(email: string): Promise<UserModel | null> {
     try {
-      const user = await UserModel.findOne({ where: { email } })
+      const user = await UserModel.findOne({ where: { email } });
       if (!user) {
-        return null
-      } else
-      return user
+        return null;
+      } else {
+        return user.dataValues;
+      }
     } catch (error) {
-      throw new Error(`Error finding user: ${error}`)
+      throw new Error(`Error finding user: ${error}`);
     }
   }
 

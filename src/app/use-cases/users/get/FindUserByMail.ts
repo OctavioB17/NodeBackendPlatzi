@@ -28,7 +28,6 @@ export default class FindUserByMail implements IFindUserByEmail {
 
       return UserMapper.toDTO(user)
     } catch (error) {
-      console.log("Mail error", error)
         if (error instanceof BoomError) {
           throw error;
         }

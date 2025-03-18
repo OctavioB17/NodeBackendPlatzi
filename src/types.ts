@@ -1,5 +1,6 @@
 export const USER_TYPES = {
   IUserRepository: Symbol.for('IUserRepository'),
+  IUserController: Symbol.for('IUserController'),
   IIdGenerator: Symbol.for('IIdGenerator'),
   ICreateUser: Symbol.for('ICreateUser'),
   IFindAll: Symbol.for('IFindAll'),

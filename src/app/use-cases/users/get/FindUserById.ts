@@ -27,7 +27,6 @@
 
         return UserMapper.toDTO(user.dataValues)
       } catch (error) {
-        console.log('Error de ejecución:', error);
         if (error instanceof BoomError) {
           throw error;
         }

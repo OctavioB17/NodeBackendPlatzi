@@ -16,7 +16,7 @@ export default class UserMapper {
     return userModels.map(user => this.toDTO(user.dataValues))
   }
 
-  static toNoPasswordDTOList(userModels: UserModel[]): UserDTO[] {
-    return userModels.map(user => this.toDTO(user.dataValues))
+  static toNoPasswordDTOList(userModels: UserModel[]): UserNoPasswordDTO[] {
+    return userModels.map(user => this.toNoPasswordDTO(user.dataValues))
   }
 }

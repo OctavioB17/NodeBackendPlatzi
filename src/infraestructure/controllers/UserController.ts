@@ -7,14 +7,14 @@ import { IFindAllNoPassword } from "../../app/interfaces/users/get/IFindAllNoPas
 import { IFindUserById } from "../../app/interfaces/users/get/IFindUserById";
 import { IFindUserByIdNoPassword } from "../../app/interfaces/users/get/IFindUserByIdNoPassword";
 import { IFindUserByEmail } from "../../app/interfaces/users/get/IFindUserByEmail";
-import { IFindUserByEmailNoPassword } from "../../app/interfaces/users/get/IFindUserByEmailNoPassword";
 import { IDeleteUser } from "../../app/interfaces/users/delete/IDeleteUser";
 import { IChangePassword } from "../../app/interfaces/users/patch/IChangePassword";
 import { BoomError } from "../../domain/entities/DomainError";
 import { validate as validateUUID } from 'uuid';
 import { ErrorType } from "../../domain/interfaces/Error";
-
-export default class UserController {
+import { IUserController } from "./interfaces/IUserController";
+import { IFindUserByEmailNoPassword } from "../../app/interfaces/users/get/IFindUserByEmailNoPassword";
+export default class UserController implements IUserController {
   constructor(
     @inject(USER_TYPES.ICreateUser) private createUser: ICreateUser,
     @inject(USER_TYPES.IFindAll) private findAll: IFindAll,
@@ -133,24 +133,25 @@ export default class UserController {
 
   async findUserByMailNoPassword(req: Request, res: Response, next: NextFunction) {
     const { email } = req.params
-    try {
-      const user = await this.findUserByEmailNoPassword.execute(email)
-      if (user) {
-        res.status(200).json(user)
-      } else {
-        throw new BoomError({
-          message: 'No users found',
-          type: ErrorType.NOT_FOUND,
-          statusCode: 404
-        });
-      }
-    } catch (error) {
-      next(error)
+      try {
+        const user = await this.findUserByEmailNoPassword.execute(email)
+        if (user) {
+          res.status(200).json(user)
+        } else {
+          throw new BoomError({
+            message: 'No users found',
+            type: ErrorType.NOT_FOUND,
+            statusCode: 404
+          });
+        }
+      } catch (error) {
+        next(error)
     }
   }
 
   async getUserByIdNoPassword(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params
+
     try {
       if (!validateUUID(id)) {
         throw new BoomError({
