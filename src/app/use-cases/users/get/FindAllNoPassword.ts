@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
 import {USER_TYPES} from "../../../../types";
-import { IFindAllNoPassword } from "../../../interfaces/users/get/IFindAllNoPassword";
+import { IFindAllUsersNoPassword } from "../../../interfaces/users/get/IFindAllUsersNoPassword";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import UserNoPasswordDTO from "../../../../infraestructure/dtos/UserNoPasswordDTO";
@@ -9,7 +9,7 @@ import UserMapper from "../../../../infraestructure/mappers/UserMapper";
 
 
 @injectable()
-export default class FindAllNoPassword implements IFindAllNoPassword {
+export default class FindAllNoPassword implements IFindAllUsersNoPassword {
   constructor(
     @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
   ) {}

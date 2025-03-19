@@ -1,5 +1,5 @@
 import UserNoPasswordDTO from "../../../../infraestructure/dtos/UserNoPasswordDTO";
 
-export interface IFindAllNoPassword {
+export interface IFindAllUsersNoPassword {
   execute(): Promise<UserNoPasswordDTO[] | null>
 }

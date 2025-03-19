@@ -2,8 +2,8 @@ import { inject } from "inversify";
 import { ICreateUser } from "../../app/interfaces/users/post/ICreateUser";
 import { Response, Request, NextFunction } from "express";
 import { USER_TYPES } from "../../types";
-import { IFindAll } from "../../app/interfaces/users/get/IFindAll";
-import { IFindAllNoPassword } from "../../app/interfaces/users/get/IFindAllNoPassword";
+import { IFindAllUsers } from "../../app/interfaces/users/get/IFindAllUsers";
+import { IFindAllUsersNoPassword } from "../../app/interfaces/users/get/IFindAllUsersNoPassword";
 import { IFindUserById } from "../../app/interfaces/users/get/IFindUserById";
 import { IFindUserByIdNoPassword } from "../../app/interfaces/users/get/IFindUserByIdNoPassword";
 import { IFindUserByEmail } from "../../app/interfaces/users/get/IFindUserByEmail";
@@ -17,8 +17,8 @@ import { IFindUserByEmailNoPassword } from "../../app/interfaces/users/get/IFind
 export default class UserController implements IUserController {
   constructor(
     @inject(USER_TYPES.ICreateUser) private createUser: ICreateUser,
-    @inject(USER_TYPES.IFindAll) private findAll: IFindAll,
-    @inject(USER_TYPES.IFindAllNoPassword) private findAllNoPassword: IFindAllNoPassword,
+    @inject(USER_TYPES.IFindAll) private findAll: IFindAllUsers,
+    @inject(USER_TYPES.IFindAllNoPassword) private findAllNoPassword: IFindAllUsersNoPassword,
     @inject(USER_TYPES.IFindUserById) private findUserById: IFindUserById,
     @inject(USER_TYPES.IFindUserByIdNoPassword) private findUserByIdNoPassword: IFindUserByIdNoPassword,
     @inject(USER_TYPES.IFindUserByEmail) private findUserByEmail: IFindUserByEmail,

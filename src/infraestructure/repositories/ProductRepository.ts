@@ -1,16 +1,12 @@
-import { plainToInstance } from "class-transformer";
-import { IProduct } from "../../domain/interfaces/products/IProducts";
+import { id } from "inversify";
 import IProductRepository from "../../domain/repositories/IProductRepository";
 import ProductModel from "../database/models/ProductsModel";
-import ProductDTO from "../dtos/ProductDTO";
-import ProductMapper from "../mappers/ProductMapper";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 
 export default class ProductRepository implements IProductRepository {
-  async createProduct(product: IProduct): Promise<boolean> {
+  async createProduct(product: ProductModel): Promise<boolean> {
     try {
-      const userModel = ProductMapper.iProductDtoToModel(product)
-      const newProduct = await ProductModel.create(userModel)
+      const newProduct = await ProductModel.create(product)
       if (newProduct) {
         return true
       } else {
@@ -20,11 +16,11 @@ export default class ProductRepository implements IProductRepository {
       throw new Error('Failed to create product')
     }
   }
-  async findById(id: string): Promise<ProductDTO | null> {
+  async findById(id: string): Promise<ProductModel | null> {
     try {
       const product = await ProductModel.findByPk(id);
       if (product) {
-        return ProductMapper.productModeltoDTO(product)
+        return product
       } else {
         return null
       }
@@ -34,7 +30,7 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async findByName(name: string): Promise<ProductDTO[] | null> {
+  async findByName(name: string): Promise<ProductModel[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
@@ -44,7 +40,7 @@ export default class ProductRepository implements IProductRepository {
         }
       })
       if (products.length > 0) {
-        return ProductMapper.productModeltoDTOList(products)
+        return products
       } else {
         return null
       }
@@ -53,7 +49,7 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async findAllByUserId(userId: string): Promise<ProductDTO[] | null> {
+  async findAllByUserId(userId: string): Promise<ProductModel[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
@@ -61,7 +57,7 @@ export default class ProductRepository implements IProductRepository {
         }
       })
       if (products.length > 0) {
-        return ProductMapper.productModeltoDTOList(products)
+        return products
       } else {
         return null
       }
@@ -69,7 +65,8 @@ export default class ProductRepository implements IProductRepository {
       throw new Error(error)
     }
   }
-  async findAllByCategory(categoryId: string): Promise<ProductDTO[] | null> {
+
+  async findAllByCategory(categoryId: string): Promise<ProductModel[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
@@ -77,7 +74,7 @@ export default class ProductRepository implements IProductRepository {
         }
       })
       if (products.length > 0) {
-        return ProductMapper.productModeltoDTOList(products)
+        return products
       } else {
         return null
       }
@@ -86,22 +83,67 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  updateProduct(product: IProduct): Promise<ProductDTO | null> {
+  async updateProduct(productId: string, productData: Partial<ProductModel>): Promise<ProductModel | null> {
     try {
-      const userModel = plainToInstance(ProductModel, product)
+      const product = await  this.findById(productId);
 
-    } catch (error) {
-
+      if (product) {
+        product.update({
+          ...productData
+        })
+        return product
+      } else {
+        return null
+      }
+    } catch (error: any) {
+      throw new Error(error)
     }
   }
-  deleteProduct(id: string): Promise<boolean> {
-    throw new Error("Method not implemented.");
-  }
-  updateStock(id: string, stock: number): Promise<ProductDTO | null> {
-    throw new Error("Method not implemented.");
-  }
-  toggleProductPause(id: string): Promise<ProductDTO | null> {
-    throw new Error("Method not implemented.");
+
+  async deleteProduct(id: string): Promise<boolean> {
+    try {
+      const product = await this.findById(id)
+      if (product) {
+        await product.destroy()
+        return true
+      } else {
+        return false
+      }
+    } catch (error: any) {
+      throw new Error(error)
+    }
   }
 
+  async updateStock(id: string, stock: number): Promise<ProductModel | null> {
+    try {
+      const product = await this.findById(id);
+      if (!product) {
+        return null
+      }
+
+      product.update({
+        stock: stock
+      })
+
+      return product
+    } catch (error: any) {
+      throw new Error(error)
+    }
+  }
+
+ async  toggleProductPause(id: string, status: boolean): Promise<ProductModel | null> {
+    try {
+      const product = await this.findById(id);
+      if (!product) {
+        return null
+      }
+      product.update({
+        isPaused: !status
+      })
+
+      return product
+    } catch (error: any) {
+      throw new Error(error)
+    }
+  }
 }

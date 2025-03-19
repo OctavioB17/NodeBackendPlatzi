@@ -1,12 +1,10 @@
+import CategoriesModel from "../../infraestructure/database/models/CategoriesModel";
 import Product from "../entities/Product";
-import { ICategories } from "../interfaces/categories/ICategories";
 
 export interface ICategoriesRepository {
-  createCategory(name: string, description: string): Promise<ICategories>;
-  getCategoryById(id: number): Promise<ICategories | null>;
-  getAllCategories(): Promise<ICategories[]>;
-  updateCategory(id: number, name: string, description: string): Promise<ICategories>;
-  deleteCategory(id: number): Promise<void>;
-  addProductToCategory(categoryId: number, product: Product): Promise<ICategories>;
-  removeProductFromCategory(categoryId: number, productId: number): Promise<ICategories>;
+  createCategory(categories: CategoriesModel): Promise<boolean>;
+  getCategoryById(id: string): Promise<CategoriesModel | null>;
+  getAllCategories(): Promise<CategoriesModel[] | null>;
+  updateCategory(id: string, category: Partial<CategoriesModel>): Promise<CategoriesModel | null>;
+  deleteCategory(id: string): Promise<boolean>;
 }

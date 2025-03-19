@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
 import {USER_TYPES} from "../../../../types";
-import { IFindAll } from "../../../interfaces/users/get/IFindAll";
+import { IFindAllUsers } from "../../../interfaces/users/get/IFindAllUsers";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import UserMapper from "../../../../infraestructure/mappers/UserMapper";
@@ -9,7 +9,7 @@ import UserDTO from "../../../../infraestructure/dtos/UserDTO";
 
 
 @injectable()
-export default class FindAll implements IFindAll {
+export default class FindAll implements IFindAllUsers {
   constructor(
     @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
   ) {}

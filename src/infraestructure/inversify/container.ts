@@ -6,8 +6,8 @@ import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
 import {USER_TYPES} from "../../types";
 import UuidGenerator from "../services/utils/UuidGenerator";
 import CreateUser from "../../app/use-cases/users/post/CreateUser";
-import { IFindAll } from "../../app/interfaces/users/get/IFindAll";
-import { IFindAllNoPassword } from "../../app/interfaces/users/get/IFindAllNoPassword";
+import { IFindAllUsers } from "../../app/interfaces/users/get/IFindAllUsers";
+import { IFindAllUsersNoPassword } from "../../app/interfaces/users/get/IFindAllUsersNoPassword";
 import { IFindUserById } from "../../app/interfaces/users/get/IFindUserById";
 import { IFindUserByIdNoPassword } from "../../app/interfaces/users/get/IFindUserByIdNoPassword";
 import { IFindUserByEmail } from "../../app/interfaces/users/get/IFindUserByEmail";
@@ -30,8 +30,8 @@ const container = new Container();
 container.bind<IIdGenerator>(USER_TYPES.IIdGenerator).to(UuidGenerator);
 container.bind<IUserRepository>(USER_TYPES.IUserRepository).to(UserRepository);
 container.bind<ICreateUser>(USER_TYPES.ICreateUser).to(CreateUser);
-container.bind<IFindAll>(USER_TYPES.IFindAll).to(FindAll)
-container.bind<IFindAllNoPassword>(USER_TYPES.IFindAllNoPassword).to(FindAllNoPassword)
+container.bind<IFindAllUsers>(USER_TYPES.IFindAll).to(FindAll)
+container.bind<IFindAllUsersNoPassword>(USER_TYPES.IFindAllNoPassword).to(FindAllNoPassword)
 container.bind<IFindUserById>(USER_TYPES.IFindUserById).to(FindUserById)
 container.bind<IFindUserByIdNoPassword>(USER_TYPES.IFindUserByIdNoPassword).to(FindUserIdNoPassword)
 container.bind<IFindUserByEmail>(USER_TYPES.IFindUserByEmail).to(FindUserByMail)

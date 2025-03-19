@@ -1,28 +1,71 @@
-import Product from "../../domain/entities/Product";
-import { ICategories } from "../../domain/interfaces/categories/ICategories";
 import { ICategoriesRepository } from "../../domain/repositories/ICategoryRepository";
+import CategoriesModel from "../database/models/CategoriesModel";
 
 export default class CategoriesRepository implements ICategoriesRepository {
-  createCategory(name: string, description: string): Promise<ICategories> {
-    throw new Error("Method not implemented.");
-  }
-  getCategoryById(id: number): Promise<ICategories | null> {
-    throw new Error("Method not implemented.");
-  }
-  getAllCategories(): Promise<ICategories[]> {
-    throw new Error("Method not implemented.");
-  }
-  updateCategory(id: number, name: string, description: string): Promise<ICategories> {
-    throw new Error("Method not implemented.");
-  }
-  deleteCategory(id: number): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-  addProductToCategory(categoryId: number, product: Product): Promise<ICategories> {
-    throw new Error("Method not implemented.");
-  }
-  removeProductFromCategory(categoryId: number, productId: number): Promise<ICategories> {
-    throw new Error("Method not implemented.");
+
+  async createCategory(category: CategoriesModel): Promise<boolean> {
+    try {
+      const newCategory = await CategoriesModel.create(category)
+      if (newCategory) {
+        return true
+      } else {
+        return false
+      }
+    } catch (error: any) {
+      throw new Error(error)
+    }
   }
 
+  async getCategoryById(id: string): Promise<CategoriesModel | null> {
+    try {
+      const category = await CategoriesModel.findByPk(id);
+      if (category) {
+        return category
+      } else {
+        return null
+      }
+    } catch (error: any) {
+      throw new Error(error)
+    }
+  }
+  async getAllCategories(): Promise<CategoriesModel[] | null> {
+    try {
+      const allCategories = await CategoriesModel.findAll();
+      if (!allCategories) {
+        return null
+      }
+
+      return allCategories
+    } catch (error: any) {
+      throw new Error(error)
+    }
+  }
+  async updateCategory(id: string, categories: Partial<CategoriesModel>): Promise<CategoriesModel | null> {
+    try {
+      const category = await this.getCategoryById(id)
+      if (category) {
+        category.update({
+          ...categories
+        })
+        return category
+      } else {
+        return null
+      }
+    } catch (error: any) {
+      throw new Error(error)
+    }
+  }
+  async deleteCategory(id: string): Promise<boolean> {
+    try {
+      const category = await this.getCategoryById(id)
+      if (!category) {
+        return false
+      }
+
+      await category.destroy();
+      return true
+    } catch (error: any) {
+      throw new Error(error)
+    }
+  }
 }
