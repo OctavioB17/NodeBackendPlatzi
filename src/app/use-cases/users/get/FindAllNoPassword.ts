@@ -25,7 +25,7 @@ export default class FindAllNoPassword implements IFindAllNoPassword {
         })
       }
 
-      return UserMapper.toNoPasswordDTOList(users)
+      return UserMapper.userModelToNoPasswordDTOList(users)
     } catch (error) {
         if (error instanceof BoomError) {
           throw error;

@@ -26,7 +26,7 @@ export default class FindUserIdNoPassword implements IFindUserByIdNoPassword {
         })
       }
 
-      return UserMapper.toNoPasswordDTO(user.dataValues)
+      return UserMapper.userModelToNoPasswordDTO(user.dataValues)
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;

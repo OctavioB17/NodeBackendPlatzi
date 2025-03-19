@@ -25,7 +25,7 @@
           })
         }
 
-        return UserMapper.toDTO(user.dataValues)
+        return UserMapper.userModelToDTO(user.dataValues)
       } catch (error) {
         if (error instanceof BoomError) {
           throw error;

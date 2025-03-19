@@ -25,7 +25,7 @@ export default class FindAll implements IFindAll {
         })
       }
 
-      return UserMapper.toDTOList(users)
+      return UserMapper.userModelToDTOList(users)
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;

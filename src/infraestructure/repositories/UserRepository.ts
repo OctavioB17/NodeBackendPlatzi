@@ -3,6 +3,8 @@ import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import UserModel from "../database/models/UserModel";
 import { IUser } from "../../domain/interfaces/user/IUser";
 import { plainToInstance } from "class-transformer";
+import UserMapper from "../mappers/UserMapper";
+import UserDTO from "../dtos/UserDTO";
 
 @injectable()
 export default class UserRepository implements IUserRepository {
@@ -20,33 +22,33 @@ export default class UserRepository implements IUserRepository {
   }
 
   // Get - Find user
-  async findById(id: string): Promise<UserModel | null> {
+  async findById(id: string): Promise<UserDTO | null> {
     try {
       const user = await UserModel.findByPk(id)
       if(!user) {
         return null
       }
-      return user
+      return UserMapper.userModelToDTO(user);
     } catch (error) {
       throw new Error(`Error finding user: ${error}`)
     }
   }
 
 
-  async findByEmail(email: string): Promise<UserModel | null> {
+  async findByEmail(email: string): Promise<UserDTO | null> {
     try {
       const user = await UserModel.findOne({ where: { email } });
       if (!user) {
         return null;
       } else {
-        return user.dataValues;
+        return UserMapper.userModelToDTO(user.dataValues);
       }
     } catch (error) {
       throw new Error(`Error finding user: ${error}`);
     }
   }
 
-  async findAll(): Promise<UserModel[] | null> {
+  async findAll(): Promise<UserDTO[] | null> {
     try {
       const users = await UserModel.findAll();
 
@@ -54,22 +56,23 @@ export default class UserRepository implements IUserRepository {
         return null
       }
 
-      return users
+      return UserMapper.userModelToDTOList(users)
     } catch (error) {
       throw new Error(`Error finding users: ${error}`)
     }
   }
 
   // Patch - Update user
-  async changePassword(password: string, email: string): Promise<UserModel | null> {
+  async changePassword(password: string, email: string): Promise<UserDTO | null> {
     try {
-      const user = await this.findByEmail(email);
+      const user = await UserModel.findOne({ where: { email } });
+
       if (user) {
         user.update(
           {password: password},
           {where: { email }}
         )
-       return user
+        return UserMapper.userModelToDTO(user.dataValues);
       } else {
         throw new Error("User not found")
       }

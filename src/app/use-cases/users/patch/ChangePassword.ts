@@ -33,7 +33,7 @@ export default class ChangePassword implements IChangePassword {
         })
       }
 
-      return UserMapper.toDTO(changePassword.dataValues)
+      return UserMapper.userModelToDTO(changePassword.dataValues)
     } catch (error: any) {
       if (error instanceof BoomError) {
         throw error;

@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import ProductModel from "./models/ProductsModel";
 import CategoriesModel from "./models/CategoriesModel";
 import UserModel from "./models/UserModel";
+import './ModelAssociations';
 config()
 
 const USER = process.env.DB_USER ? encodeURIComponent(process.env.DB_USER) : '';

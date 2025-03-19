@@ -26,7 +26,7 @@ export default class FindUserByMail implements IFindUserByEmail {
         })
       }
 
-      return UserMapper.toDTO(user)
+      return UserMapper.userModelToDTO(user)
     } catch (error) {
         if (error instanceof BoomError) {
           throw error;

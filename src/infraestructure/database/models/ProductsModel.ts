@@ -1,6 +1,8 @@
 
 import { IProductModel } from "../../../domain/interfaces/products/IProductModel";
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import UserModel from "./UserModel";
+import CategoriesModel from "./CategoriesModel";
 
 @Table({ tableName: 'products', timestamps: true })
 export default class ProductModel extends Model<ProductModel> implements IProductModel {
@@ -31,6 +33,7 @@ export default class ProductModel extends Model<ProductModel> implements IProduc
   @Column({ type: DataType.SMALLINT, allowNull: false })
   declare stock: number;
 
+  @ForeignKey(() => CategoriesModel)
   @Column({ type: DataType.STRING, allowNull: false })
   declare categoryId: string;
 
@@ -40,7 +43,7 @@ export default class ProductModel extends Model<ProductModel> implements IProduc
   @Column({ type: DataType.BOOLEAN, allowNull: false })
   declare isPaused: boolean;
 
-  @Column({ type: DataType.STRING, allowNull: false })
+  @ForeignKey(() => UserModel)
+  @Column({ type: DataType.UUID, allowNull: false })
   declare userId: string;
-
 }
