@@ -2,7 +2,7 @@ import { inject } from "inversify";
 import { ICreateUser } from "../../app/interfaces/users/post/ICreateUser";
 import { Response, Request, NextFunction } from "express";
 import { USER_TYPES } from "../../types";
-import { IFindAllUsers } from "../../app/interfaces/users/get/IFindAllUsers";
+import { IFindAllUsers } from "../../app/interfaces/users/get/IFindAll";
 import { IFindAllUsersNoPassword } from "../../app/interfaces/users/get/IFindAllUsersNoPassword";
 import { IFindUserById } from "../../app/interfaces/users/get/IFindUserById";
 import { IFindUserByIdNoPassword } from "../../app/interfaces/users/get/IFindUserByIdNoPassword";

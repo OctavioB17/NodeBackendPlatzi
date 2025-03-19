@@ -3,12 +3,11 @@ dotenv.config();
 import express from 'express';
 import { obtainIp } from './utils/functions';
 import routerApi from './presentation/routes';
-import { container } from './infraestructure/inversify/container';
 import { ICreateUser } from './app/interfaces/users/post/ICreateUser';
 import {USER_TYPES} from './types';
 import { IIdGenerator } from './domain/services/utils/IIdGenerator';
 import { IUserRepository } from './domain/repositories/IUserRepository';
-import { IFindAllUsers } from './app/interfaces/users/get/IFindAllUsers';
+import { IFindAllUsers } from './app/interfaces/users/get/IFindAll';
 import { IFindAllUsersNoPassword } from './app/interfaces/users/get/IFindAllUsersNoPassword';
 import { IFindUserByIdNoPassword } from './app/interfaces/users/get/IFindUserByIdNoPassword';
 import { IFindUserByEmail } from './app/interfaces/users/get/IFindUserByEmail';
@@ -19,6 +18,7 @@ import { boomErrorHandling, errorHandlingMiddleware, logError } from './infraest
 import { IUserController } from './infraestructure/controllers/interfaces/IUserController';
 import syncDatabase from './infraestructure/database/DataBaseSync';
 import { corsConfig } from './infraestructure/server/corsConfig';
+import { userContainer } from './infraestructure/inversify/userContainer';
 
 const app = express();
 app.use(express.json());
@@ -26,18 +26,18 @@ app.use(corsConfig)
 syncDatabase();
 const port = 3000;
 const ip: string = obtainIp() || 'localhost';
-container.get<ICreateUser>(USER_TYPES.ICreateUser);
-container.get<IIdGenerator>(USER_TYPES.IIdGenerator);
-container.get<IUserRepository>(USER_TYPES.IUserRepository);
-container.get<IFindAllUsers>(USER_TYPES.IFindAll)
-container.get<IFindAllUsersNoPassword>(USER_TYPES.IFindAllNoPassword)
-container.get<IFindAllUsersNoPassword>(USER_TYPES.IFindUserById)
-container.get<IFindUserByIdNoPassword>(USER_TYPES.IFindUserByIdNoPassword)
-container.get<IFindUserByEmail>(USER_TYPES.IFindUserByEmail)
-container.get<IFindUserByEmailNoPassword>(USER_TYPES.IFindUserByEmailNoPassword)
-container.get<IChangePassword>(USER_TYPES.IChangePassword)
-container.get<IDeleteUser>(USER_TYPES.IDeleteUser)
-container.get<IUserController>(USER_TYPES.IUserController);
+userContainer.get<ICreateUser>(USER_TYPES.ICreateUser);
+userContainer.get<IIdGenerator>(USER_TYPES.IIdGenerator);
+userContainer.get<IUserRepository>(USER_TYPES.IUserRepository);
+userContainer.get<IFindAllUsers>(USER_TYPES.IFindAll)
+userContainer.get<IFindAllUsersNoPassword>(USER_TYPES.IFindAllNoPassword)
+userContainer.get<IFindAllUsersNoPassword>(USER_TYPES.IFindUserById)
+userContainer.get<IFindUserByIdNoPassword>(USER_TYPES.IFindUserByIdNoPassword)
+userContainer.get<IFindUserByEmail>(USER_TYPES.IFindUserByEmail)
+userContainer.get<IFindUserByEmailNoPassword>(USER_TYPES.IFindUserByEmailNoPassword)
+userContainer.get<IChangePassword>(USER_TYPES.IChangePassword)
+userContainer.get<IDeleteUser>(USER_TYPES.IDeleteUser)
+userContainer.get<IUserController>(USER_TYPES.IUserController);
 routerApi(app);
 app.use(logError);
 app.use(boomErrorHandling);

@@ -3,16 +3,15 @@ import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import UserRepository from "../repositories/UserRepository";
 import { ICreateUser } from "../../app/interfaces/users/post/ICreateUser";
 import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
-import {USER_TYPES} from "../../types";
+import { USER_TYPES} from "../../types";
 import UuidGenerator from "../services/utils/UuidGenerator";
 import CreateUser from "../../app/use-cases/users/post/CreateUser";
-import { IFindAllUsers } from "../../app/interfaces/users/get/IFindAllUsers";
 import { IFindAllUsersNoPassword } from "../../app/interfaces/users/get/IFindAllUsersNoPassword";
 import { IFindUserById } from "../../app/interfaces/users/get/IFindUserById";
 import { IFindUserByIdNoPassword } from "../../app/interfaces/users/get/IFindUserByIdNoPassword";
 import { IFindUserByEmail } from "../../app/interfaces/users/get/IFindUserByEmail";
 import { IFindUserByEmailNoPassword } from "../../app/interfaces/users/get/IFindUserByEmailNoPassword";
-import FindAll from "../../app/use-cases/users/get/FindAll";
+import FindAllUsers from "../../app/use-cases/users/get/FindAll";
 import FindAllNoPassword from "../../app/use-cases/users/get/FindAllNoPassword";
 import FindUserById from "../../app/use-cases/users/get/FindUserById";
 import FindUserIdNoPassword from "../../app/use-cases/users/get/FindUserByIdNoPassword";
@@ -24,20 +23,21 @@ import DeleteUser from "../../app/use-cases/users/delete/DeleteUser";
 import UserController from "../controllers/UserController";
 import { IUserController } from "../controllers/interfaces/IUserController";
 import FindUserByMailNoPassword from "../../app/use-cases/users/get/FindUserByMailNoPassword";
+import { IFindAllUsers } from "../../app/interfaces/users/get/IFindAll";
 
-const container = new Container();
+const userContainer = new Container();
 
-container.bind<IIdGenerator>(USER_TYPES.IIdGenerator).to(UuidGenerator);
-container.bind<IUserRepository>(USER_TYPES.IUserRepository).to(UserRepository);
-container.bind<ICreateUser>(USER_TYPES.ICreateUser).to(CreateUser);
-container.bind<IFindAllUsers>(USER_TYPES.IFindAll).to(FindAll)
-container.bind<IFindAllUsersNoPassword>(USER_TYPES.IFindAllNoPassword).to(FindAllNoPassword)
-container.bind<IFindUserById>(USER_TYPES.IFindUserById).to(FindUserById)
-container.bind<IFindUserByIdNoPassword>(USER_TYPES.IFindUserByIdNoPassword).to(FindUserIdNoPassword)
-container.bind<IFindUserByEmail>(USER_TYPES.IFindUserByEmail).to(FindUserByMail)
-container.bind<IFindUserByEmailNoPassword>(USER_TYPES.IFindUserByEmailNoPassword).to(FindUserByMailNoPassword)
-container.bind<IChangePassword>(USER_TYPES.IChangePassword).to(ChangePassword)
-container.bind<IDeleteUser>(USER_TYPES.IDeleteUser).to(DeleteUser)
-container.bind<IUserController>(USER_TYPES.IUserController).to(UserController)
+userContainer.bind<IIdGenerator>(USER_TYPES.IIdGenerator).to(UuidGenerator);
+userContainer.bind<IUserRepository>(USER_TYPES.IUserRepository).to(UserRepository);
+userContainer.bind<ICreateUser>(USER_TYPES.ICreateUser).to(CreateUser);
+userContainer.bind<IFindAllUsers>(USER_TYPES.IFindAll).to(FindAllUsers)
+userContainer.bind<IFindAllUsersNoPassword>(USER_TYPES.IFindAllNoPassword).to(FindAllNoPassword)
+userContainer.bind<IFindUserById>(USER_TYPES.IFindUserById).to(FindUserById)
+userContainer.bind<IFindUserByIdNoPassword>(USER_TYPES.IFindUserByIdNoPassword).to(FindUserIdNoPassword)
+userContainer.bind<IFindUserByEmail>(USER_TYPES.IFindUserByEmail).to(FindUserByMail)
+userContainer.bind<IFindUserByEmailNoPassword>(USER_TYPES.IFindUserByEmailNoPassword).to(FindUserByMailNoPassword)
+userContainer.bind<IChangePassword>(USER_TYPES.IChangePassword).to(ChangePassword)
+userContainer.bind<IDeleteUser>(USER_TYPES.IDeleteUser).to(DeleteUser)
+userContainer.bind<IUserController>(USER_TYPES.IUserController).to(UserController)
 
-export { container }
+export { userContainer }

@@ -12,3 +12,12 @@ export const USER_TYPES = {
   IDeleteUser: Symbol.for('IDeleteUser'),
   IChangePassword: Symbol.for('IChangePassword')
 };
+
+export const PRODUCT_TYPES = {
+  IProductRepository: Symbol.for('IProductRepository'),
+  IProductController: Symbol.for('IProductController'),
+  IFindAllProductsByUser: Symbol.for('IFindAllProductsByUser'),
+  IFindProductById: Symbol.for('IFindProductById'),
+  IFindAllProductByCategory: Symbol.for('IFindAllProductByCategory'),
+  IFindProductByName: Symbol.for('IFindProductByName')
+}
