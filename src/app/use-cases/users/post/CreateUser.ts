@@ -6,6 +6,7 @@ import { ICreateUser } from "../../../interfaces/users/post/ICreateUser";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import { IUser } from "../../../../domain/interfaces/user/IUser";
+import UserMapper from "../../../../infraestructure/mappers/UserMapper";
 
 
 @injectable()
@@ -31,7 +32,8 @@ export default class CreateUser implements ICreateUser {
       id: this.idGenerator.generate(),
     };
 
-    const userCreation = await this.userRepository.createUser(newUser);
+    const userModel = await UserMapper.iUserDtoToModel(newUser)
+    const userCreation = await this.userRepository.createUser(userModel);
     return !!userCreation
     } catch (error) {
         if (error instanceof BoomError) {

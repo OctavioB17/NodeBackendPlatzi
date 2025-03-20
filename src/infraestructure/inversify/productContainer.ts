@@ -20,10 +20,13 @@ import IUpdateStock from "../../app/interfaces/products/patch/IUpdateStock";
 import UpdateStock from "../../app/use-cases/products/patch/UpdateStock";
 import IToggleProductPause from "../../app/interfaces/products/patch/IToggleProductPause";
 import ToggleProductPause from "../../app/use-cases/products/patch/ToggleProductPause";
+import IProductController from "../../presentation/controllers/interfaces/IProductController";
+import ProductController from "../../presentation/controllers/ProductController";
 
 const productContainer = new Container();
 
 productContainer.bind<IProductRepository>(PRODUCT_TYPES.IProductRepository).to(ProductRepository);
+productContainer.bind<IProductController>(PRODUCT_TYPES.IProductController).to(ProductController);
 productContainer.bind<IFindAllProductsByUser>(PRODUCT_TYPES.IFindAllProductsByUser).to(FindAllProductsByUser);
 productContainer.bind<IFindProductById>(PRODUCT_TYPES.IFindProductById).to(FindProductById);
 productContainer.bind<IFindAllProductByCategory>(PRODUCT_TYPES.IFindAllProductByCategory).to(FindAllProductsByCategory);
