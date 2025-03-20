@@ -19,5 +19,10 @@ export const PRODUCT_TYPES = {
   IFindAllProductsByUser: Symbol.for('IFindAllProductsByUser'),
   IFindProductById: Symbol.for('IFindProductById'),
   IFindAllProductByCategory: Symbol.for('IFindAllProductByCategory'),
-  IFindProductByName: Symbol.for('IFindProductByName')
+  IFindProductByName: Symbol.for('IFindProductByName'),
+  IDeleteProduct: Symbol.for('IDeleteProduct'),
+  ICreateProduct: Symbol.for('ICreateProduct'),
+  IUpdateProduct: Symbol.for('IUpdateProduct'),
+  IUpdateStock: Symbol.for('IUpdateStock'),
+  IToggleProductPause: Symbol.for('IToggleProductPause')
 }

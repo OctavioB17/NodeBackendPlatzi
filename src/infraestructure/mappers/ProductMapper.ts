@@ -27,4 +27,12 @@ export default class ProductMapper {
   static iUserDtoToModelList(iProduct: IProduct[]): ProductModel[] {
     return iProduct.map(product => this.iProductDtoToModel(product))
   }
+
+  static partialProductDtoToModel(partialProductDto: Partial<ProductDTO>): Partial<ProductModel> {
+    return plainToInstance(ProductModel, partialProductDto);
+  }
+
+  static partialProductModelToDto(partialProductModel: Partial<ProductModel>): Partial<ProductDTO> {
+    return plainToInstance(ProductDTO, partialProductModel);
+  }
 }

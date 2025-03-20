@@ -4,7 +4,7 @@ import express from 'express';
 import { obtainIp } from './utils/functions';
 import routerApi from './presentation/routes';
 import { ICreateUser } from './app/interfaces/users/post/ICreateUser';
-import {USER_TYPES} from './types';
+import {PRODUCT_TYPES, USER_TYPES} from './types';
 import { IIdGenerator } from './domain/services/utils/IIdGenerator';
 import { IUserRepository } from './domain/repositories/IUserRepository';
 import { IFindAllUsers } from './app/interfaces/users/get/IFindAll';
@@ -15,10 +15,20 @@ import { IFindUserByEmailNoPassword } from './app/interfaces/users/get/IFindUser
 import { IDeleteUser } from './app/interfaces/users/delete/IDeleteUser';
 import { IChangePassword } from './app/interfaces/users/patch/IChangePassword';
 import { boomErrorHandling, errorHandlingMiddleware, logError } from './infraestructure/middlewares/httpError';
-import { IUserController } from './infraestructure/controllers/interfaces/IUserController';
+import IUserController from './presentation/controllers/interfaces/IUserController';
 import syncDatabase from './infraestructure/database/DataBaseSync';
 import { corsConfig } from './infraestructure/server/corsConfig';
-import { userContainer } from './infraestructure/inversify/userContainer';
+import userContainer from './infraestructure/inversify/userContainer';
+import productContainer from './infraestructure/inversify/productContainer';
+import ICreateProduct from './app/interfaces/products/post/ICreateProduct';
+import IProductRepository from './domain/repositories/IProductRepository';
+import IProductController from './presentation/controllers/interfaces/IUserController'
+import IFindAllProductByCategory from './app/interfaces/products/get/IFindAllProductByCategory';
+import IFindAllProductsByUser from './app/interfaces/products/get/IFindAllProductsByUser';
+import IFindProductById from './app/interfaces/products/get/IFindProductById';
+import IFindProductByName from './app/interfaces/products/get/IFindProductByName';
+import IToggleProductPause from './app/interfaces/products/patch/IToggleProductPause';
+import IUpdateProduct from './app/interfaces/products/patch/IUpdateProduct';
 
 const app = express();
 app.use(express.json());
@@ -38,6 +48,17 @@ userContainer.get<IFindUserByEmailNoPassword>(USER_TYPES.IFindUserByEmailNoPassw
 userContainer.get<IChangePassword>(USER_TYPES.IChangePassword)
 userContainer.get<IDeleteUser>(USER_TYPES.IDeleteUser)
 userContainer.get<IUserController>(USER_TYPES.IUserController);
+productContainer.get<IProductRepository>(PRODUCT_TYPES.IProductRepository)
+productContainer.get<IProductController>(PRODUCT_TYPES.IProductController)
+productContainer.get<ICreateProduct>(PRODUCT_TYPES.ICreateProduct)
+productContainer.get<IFindAllProductByCategory>(PRODUCT_TYPES.IFindAllProductByCategory)
+productContainer.get<IFindAllProductsByUser>(PRODUCT_TYPES.IFindAllProductsByUser)
+productContainer.get<IFindProductById>(PRODUCT_TYPES.IFindProductById)
+productContainer.get<IFindProductByName>(PRODUCT_TYPES.IFindProductByName)
+productContainer.get<IToggleProductPause>(PRODUCT_TYPES.IToggleProductPause)
+productContainer.get<IUpdateProduct>(PRODUCT_TYPES.IUpdateProduct)
+
+
 routerApi(app);
 app.use(logError);
 app.use(boomErrorHandling);

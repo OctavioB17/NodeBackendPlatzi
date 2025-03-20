@@ -1,6 +1,5 @@
-import ProductModel from "../../../../infraestructure/database/models/ProductsModel";
 import ProductDTO from "../../../../infraestructure/dtos/ProductDTO";
 
 export default interface IUpdateProduct {
-  execute(product: ProductModel): Promise<ProductDTO | null>
+  execute(productId: string, productData: Partial<ProductDTO>): Promise<Partial<ProductDTO> | null>
 }

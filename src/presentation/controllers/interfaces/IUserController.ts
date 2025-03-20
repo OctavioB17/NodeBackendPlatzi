@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-export interface IUserController {
+export default interface IUserController {
   register(req: Request, res: Response, next: NextFunction): Promise<void>;
   findAllUsers(req: Request, res: Response, next: NextFunction): Promise<void>;
   findUserByMail(req: Request, res: Response, next: NextFunction): Promise<void>;

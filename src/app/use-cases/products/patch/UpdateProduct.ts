@@ -2,39 +2,41 @@ import { inject, injectable } from "inversify";
 import {PRODUCT_TYPES} from "../../../../types";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import ProductDTO from "../../../../infraestructure/dtos/ProductDTO";
 import IProductRepository from "../../../../domain/repositories/IProductRepository";
+import IUpdateProduct from "../../../interfaces/products/patch/IUpdateProduct";
+import ProductDTO from "../../../../infraestructure/dtos/ProductDTO";
 import ProductMapper from "../../../../infraestructure/mappers/ProductMapper";
-import IFindProductsByName from "../../../interfaces/products/get/IFindProductByName";
-
 
 @injectable()
-export default class FindProductsByName implements IFindProductsByName {
+export default class UpdateProduct implements IUpdateProduct {
   constructor(
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
   ) {}
 
-  async execute(productName: string): Promise<ProductDTO[]> {
+  async execute(productId: string, productData: Partial<ProductDTO>): Promise<Partial<ProductDTO> | null> {
     try {
-      const products = await this.iProductRepository.findByName(productName)
-      if (!products) {
+      const userModel = ProductMapper.partialProductDtoToModel(productData)
+      const result = await this.iProductRepository.updateProduct(productId, userModel);
+
+      if (!result) {
         throw new BoomError({
-          message: `${productName} not found`,
+          message: `Product not found or can not be updated`,
           type: ErrorType.NOT_FOUND,
           statusCode: 404
-        })
+        });
       }
 
-      return ProductMapper.productModeltoDTOList(products)
+      return ProductMapper.partialProductModelToDto(result);
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;
       }
+
       throw new BoomError({
-        message: `Error finding Product`,
+        message: `Error updating product`,
         type: ErrorType.INTERNAL_ERROR,
         statusCode: 500
-      })
+      });
     }
   }
 }

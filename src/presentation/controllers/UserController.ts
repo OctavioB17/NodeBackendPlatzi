@@ -12,7 +12,7 @@ import { IChangePassword } from "../../app/interfaces/users/patch/IChangePasswor
 import { BoomError } from "../../domain/entities/DomainError";
 import { validate as validateUUID } from 'uuid';
 import { ErrorType } from "../../domain/interfaces/Error";
-import { IUserController } from "./interfaces/IUserController";
+import IUserController from "./interfaces/IUserController";
 import { IFindUserByEmailNoPassword } from "../../app/interfaces/users/get/IFindUserByEmailNoPassword";
 export default class UserController implements IUserController {
   constructor(

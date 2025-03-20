@@ -11,7 +11,7 @@ import IFindAllProductByCategory from "../../../interfaces/products/get/IFindAll
 @injectable()
 export default class FindAllProductsByCategory implements IFindAllProductByCategory {
   constructor(
-    @inject(PRODUCT_TYPES.IFindAllProductByCategory) private iProductRepository: IProductRepository,
+    @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
   ) {}
 
   async execute(categoryId: string): Promise<ProductDTO[]> {

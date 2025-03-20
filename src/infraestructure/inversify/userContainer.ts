@@ -20,8 +20,8 @@ import { IChangePassword } from "../../app/interfaces/users/patch/IChangePasswor
 import ChangePassword from "../../app/use-cases/users/patch/ChangePassword";
 import { IDeleteUser } from "../../app/interfaces/users/delete/IDeleteUser";
 import DeleteUser from "../../app/use-cases/users/delete/DeleteUser";
-import UserController from "../controllers/UserController";
-import { IUserController } from "../controllers/interfaces/IUserController";
+import UserController from "../../presentation/controllers/UserController";
+import IUserController from "../../presentation/controllers/interfaces/IUserController";
 import FindUserByMailNoPassword from "../../app/use-cases/users/get/FindUserByMailNoPassword";
 import { IFindAllUsers } from "../../app/interfaces/users/get/IFindAll";
 
@@ -40,4 +40,4 @@ userContainer.bind<IChangePassword>(USER_TYPES.IChangePassword).to(ChangePasswor
 userContainer.bind<IDeleteUser>(USER_TYPES.IDeleteUser).to(DeleteUser)
 userContainer.bind<IUserController>(USER_TYPES.IUserController).to(UserController)
 
-export { userContainer }
+export default userContainer
