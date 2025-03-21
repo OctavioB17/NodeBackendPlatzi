@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer";
 
-export default class ProductDTO {
+export default class CategoryDTO {
   @Expose()
   id!: string;
 

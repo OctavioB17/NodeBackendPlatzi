@@ -1,5 +1,4 @@
-import ProductDTO from "../../../../infraestructure/dtos/ProductDTO";
-
+import CategoryDTO from "../../../../infraestructure/dtos/CategoryDTO";
 export default interface IFindAllProductByCategory {
-  execute(categoryId: string): Promise<ProductDTO[] | null>
+  execute(categoryId: string): Promise<CategoryDTO[] | null>
 }

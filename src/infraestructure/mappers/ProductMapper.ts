@@ -9,7 +9,7 @@ export default class ProductMapper {
   }
 
   static productModeltoDTOList(productModels: ProductModel[]): ProductDTO[] {
-    return productModels.map(user => this.productModeltoDTO(user.dataValues))
+    return productModels.map(product => this.productModeltoDTO(product.dataValues))
   }
 
   static productDtoToModel(productDto: ProductDTO): ProductModel {
@@ -24,7 +24,7 @@ export default class ProductMapper {
     return plainToInstance(ProductModel, iProduct)
   }
 
-  static iUserDtoToModelList(iProduct: IProduct[]): ProductModel[] {
+  static iProductDtoToModelList(iProduct: IProduct[]): ProductModel[] {
     return iProduct.map(product => this.iProductDtoToModel(product))
   }
 

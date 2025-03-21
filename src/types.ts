@@ -26,3 +26,7 @@ export const PRODUCT_TYPES = {
   IUpdateStock: Symbol.for('IUpdateStock'),
   IToggleProductPause: Symbol.for('IToggleProductPause')
 }
+
+export const CATEGORY_TYPES = {
+  ICategoryRepository: Symbol.for('ICategoryRepository')
+}
