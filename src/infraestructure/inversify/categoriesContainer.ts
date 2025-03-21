@@ -1,5 +1,5 @@
 import { Container } from "inversify";
-import { CATEGORY_TYPES } from "../../types";
+import { CATEGORY_TYPES, UTIL_TYPES } from "../../types";
 import { ICategoriesRepository } from "../../domain/repositories/ICategoryRepository";
 import CategoriesRepository from "../repositories/CategoriesRepository";
 import ICategoriesController from "../../presentation/controllers/interfaces/ICategoriesController";
@@ -14,10 +14,13 @@ import IGetCategoryById from "../../app/interfaces/categories/get/IGetCategoryBy
 import GetCategoryById from "../../app/use-cases/categories/get/GetCategoryById";
 import UpdateCategory from "../../app/use-cases/categories/patch/UpdateCategory";
 import IUpdateCategory from "../../app/interfaces/categories/patch/IUpdateCategory";
+import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
+import UuidGenerator from "../services/utils/UuidGenerator";
 
 const categoriesContainer = new Container();
 
 categoriesContainer.bind<ICategoriesRepository>(CATEGORY_TYPES.ICategoriesRepository).to(CategoriesRepository);
+categoriesContainer.bind<IIdGenerator>(UTIL_TYPES.IIdGenerator).to(UuidGenerator);
 categoriesContainer.bind<ICategoriesController>(CATEGORY_TYPES.ICategoriesController).to(CategoriesController);
 categoriesContainer.bind<ICreateCategory>(CATEGORY_TYPES.ICreateCategory).to(CreateCategory);
 categoriesContainer.bind<IDeleteCategory>(CATEGORY_TYPES.IDeleteCategory).to(DeleteCategory);

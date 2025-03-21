@@ -2,9 +2,7 @@ import { Container } from "inversify";
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import UserRepository from "../repositories/UserRepository";
 import { ICreateUser } from "../../app/interfaces/users/post/ICreateUser";
-import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
-import { USER_TYPES} from "../../types";
-import UuidGenerator from "../services/utils/UuidGenerator";
+import { USER_TYPES, UTIL_TYPES } from "../../types";
 import CreateUser from "../../app/use-cases/users/post/CreateUser";
 import { IFindAllUsersNoPassword } from "../../app/interfaces/users/get/IFindAllUsersNoPassword";
 import { IFindUserById } from "../../app/interfaces/users/get/IFindUserById";
@@ -24,11 +22,13 @@ import UserController from "../../presentation/controllers/UserController";
 import IUserController from "../../presentation/controllers/interfaces/IUserController";
 import FindUserByMailNoPassword from "../../app/use-cases/users/get/FindUserByMailNoPassword";
 import { IFindAllUsers } from "../../app/interfaces/users/get/IFindAll";
+import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
+import UuidGenerator from "../services/utils/UuidGenerator";
 
 const userContainer = new Container();
 
-userContainer.bind<IIdGenerator>(USER_TYPES.IIdGenerator).to(UuidGenerator);
 userContainer.bind<IUserRepository>(USER_TYPES.IUserRepository).to(UserRepository);
+userContainer.bind<IIdGenerator>(UTIL_TYPES.IIdGenerator).to(UuidGenerator);
 userContainer.bind<ICreateUser>(USER_TYPES.ICreateUser).to(CreateUser);
 userContainer.bind<IFindAllUsers>(USER_TYPES.IFindAll).to(FindAllUsers)
 userContainer.bind<IFindAllUsersNoPassword>(USER_TYPES.IFindAllNoPassword).to(FindAllNoPassword)

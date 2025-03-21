@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
 import { IIdGenerator } from "../../../../domain/services/utils/IIdGenerator";
-import {USER_TYPES} from "../../../../types";
+import {USER_TYPES, UTIL_TYPES} from "../../../../types";
 import { ICreateUser } from "../../../interfaces/users/post/ICreateUser";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
@@ -13,7 +13,7 @@ import UserMapper from "../../../../infraestructure/mappers/UserMapper";
 export default class CreateUser implements ICreateUser {
   constructor(
     @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
-    @inject(USER_TYPES.IIdGenerator) private idGenerator: IIdGenerator
+    @inject(UTIL_TYPES.IIdGenerator) private idGenerator: IIdGenerator
   ) {}
 
   async execute(iUser: IUser): Promise<boolean> {

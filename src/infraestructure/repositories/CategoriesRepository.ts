@@ -16,6 +16,19 @@ export default class CategoriesRepository implements ICategoriesRepository {
     }
   }
 
+  async getCategoryByName(name: string): Promise<CategoriesModel | null> {
+    try {
+      const category = await CategoriesModel.findOne({ where: { name: name } });
+      if (category) {
+        return category
+      } else {
+        return null
+      }
+    } catch (error: any) {
+      throw new Error(error)
+    }
+  }
+
   async getCategoryById(id: string): Promise<CategoriesModel | null> {
     try {
       const category = await CategoriesModel.findByPk(id);
@@ -28,6 +41,7 @@ export default class CategoriesRepository implements ICategoriesRepository {
       throw new Error(error)
     }
   }
+
   async getAllCategories(): Promise<CategoriesModel[] | null> {
     try {
       const allCategories = await CategoriesModel.findAll();

@@ -4,7 +4,7 @@ import express from 'express';
 import { obtainIp } from './utils/functions';
 import routerApi from './presentation/routes';
 import { ICreateUser } from './app/interfaces/users/post/ICreateUser';
-import {CATEGORY_TYPES, PRODUCT_TYPES, USER_TYPES} from './types';
+import {CATEGORY_TYPES, PRODUCT_TYPES, USER_TYPES, UTIL_TYPES} from './types';
 import { IIdGenerator } from './domain/services/utils/IIdGenerator';
 import { IUserRepository } from './domain/repositories/IUserRepository';
 import { IFindAllUsers } from './app/interfaces/users/get/IFindAll';
@@ -37,6 +37,7 @@ import IGetAllCategories from './app/interfaces/categories/get/IGetAllCategories
 import IGetCategoryById from './app/interfaces/categories/get/IGetCategoryById';
 import IUpdateCategory from './app/interfaces/categories/patch/IUpdateCategory';
 import ICreateCategory from './app/interfaces/categories/post/ICreateCategory';
+import utilContainer from './infraestructure/inversify/utilContainer';
 
 const app = express();
 app.use(express.json());
@@ -44,8 +45,8 @@ app.use(corsConfig)
 syncDatabase();
 const port = 3000;
 const ip: string = obtainIp() || 'localhost';
+utilContainer.get<IIdGenerator>(UTIL_TYPES.IIdGenerator);
 userContainer.get<ICreateUser>(USER_TYPES.ICreateUser);
-userContainer.get<IIdGenerator>(USER_TYPES.IIdGenerator);
 userContainer.get<IUserRepository>(USER_TYPES.IUserRepository);
 userContainer.get<IFindAllUsers>(USER_TYPES.IFindAll)
 userContainer.get<IFindAllUsersNoPassword>(USER_TYPES.IFindAllNoPassword)
