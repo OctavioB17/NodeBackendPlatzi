@@ -28,5 +28,11 @@ export const PRODUCT_TYPES = {
 }
 
 export const CATEGORY_TYPES = {
-  ICategoryRepository: Symbol.for('ICategoryRepository')
+  ICategoriesRepository: Symbol.for('ICategoryRepository'),
+  ICategoriesController: Symbol.for('ICategoriesController'),
+  IGetAllCategories: Symbol.for('IGetAllCategories'),
+  IGetCategoryById: Symbol.for('IGetCategoryById'),
+  IUpdateCategory: Symbol.for('IUpdateCategory'),
+  ICreateCategory: Symbol.for('ICreateCategory'),
+  IDeleteCategory: Symbol.for('IDeleteCategory')
 }

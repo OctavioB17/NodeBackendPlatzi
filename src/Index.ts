@@ -4,7 +4,7 @@ import express from 'express';
 import { obtainIp } from './utils/functions';
 import routerApi from './presentation/routes';
 import { ICreateUser } from './app/interfaces/users/post/ICreateUser';
-import {PRODUCT_TYPES, USER_TYPES} from './types';
+import {CATEGORY_TYPES, PRODUCT_TYPES, USER_TYPES} from './types';
 import { IIdGenerator } from './domain/services/utils/IIdGenerator';
 import { IUserRepository } from './domain/repositories/IUserRepository';
 import { IFindAllUsers } from './app/interfaces/users/get/IFindAll';
@@ -29,6 +29,14 @@ import IFindProductById from './app/interfaces/products/get/IFindProductById';
 import IFindProductByName from './app/interfaces/products/get/IFindProductByName';
 import IToggleProductPause from './app/interfaces/products/patch/IToggleProductPause';
 import IUpdateProduct from './app/interfaces/products/patch/IUpdateProduct';
+import categoriesContainer from './infraestructure/inversify/categoriesContainer';
+import { ICategoriesRepository } from './domain/repositories/ICategoryRepository';
+import ICategoriesController from './presentation/controllers/interfaces/ICategoriesController';
+import IDeleteCategory from './app/interfaces/categories/delete/IDeleteCategory';
+import IGetAllCategories from './app/interfaces/categories/get/IGetAllCategories';
+import IGetCategoryById from './app/interfaces/categories/get/IGetCategoryById';
+import IUpdateCategory from './app/interfaces/categories/patch/IUpdateCategory';
+import ICreateCategory from './app/interfaces/categories/post/ICreateCategory';
 
 const app = express();
 app.use(express.json());
@@ -57,7 +65,13 @@ productContainer.get<IFindProductById>(PRODUCT_TYPES.IFindProductById)
 productContainer.get<IFindProductByName>(PRODUCT_TYPES.IFindProductByName)
 productContainer.get<IToggleProductPause>(PRODUCT_TYPES.IToggleProductPause)
 productContainer.get<IUpdateProduct>(PRODUCT_TYPES.IUpdateProduct)
-
+categoriesContainer.get<ICategoriesRepository>(CATEGORY_TYPES.ICategoriesRepository)
+categoriesContainer.get<ICategoriesController>(CATEGORY_TYPES.ICategoriesController)
+categoriesContainer.get<ICreateCategory>(CATEGORY_TYPES.ICreateCategory)
+categoriesContainer.get<IDeleteCategory>(CATEGORY_TYPES.IDeleteCategory)
+categoriesContainer.get<IGetAllCategories>(CATEGORY_TYPES.IGetAllCategories)
+categoriesContainer.get<IGetCategoryById>(CATEGORY_TYPES.IGetCategoryById)
+categoriesContainer.get<IUpdateCategory>(CATEGORY_TYPES.IUpdateCategory)
 
 routerApi(app);
 app.use(logError);
