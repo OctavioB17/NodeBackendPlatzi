@@ -40,16 +40,8 @@ export default class UserController implements IUserController {
           statusCode: 400
         });
       }
-    } catch (error: any) {
-      if (error instanceof BoomError) {
-        res.status(error.statusCode).json({ error: error.message, code: error.statusCode });
-      } else {
-        throw new BoomError({
-          message: 'Server Error',
-          type: ErrorType.INTERNAL_ERROR,
-          statusCode: 500
-        });
-      }
+    } catch (error) {
+      next(error)
     }
   }
 

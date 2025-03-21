@@ -10,7 +10,7 @@ import { ErrorType } from "../../../../domain/interfaces/Error";
 @injectable()
 export default class UpdateCategory implements IUpdateProduct {
   constructor(
-    @inject(CATEGORY_TYPES.ICategoryRepository) private categoryRepository: ICategoriesRepository
+    @inject(CATEGORY_TYPES.ICategoriesRepository) private categoryRepository: ICategoriesRepository
   ) {}
 
   async execute(categoryId: string, categoryData: Partial<CategoryDTO>): Promise<Partial<CategoryDTO> | null> {
