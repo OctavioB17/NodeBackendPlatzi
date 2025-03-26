@@ -37,5 +37,6 @@ export const CATEGORY_TYPES = {
   IGetCategoryById: Symbol.for('IGetCategoryById'),
   IUpdateCategory: Symbol.for('IUpdateCategory'),
   ICreateCategory: Symbol.for('ICreateCategory'),
-  IDeleteCategory: Symbol.for('IDeleteCategory')
+  IDeleteCategory: Symbol.for('IDeleteCategory'),
+  IGetCategoryByName: Symbol.for('IGetCategoryByName')
 }

@@ -20,7 +20,7 @@ export default class CategoriesRepository implements ICategoriesRepository {
     try {
       const category = await CategoriesModel.findOne({ where: { name: name } });
       if (category) {
-        return category
+        return category.dataValues
       } else {
         return null
       }
@@ -58,14 +58,13 @@ export default class CategoriesRepository implements ICategoriesRepository {
     try {
       const category = await this.getCategoryById(id)
       if (category) {
-        category.update({
-          ...categories
-        })
-        return category
+        const updatedCategory = await category.update({ ...categories });
+        return updatedCategory.dataValues
       } else {
         return null
       }
     } catch (error: any) {
+      console.error('Error updating category:', error);
       throw new Error(error)
     }
   }

@@ -16,6 +16,8 @@ import UpdateCategory from "../../app/use-cases/categories/patch/UpdateCategory"
 import IUpdateCategory from "../../app/interfaces/categories/patch/IUpdateCategory";
 import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
 import UuidGenerator from "../services/utils/UuidGenerator";
+import IGetCategoryByName from "../../app/interfaces/categories/get/IGetCategoryByName";
+import GetCategoryByName from "../../app/use-cases/categories/get/GetCategoryByName";
 
 const categoriesContainer = new Container();
 
@@ -27,5 +29,7 @@ categoriesContainer.bind<IDeleteCategory>(CATEGORY_TYPES.IDeleteCategory).to(Del
 categoriesContainer.bind<IGetAllCategories>(CATEGORY_TYPES.IGetAllCategories).to(GetAllCategories);
 categoriesContainer.bind<IGetCategoryById>(CATEGORY_TYPES.IGetCategoryById).to(GetCategoryById);
 categoriesContainer.bind<IUpdateCategory>(CATEGORY_TYPES.IUpdateCategory).to(UpdateCategory);
+categoriesContainer.bind<IGetCategoryByName>(CATEGORY_TYPES.IGetCategoryByName).to(GetCategoryByName);
+
 
 export default categoriesContainer

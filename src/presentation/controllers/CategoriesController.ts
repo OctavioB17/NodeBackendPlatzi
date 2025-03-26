@@ -9,6 +9,7 @@ import ICreateCategory from "../../app/interfaces/categories/post/ICreateCategor
 import { inject } from "inversify";
 import { BoomError } from "../../domain/entities/DomainError";
 import { ErrorType } from "../../domain/interfaces/Error";
+import IGetCategoryByName from "../../app/interfaces/categories/get/IGetCategoryByName";
 
 export default class CategoriesController implements ICategoriesController {
 
@@ -18,10 +19,12 @@ export default class CategoriesController implements ICategoriesController {
     @inject(CATEGORY_TYPES.IUpdateCategory) private updateCategory: IUpdateCategory,
     @inject(CATEGORY_TYPES.IDeleteCategory) private deleteCategory: IDeleteCategory,
     @inject(CATEGORY_TYPES.ICreateCategory) private createCategory: ICreateCategory,
+    @inject(CATEGORY_TYPES.IGetCategoryByName) private findCategoryByName: IGetCategoryByName,
   ) {}
 
   async createCategoryController(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { category } = req.body
+    const category = req.body
+
     try {
       const newCategory = await this.createCategory.execute(category)
       if (!newCategory) {
@@ -72,6 +75,23 @@ export default class CategoriesController implements ICategoriesController {
       next(error)
     }
   }
+
+  async findByNameController(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { name } = req.params
+      const categoty = await this.findCategoryByName.execute(name)
+      if (!categoty) {
+        throw new BoomError({
+          message: `Failed to find ${name} category`,
+          type: ErrorType.INTERNAL_ERROR,
+          statusCode: 404
+        });
+      }
+
+      res.status(200).json(categoty)
+    } catch (error) {
+      next(error)
+    }  }
 
   async updateCategoryController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params

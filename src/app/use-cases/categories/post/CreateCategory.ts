@@ -17,22 +17,20 @@ export default class CreateCategory implements ICreateCategory {
 
   async execute(categoryDto: CategoryDTO): Promise<boolean | null> {
     try {
-      const category = this.categoryRepository.getCategoryByName(categoryDto.name)
-      if (!category) {
+      const category = await this.categoryRepository.getCategoryByName(categoryDto.name)
+      if (category) {
         throw new BoomError({
           message: `Category already created`,
           type: ErrorType.VALIDATION_ERROR,
           statusCode: 400
         });
       }
-
       const newCategory: CategoryDTO = {
         ...categoryDto,
         id: this.idGenerator.generate(),
       };
-
       const dtoToModel = CategoryMapper.categoryDTOToModel(newCategory)
-      const categoryCreation = await this.categoryRepository.createCategory(dtoToModel)
+      const categoryCreation = await this.categoryRepository.createCategory(dtoToModel.dataValues)
       if (categoryCreation) {
         return true
       } else {

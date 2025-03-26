@@ -16,7 +16,7 @@ export default class UpdateCategory implements IUpdateProduct {
   async execute(categoryId: string, categoryData: Partial<CategoryDTO>): Promise<Partial<CategoryDTO> | null> {
     try {
       const partialDtoToModel = CategoryMapper.partialCategoryDtoToModel(categoryData)
-      const updateProduct = await this.categoryRepository.updateCategory(categoryId, partialDtoToModel)
+      const updateProduct = await this.categoryRepository.updateCategory(categoryId, partialDtoToModel?.dataValues ?? {});
       if (!updateProduct) {
         throw new BoomError({
           message: `Category not found or could not be updated`,
