@@ -27,7 +27,7 @@ export default class CreateProduct implements ICreateProduct {
 
       if (!result) {
         throw new BoomError({
-          message: `Product not found or could not be deleted`,
+          message: `Product already created`,
           type: ErrorType.NOT_FOUND,
           statusCode: 404
         });
@@ -35,12 +35,13 @@ export default class CreateProduct implements ICreateProduct {
 
       return true;
     } catch (error) {
+      console.log(error)
       if (error instanceof BoomError) {
         throw error;
       }
 
       throw new BoomError({
-        message: `Error deleting product`,
+        message: `Error creating product`,
         type: ErrorType.INTERNAL_ERROR,
         statusCode: 500
       });

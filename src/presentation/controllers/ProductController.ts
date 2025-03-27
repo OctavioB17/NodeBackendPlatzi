@@ -33,7 +33,7 @@ export default class ProductController implements IProductController {
     try {
       const createdProduct = await this.createProduct.execute(productData);
       if (createdProduct) {
-        res.status(201).json(createdProduct);
+        res.status(201).json({ message: 'Product created' });
       } else {
         throw new BoomError({
           message: 'Failed to create product',
@@ -67,9 +67,9 @@ export default class ProductController implements IProductController {
   }
 
   async findAllByUserIdController(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { userId } = req.params;
+    const { id } = req.params;
     try {
-      const products = await this.findAllProductsByUser.execute(userId);
+      const products = await this.findAllProductsByUser.execute(id);
       if (products && products.length > 0) {
         res.status(200).json(products);
       } else {
@@ -85,9 +85,9 @@ export default class ProductController implements IProductController {
   }
 
   async findByIdController(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { productId } = req.params;
+    const { id } = req.params;
     try {
-      const product = await this.findProductById.execute(productId);
+      const product = await this.findProductById.execute(id);
       if (product) {
         res.status(200).json(product);
       } else {
@@ -121,9 +121,9 @@ export default class ProductController implements IProductController {
   }
 
   async findAllByCategoryController(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { categoryId } = req.params;
+    const { id } = req.params;
     try {
-      const products = await this.findAllProductByCategory.execute(categoryId);
+      const products = await this.findAllProductByCategory.execute(id);
       if (products && products.length > 0) {
         res.status(200).json(products);
       } else {

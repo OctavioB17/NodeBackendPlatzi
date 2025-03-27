@@ -2,7 +2,6 @@ import Joi from "joi";
 import { UserRolesEnum } from "../../domain/interfaces/user/UserRoles";
 
 export const createUserSchema = Joi.object({
-  id: Joi.string().uuid().optional(),
   name: Joi.string().min(2).max(100).pattern(/^[^0-9]*$/).required(),
   surname: Joi.string().min(2).max(100).pattern(/^[^0-9]*$/).required(),
   email: Joi.string().email().required(),

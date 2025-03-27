@@ -20,7 +20,7 @@ export default class ProductDTO {
   dimensions!: { length: string; width: string; heigth: string; } | null;
 
   @Expose()
-  weigth!: number | null;
+  weight!: number | null;
 
   @Expose()
   price!: number;

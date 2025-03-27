@@ -3,6 +3,7 @@ import ProductModel from "../../infraestructure/database/models/ProductsModel";
 export default interface IProductRepository {
   createProduct(product: ProductModel): Promise<boolean | null>
   findById(id: string): Promise<ProductModel | null>
+  findByIdInSystem(id: string): Promise<ProductModel | null>
   findByName(email: string): Promise<ProductModel[] | null>;
   findAllByUserId(userId: string): Promise<ProductModel[] | null>;
   findAllByCategory(categoryId: string): Promise<ProductModel[] | null>;

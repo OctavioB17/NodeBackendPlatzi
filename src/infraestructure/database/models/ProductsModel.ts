@@ -24,8 +24,8 @@ export default class ProductModel extends Model<ProductModel> implements IProduc
   @Column({ type: DataType.JSON, allowNull: true })
   declare dimensions: { length: string; width: string; heigth: string; } | null;
 
-  @Column({ type: DataType.SMALLINT, allowNull: true })
-  declare weigth: number | null;
+  @Column({ type: DataType.FLOAT, allowNull: true })
+  declare weight: number | null;
 
   @Column({ type: DataType.INTEGER, allowNull: false })
   declare price: number;

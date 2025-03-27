@@ -6,7 +6,7 @@ import { Op, where } from "sequelize";
 export default class ProductRepository implements IProductRepository {
   async createProduct(product: ProductModel): Promise<boolean> {
     try {
-      const newProduct = await ProductModel.create(product)
+      const newProduct = await ProductModel.create(product.dataValues)
       if (newProduct) {
         return true
       } else {
@@ -20,6 +20,20 @@ export default class ProductRepository implements IProductRepository {
     try {
       const product = await ProductModel.findByPk(id);
       if (product) {
+        return product.dataValues
+      } else {
+        return null
+      }
+    } catch (error: any) {
+      throw new Error(error)
+
+    }
+  }
+
+  async findByIdInSystem(id: string): Promise<ProductModel | null> {
+    try {
+      const product = await ProductModel.findByPk(id);
+      if (product) {
         return product
       } else {
         return null
@@ -30,12 +44,13 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
+
   async findByName(name: string): Promise<ProductModel[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
           name: {
-            [Op.like]: `%${name}%`
+            [Op.iLike]: `%${name}%`
           }
         }
       })
@@ -85,13 +100,13 @@ export default class ProductRepository implements IProductRepository {
 
   async updateProduct(productId: string, productData: Partial<ProductModel>): Promise<ProductModel | null> {
     try {
-      const product = await  this.findById(productId);
+      const product = await  this.findByIdInSystem(productId);
 
       if (product) {
         product.update({
           ...productData
         })
-        return product
+        return product.dataValues
       } else {
         return null
       }
@@ -102,7 +117,7 @@ export default class ProductRepository implements IProductRepository {
 
   async deleteProduct(id: string): Promise<boolean> {
     try {
-      const product = await this.findById(id)
+      const product = await this.findByIdInSystem(id)
       if (product) {
         await product.destroy()
         return true
@@ -116,7 +131,7 @@ export default class ProductRepository implements IProductRepository {
 
   async updateStock(id: string, stock: number): Promise<ProductModel | null> {
     try {
-      const product = await this.findById(id);
+      const product = await this.findByIdInSystem(id);
       if (!product) {
         return null
       }
@@ -133,7 +148,7 @@ export default class ProductRepository implements IProductRepository {
 
  async  toggleProductPause(id: string, status: boolean): Promise<ProductModel | null> {
     try {
-      const product = await this.findById(id);
+      const product = await this.findByIdInSystem(id);
       if (!product) {
         return null
       }

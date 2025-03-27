@@ -27,6 +27,7 @@ export default class FindAllProductsByUser implements IFindAllProductsByUser {
 
       return ProductMapper.productModeltoDTOList(products)
     } catch (error) {
+      console.log(error)
       if (error instanceof BoomError) {
         throw error;
       }
