@@ -21,7 +21,10 @@ export default class ProductRepository implements IProductRepository {
   }
   async findById(id: string): Promise<IProductWithUserAndCategory | null> {
     try {
-      const product = await ProductModel.findByPk(id, { include: ['users', 'categories'] });
+      const product = await ProductModel.findByPk(id, { include: [
+        { model: UserModel, as: 'user' },
+        { model: CategoriesModel, as: 'categories' }
+      ]});
       if (product) {
         return product.dataValues
       } else {
@@ -56,7 +59,10 @@ export default class ProductRepository implements IProductRepository {
             [Op.iLike]: `%${name}%`
           }
         },
-        include: ['users', 'categories']
+        include: [
+          { model: UserModel, as: 'user' },
+          { model: CategoriesModel, as: 'categories' }
+        ]
       })
       if (products.length > 0) {
         return products
@@ -95,7 +101,10 @@ export default class ProductRepository implements IProductRepository {
         where: {
           categoryId: categoryId
         },
-        include: ['users', 'categories']
+        include: [
+          { model: UserModel, as: 'user' },
+          { model: CategoriesModel, as: 'categories' }
+        ]
       })
       if (products.length > 0) {
         return products
