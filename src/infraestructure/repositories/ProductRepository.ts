@@ -98,20 +98,17 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async updateProduct(productId: string, productData: Partial<ProductModel>): Promise<ProductModel | null> {
+  async updateProduct(productId: string, productData: Partial<Omit<ProductModel, "id">>): Promise<ProductModel | null> {
     try {
-      const product = await  this.findByIdInSystem(productId);
+      const product = await this.findByIdInSystem(productId);
 
-      if (product) {
-        product.update({
-          ...productData
-        })
-        return product.dataValues
-      } else {
-        return null
-      }
+      if (!product) return null;
+
+      const productUpdate = await product.update(productData instanceof ProductModel ? productData.dataValues : productData);
+
+      return productUpdate.dataValues;
     } catch (error: any) {
-      throw new Error(error)
+      throw new Error(error);
     }
   }
 
