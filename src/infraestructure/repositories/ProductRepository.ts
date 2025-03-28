@@ -2,6 +2,9 @@ import { id } from "inversify";
 import IProductRepository from "../../domain/repositories/IProductRepository";
 import ProductModel from "../database/models/ProductsModel";
 import { Op, where } from "sequelize";
+import IProductWithUserAndCategory from "../../domain/interfaces/user/IProductWithUserAndCategory";
+import UserModel from "../database/models/UserModel";
+import CategoriesModel from "../database/models/CategoriesModel";
 
 export default class ProductRepository implements IProductRepository {
   async createProduct(product: ProductModel): Promise<boolean> {
@@ -16,9 +19,9 @@ export default class ProductRepository implements IProductRepository {
       throw new Error('Failed to create product')
     }
   }
-  async findById(id: string): Promise<ProductModel | null> {
+  async findById(id: string): Promise<IProductWithUserAndCategory | null> {
     try {
-      const product = await ProductModel.findByPk(id);
+      const product = await ProductModel.findByPk(id, { include: ['users', 'categories'] });
       if (product) {
         return product.dataValues
       } else {
@@ -45,14 +48,15 @@ export default class ProductRepository implements IProductRepository {
   }
 
 
-  async findByName(name: string): Promise<ProductModel[] | null> {
+  async findByName(name: string): Promise<IProductWithUserAndCategory[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
           name: {
             [Op.iLike]: `%${name}%`
           }
-        }
+        },
+        include: ['users', 'categories']
       })
       if (products.length > 0) {
         return products
@@ -64,12 +68,16 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async findAllByUserId(userId: string): Promise<ProductModel[] | null> {
+  async findAllByUserId(userId: string): Promise<IProductWithUserAndCategory[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
           userId: userId
-        }
+        },
+        include: [
+          { model: UserModel, as: 'user' },
+          { model: CategoriesModel, as: 'categories' }
+        ]
       })
       if (products.length > 0) {
         return products
@@ -86,7 +94,8 @@ export default class ProductRepository implements IProductRepository {
       const products = await ProductModel.findAll({
         where: {
           categoryId: categoryId
-        }
+        },
+        include: ['users', 'categories']
       })
       if (products.length > 0) {
         return products

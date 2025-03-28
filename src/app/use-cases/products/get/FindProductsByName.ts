@@ -2,10 +2,10 @@ import { inject, injectable } from "inversify";
 import {PRODUCT_TYPES} from "../../../../types";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import ProductDTO from "../../../../infraestructure/dtos/ProductDTO";
 import IProductRepository from "../../../../domain/repositories/IProductRepository";
 import ProductMapper from "../../../../infraestructure/mappers/ProductMapper";
 import IFindProductsByName from "../../../interfaces/products/get/IFindProductByName";
+import ProductWithUserAndCategoryDTO from "../../../../infraestructure/dtos/ProductWithUserAndCategoryDTO";
 
 
 @injectable()
@@ -14,7 +14,7 @@ export default class FindProductsByName implements IFindProductsByName {
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
   ) {}
 
-  async execute(productName: string): Promise<ProductDTO[]> {
+  async execute(productName: string): Promise<ProductWithUserAndCategoryDTO[]> {
     try {
       const products = await this.iProductRepository.findByName(productName)
       if (!products) {
@@ -24,8 +24,9 @@ export default class FindProductsByName implements IFindProductsByName {
           statusCode: 404
         })
       }
+      const productsDto = ProductMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products);
 
-      return ProductMapper.productModeltoDTOList(products)
+      return productsDto
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;

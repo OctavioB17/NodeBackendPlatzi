@@ -6,6 +6,7 @@ import ProductDTO from "../../../../infraestructure/dtos/ProductDTO";
 import IProductRepository from "../../../../domain/repositories/IProductRepository";
 import ProductMapper from "../../../../infraestructure/mappers/ProductMapper";
 import IFindAllProductByCategory from "../../../interfaces/products/get/IFindAllProductByCategory";
+import ProductWithUserAndCategoryDTO from "../../../../infraestructure/dtos/ProductWithUserAndCategoryDTO";
 
 
 @injectable()
@@ -14,7 +15,7 @@ export default class FindAllProductsByCategory implements IFindAllProductByCateg
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
   ) {}
 
-  async execute(categoryId: string): Promise<ProductDTO[]> {
+  async execute(categoryId: string): Promise<ProductWithUserAndCategoryDTO[]> {
     try {
       const products = await this.iProductRepository.findAllByCategory(categoryId)
       if (!products) {
@@ -24,8 +25,9 @@ export default class FindAllProductsByCategory implements IFindAllProductByCateg
           statusCode: 404
         })
       }
+      const productsDto = ProductMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products);
 
-      return ProductMapper.productModeltoDTOList(products)
+      return productsDto
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;

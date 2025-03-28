@@ -14,10 +14,10 @@ const sequelize = new Sequelize(URI, {
   models: [UserModel, ProductModel, CategoriesModel],
 } as any);
 
-ProductModel.belongsTo(UserModel, { foreignKey: 'userId', onUpdate: 'CASCADE', onDelete: 'CASCADE' })
+ProductModel.belongsTo(UserModel, { foreignKey: 'userId', onUpdate: 'CASCADE', onDelete: 'CASCADE', as: 'user' })
 UserModel.hasMany(ProductModel, { foreignKey: 'userId', onUpdate: 'CASCADE', onDelete: 'CASCADE' })
 
-ProductModel.belongsTo(CategoriesModel, { foreignKey: 'categoryId', onUpdate: 'CASCADE', onDelete: 'CASCADE' })
+ProductModel.belongsTo(CategoriesModel, { foreignKey: 'categoryId', onUpdate: 'CASCADE', onDelete: 'CASCADE', as: 'categories' })
 CategoriesModel.hasMany(ProductModel, { foreignKey: 'categoryId', onUpdate: 'CASCADE', onDelete: 'CASCADE'});
 
 export default sequelize
