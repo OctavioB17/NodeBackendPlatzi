@@ -1,5 +1,5 @@
 import { Container } from "inversify";
-import { IUserRepository } from "../../domain/repositories/IUserRepository";
+import { IUserRepository } from "../../domain/repositories/IUsersRepository";
 import UserRepository from "../repositories/UserRepository";
 import { ICreateUser } from "../../app/interfaces/users/post/ICreateUser";
 import { USER_TYPES, UTIL_TYPES } from "../../types";
@@ -24,10 +24,13 @@ import FindUserByMailNoPassword from "../../app/use-cases/users/get/FindUserByMa
 import { IFindAllUsers } from "../../app/interfaces/users/get/IFindAll";
 import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
 import UuidGenerator from "../services/utils/UuidGenerator";
+import IUserMapper from "../mappers/interfaces/IUserMapper";
+import UserMapper from "../mappers/UserMapper";
 
 const userContainer = new Container();
 
 userContainer.bind<IUserRepository>(USER_TYPES.IUserRepository).to(UserRepository);
+userContainer.bind<IUserMapper>(USER_TYPES.IUserMapper).to(UserMapper)
 userContainer.bind<IIdGenerator>(UTIL_TYPES.IIdGenerator).to(UuidGenerator);
 userContainer.bind<ICreateUser>(USER_TYPES.ICreateUser).to(CreateUser);
 userContainer.bind<IFindAllUsers>(USER_TYPES.IFindAll).to(FindAllUsers)

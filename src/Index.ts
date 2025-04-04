@@ -6,7 +6,7 @@ import routerApi from './presentation/routes';
 import { ICreateUser } from './app/interfaces/users/post/ICreateUser';
 import {CATEGORY_TYPES, PRODUCT_TYPES, USER_TYPES, UTIL_TYPES} from './types';
 import { IIdGenerator } from './domain/services/utils/IIdGenerator';
-import { IUserRepository } from './domain/repositories/IUserRepository';
+import { IUserRepository } from './domain/repositories/IUsersRepository';
 import { IFindAllUsers } from './app/interfaces/users/get/IFindAll';
 import { IFindAllUsersNoPassword } from './app/interfaces/users/get/IFindAllUsersNoPassword';
 import { IFindUserByIdNoPassword } from './app/interfaces/users/get/IFindUserByIdNoPassword';
@@ -18,10 +18,10 @@ import { boomErrorHandling, errorHandlingMiddleware, logError } from './infraest
 import IUserController from './presentation/controllers/interfaces/IUserController';
 import syncDatabase from './infraestructure/database/DataBaseSync';
 import { corsConfig } from './infraestructure/server/corsConfig';
-import userContainer from './infraestructure/inversify/userContainer';
-import productContainer from './infraestructure/inversify/productContainer';
+import userContainer from './infraestructure/inversify/UsersContainer';
+import productContainer from './infraestructure/inversify/ProductsContainer';
 import ICreateProduct from './app/interfaces/products/post/ICreateProduct';
-import IProductRepository from './domain/repositories/IProductRepository';
+import IProductRepository from './domain/repositories/IProductsRepository';
 import IProductController from './presentation/controllers/interfaces/IUserController'
 import IFindAllProductByCategory from './app/interfaces/products/get/IFindAllProductByCategory';
 import IFindAllProductsByUser from './app/interfaces/products/get/IFindAllProductsByUser';
@@ -29,7 +29,7 @@ import IFindProductById from './app/interfaces/products/get/IFindProductById';
 import IFindProductByName from './app/interfaces/products/get/IFindProductByName';
 import IToggleProductPause from './app/interfaces/products/patch/IToggleProductPause';
 import IUpdateProduct from './app/interfaces/products/patch/IUpdateProduct';
-import categoriesContainer from './infraestructure/inversify/categoriesContainer';
+import categoriesContainer from './infraestructure/inversify/CategoriesContainer';
 import { ICategoriesRepository } from './domain/repositories/ICategoryRepository';
 import ICategoriesController from './presentation/controllers/interfaces/ICategoriesController';
 import IDeleteCategory from './app/interfaces/categories/delete/IDeleteCategory';
@@ -37,7 +37,7 @@ import IGetAllCategories from './app/interfaces/categories/get/IGetAllCategories
 import IGetCategoryById from './app/interfaces/categories/get/IGetCategoryById';
 import IUpdateCategory from './app/interfaces/categories/patch/IUpdateCategory';
 import ICreateCategory from './app/interfaces/categories/post/ICreateCategory';
-import utilContainer from './infraestructure/inversify/utilContainer';
+import utilContainer from './infraestructure/inversify/UtilsContainer';
 
 const app = express();
 app.use(express.json());

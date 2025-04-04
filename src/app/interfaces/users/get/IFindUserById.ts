@@ -1,6 +1,5 @@
-import { IUser } from "../../../../domain/interfaces/user/IUser";
-import UserDTO from "../../../../infraestructure/dtos/UserDTO";
+import User from "../../../../domain/entities/Users";
 
 export interface IFindUserById {
-  execute(id: string): Promise<UserDTO | null>
+  execute(id: string): Promise<User | null>
 }

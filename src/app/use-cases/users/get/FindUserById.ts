@@ -1,20 +1,23 @@
   import { inject, injectable } from "inversify";
-  import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
+  import { IUserRepository } from "../../../../domain/repositories/IUsersRepository";
   import {USER_TYPES} from "../../../../types";
   import { IFindUserById } from "../../../interfaces/users/get/IFindUserById";
   import { BoomError } from "../../../../domain/entities/DomainError";
   import { ErrorType } from "../../../../domain/interfaces/Error";
   import UserMapper from "../../../../infraestructure/mappers/UserMapper";
   import UserDTO from "../../../../infraestructure/dtos/UserDTO";
+import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
+import User from "../../../../domain/entities/Users";
 
 
   @injectable()
   export default class FindUserById implements IFindUserById {
     constructor(
       @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
+      @inject(USER_TYPES.IUserMapper) private userMapper: IUserMapper
     ) {}
 
-    async execute(id: string): Promise<UserDTO> {
+    async execute(id: string): Promise<User> {
       try {
         const user = await this.userRepository.findById(id)
         if (!user) {
@@ -25,7 +28,7 @@
           })
         }
 
-        return UserMapper.userModelToDTO(user.dataValues)
+        return user
       } catch (error) {
         if (error instanceof BoomError) {
           throw error;

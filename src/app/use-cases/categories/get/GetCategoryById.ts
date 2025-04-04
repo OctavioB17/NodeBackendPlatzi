@@ -5,16 +5,18 @@ import { CATEGORY_TYPES } from "../../../../types";
 import { ICategoriesRepository } from "../../../../domain/repositories/ICategoryRepository";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
+import Category from "../../../../domain/entities/Categories";
+import ICategoryMapper from "../../../../infraestructure/mappers/interfaces/ICategoriesMapper";
 
 @injectable()
 export default class FindCategoryById implements IFindCategoryById {
   constructor(
-    @inject(CATEGORY_TYPES.ICategoriesRepository) private categoryRepository: ICategoriesRepository
+    @inject(CATEGORY_TYPES.ICategoriesRepository) private categoryRepository: ICategoriesRepository,
   ) {}
 
-  async execute(categoryId: string): Promise<CategoryDTO | null> {
+  async execute(categoryId: string): Promise<Category | null> {
     try {
-      const category = this.categoryRepository.getCategoryById(categoryId);
+      const category = await this.categoryRepository.getCategoryById(categoryId);
       if (!category) {
         throw new BoomError({
           message: `Categories not found`,
@@ -22,7 +24,6 @@ export default class FindCategoryById implements IFindCategoryById {
           statusCode: 404
         });
       }
-
      return category
     } catch (error) {
       if (error instanceof BoomError) {

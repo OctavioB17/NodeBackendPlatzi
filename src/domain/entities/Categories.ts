@@ -1,4 +1,4 @@
-import Product from "./Product";
+import Product from "./Products";
 
 export default class Category {
   private id: string;

@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
+import { IUserRepository } from "../../../../domain/repositories/IUsersRepository";
 import {USER_TYPES} from "../../../../types";
 import { IDeleteUser } from "../../../interfaces/users/delete/IDeleteUser";
 import { BoomError } from "../../../../domain/entities/DomainError";

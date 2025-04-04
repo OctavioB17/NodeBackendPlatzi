@@ -1,5 +1,5 @@
-import ProductDTO from "../../../../infraestructure/dtos/ProductDTO";
+import Product from "../../../../domain/entities/Products";
 
 export default interface IUpdateStock {
-  execute(productId: string, stock: number): Promise<ProductDTO | null>
+  execute(productId: string, stock: number): Promise<Product | null>
 }

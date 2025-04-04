@@ -10,7 +10,7 @@ export default class Product implements IProductEntity {
     private weigth: number | null;
     private price: string;
     private stock: number;
-    private category: string[];
+    private categoryId: string;
     private material: string[] | null;
     private isPaused: boolean;
     private userId: string;
@@ -25,7 +25,7 @@ export default class Product implements IProductEntity {
       weigth: number | null,
       price: string,
       stock: number,
-      category: string[],
+      categoryId: string,
       material: string[] | null,
       isPaused: boolean,
       userId: string
@@ -39,7 +39,7 @@ export default class Product implements IProductEntity {
       this.weigth = weigth;
       this.price = price;
       this.stock = stock;
-      this.category = category;
+      this.categoryId = categoryId;
       this.material = material;
       this.isPaused = isPaused;
       this.userId = userId
@@ -82,8 +82,8 @@ export default class Product implements IProductEntity {
           return this.stock;
       }
 
-      public getCategory(): string[] {
-          return this.category;
+      public getCategory(): string {
+          return this.categoryId;
       }
 
       public getMaterial(): string[] | null {
@@ -131,8 +131,8 @@ export default class Product implements IProductEntity {
           this.stock = stock;
       }
 
-      public setCategory(category: string[]): void {
-          this.category = category;
+      public setCategory(category: string): void {
+          this.categoryId = category;
       }
 
       public setMaterial(material: string[] | null): void {

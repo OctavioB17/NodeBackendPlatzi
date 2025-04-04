@@ -1,21 +1,24 @@
 import { inject, injectable } from "inversify";
 import { IUser } from "../../../../domain/interfaces/user/IUser";
-import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
+import { IUserRepository } from "../../../../domain/repositories/IUsersRepository";
 import {USER_TYPES} from "../../../../types";
 import { IFindUserByEmail } from "../../../interfaces/users/get/IFindUserByEmail";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import UserDTO from "../../../../infraestructure/dtos/UserDTO";
 import UserMapper from "../../../../infraestructure/mappers/UserMapper";
+import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
+import User from "../../../../domain/entities/Users";
 
 
 @injectable()
 export default class FindUserByMail implements IFindUserByEmail {
   constructor(
     @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
+    @inject(USER_TYPES.IUserMapper) private userMapper: IUserMapper
   ) {}
 
-  async execute(email: string): Promise<UserDTO> {
+  async execute(email: string): Promise<User> {
     try {
       const user = await this.userRepository.findByEmail(email)
       if (!user) {
@@ -26,7 +29,7 @@ export default class FindUserByMail implements IFindUserByEmail {
         })
       }
 
-      return UserMapper.userModelToDTO(user)
+      return user
     } catch (error) {
         if (error instanceof BoomError) {
           throw error;

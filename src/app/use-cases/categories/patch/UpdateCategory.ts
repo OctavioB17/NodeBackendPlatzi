@@ -6,17 +6,20 @@ import CategoryMapper from "../../../../infraestructure/mappers/CategoriesMapper
 import CategoryDTO from "../../../../infraestructure/dtos/CategoryDTO";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
+import ICategoryMapper from "../../../../infraestructure/mappers/interfaces/ICategoriesMapper";
+import Category from "../../../../domain/entities/Categories";
 
 @injectable()
 export default class UpdateCategory implements IUpdateProduct {
   constructor(
-    @inject(CATEGORY_TYPES.ICategoriesRepository) private categoryRepository: ICategoriesRepository
+    @inject(CATEGORY_TYPES.ICategoriesRepository) private categoryRepository: ICategoriesRepository,
+    @inject(CATEGORY_TYPES.ICategoryMapper) private categoryMapper: ICategoryMapper
   ) {}
 
-  async execute(categoryId: string, categoryData: Partial<CategoryDTO>): Promise<Partial<CategoryDTO> | null> {
+  async execute(categoryId: string, categoryData: Partial<CategoryDTO>): Promise<Partial<Category> | null> {
     try {
-      const partialDtoToModel = CategoryMapper.partialCategoryDtoToModel(categoryData)
-      const updateProduct = await this.categoryRepository.updateCategory(categoryId, partialDtoToModel?.dataValues ?? {});
+      const partialDtoToModel = this.categoryMapper.partialCategoryDtoToModel(categoryData) as Partial<Category>;
+      const updateProduct = await this.categoryRepository.updateCategory(categoryId, partialDtoToModel);
       if (!updateProduct) {
         throw new BoomError({
           message: `Category not found or could not be updated`,
@@ -25,7 +28,7 @@ export default class UpdateCategory implements IUpdateProduct {
         });
       }
 
-      return CategoryMapper.categoryModeltoDTO(updateProduct)
+      return updateProduct
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;

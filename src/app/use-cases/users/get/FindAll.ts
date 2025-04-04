@@ -1,20 +1,21 @@
 import { inject, injectable } from "inversify";
-import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
+import { IUserRepository } from "../../../../domain/repositories/IUsersRepository";
 import {USER_TYPES} from "../../../../types";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import UserMapper from "../../../../infraestructure/mappers/UserMapper";
-import UserDTO from "../../../../infraestructure/dtos/UserDTO";
 import { IFindAllUsers } from "../../../interfaces/users/get/IFindAll";
+import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
+import User from "../../../../domain/entities/Users";
 
 
 @injectable()
 export default class FindAllUsers implements IFindAllUsers {
   constructor(
     @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
+    @inject(USER_TYPES.IUserMapper) private userMapper: IUserMapper
   ) {}
 
-  async execute(): Promise<UserDTO[]> {
+  async execute(): Promise<User[]> {
     try {
       const users = await this.userRepository.findAll()
       if (!users) {
@@ -25,7 +26,7 @@ export default class FindAllUsers implements IFindAllUsers {
         })
       }
 
-      return UserMapper.userModelToDTOList(users)
+      return users
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;

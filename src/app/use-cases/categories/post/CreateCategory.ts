@@ -7,12 +7,14 @@ import CategoryMapper from "../../../../infraestructure/mappers/CategoriesMapper
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import { IIdGenerator } from "../../../../domain/services/utils/IIdGenerator";
+import ICategoryMapper from "../../../../infraestructure/mappers/interfaces/ICategoriesMapper";
 
 @injectable()
 export default class CreateCategory implements ICreateCategory {
   constructor(
     @inject(CATEGORY_TYPES.ICategoriesRepository) private categoryRepository: ICategoriesRepository,
-    @inject(UTIL_TYPES.IIdGenerator) private idGenerator: IIdGenerator
+    @inject(UTIL_TYPES.IIdGenerator) private idGenerator: IIdGenerator,
+    @inject(CATEGORY_TYPES.ICategoryMapper) private categoryMapper: ICategoryMapper
   ) {}
 
   async execute(categoryDto: CategoryDTO): Promise<boolean | null> {
@@ -25,12 +27,12 @@ export default class CreateCategory implements ICreateCategory {
           statusCode: 400
         });
       }
-      const newCategory: CategoryDTO = {
+      const newCategory = {
         ...categoryDto,
         id: this.idGenerator.generate(),
       };
-      const dtoToModel = CategoryMapper.categoryDTOToModel(newCategory)
-      const categoryCreation = await this.categoryRepository.createCategory(dtoToModel.dataValues)
+      const categoryMap = this.categoryMapper.dtoToCategory(newCategory)
+      const categoryCreation = await this.categoryRepository.createCategory(categoryMap)
       if (categoryCreation) {
         return true
       } else {

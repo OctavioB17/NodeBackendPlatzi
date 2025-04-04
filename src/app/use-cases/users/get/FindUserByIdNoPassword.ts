@@ -1,18 +1,18 @@
 import { inject, injectable } from "inversify";
-import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
+import { IUserRepository } from "../../../../domain/repositories/IUsersRepository";
 import {USER_TYPES} from "../../../../types";
 import { IFindUserByIdNoPassword } from "../../../interfaces/users/get/IFindUserByIdNoPassword";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import { plainToInstance } from "class-transformer";
 import UserNoPasswordDTO from "../../../../infraestructure/dtos/UserNoPasswordDTO";
-import UserMapper from "../../../../infraestructure/mappers/UserMapper";
+import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
 
 
 @injectable()
 export default class FindUserIdNoPassword implements IFindUserByIdNoPassword {
   constructor(
     @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
+    @inject(USER_TYPES.IUserMapper) private userMapper: IUserMapper
   ) {}
 
   async execute(id: string): Promise<UserNoPasswordDTO | null> {
@@ -26,7 +26,7 @@ export default class FindUserIdNoPassword implements IFindUserByIdNoPassword {
         })
       }
 
-      return UserMapper.userModelToNoPasswordDTO(user.dataValues)
+      return this.userMapper.userToNoPasswordDTO(user)
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;

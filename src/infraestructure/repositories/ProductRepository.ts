@@ -1,15 +1,30 @@
-import { id } from "inversify";
-import IProductRepository from "../../domain/repositories/IProductRepository";
+import IProductRepository from "../../domain/repositories/IProductsRepository";
 import ProductModel from "../database/models/ProductsModel";
-import { Op, where } from "sequelize";
+import { Op } from "sequelize";
 import IProductWithUserAndCategory from "../../domain/interfaces/user/IProductWithUserAndCategory";
 import UserModel from "../database/models/UserModel";
 import CategoriesModel from "../database/models/CategoriesModel";
+import ProductDTO from "../dtos/ProductDTO";
+import { PRODUCT_TYPES } from "../../types";
+import IProductMapper from "../mappers/interfaces/IProductMapper";
+import { inject, injectable } from "inversify";
+import Product from "../../domain/entities/Products";
+import ProductWithUserAndCategoryDTO from "../dtos/ProductWithUserAndCategoryDTO";
 
+@injectable()
 export default class ProductRepository implements IProductRepository {
-  async createProduct(product: ProductModel): Promise<boolean> {
+
+  private productMapper: IProductMapper;
+
+  constructor(@inject(PRODUCT_TYPES.IProductMapper) productMapper: IProductMapper) {
+    this.productMapper = productMapper
+  }
+
+
+  async createProduct(product: Product): Promise<boolean> {
     try {
-      const newProduct = await ProductModel.create(product.dataValues)
+      const dtoToModel = this.productMapper.productToModel(product)
+      const newProduct = await ProductModel.create(dtoToModel)
       if (newProduct) {
         return true
       } else {
@@ -19,14 +34,22 @@ export default class ProductRepository implements IProductRepository {
       throw new Error('Failed to create product')
     }
   }
-  async findById(id: string): Promise<IProductWithUserAndCategory | null> {
+
+  async findById(id: string): Promise<ProductWithUserAndCategoryDTO | null> {
     try {
-      const product = await ProductModel.findByPk(id, { include: [
-        { model: UserModel, as: 'user' },
-        { model: CategoriesModel, as: 'categories' }
-      ]});
-      if (product) {
-        return product.dataValues
+      const productModel = await ProductModel.findByPk(id, {
+        include: [
+          { model: UserModel, as: 'user' },
+          { model: CategoriesModel, as: 'categories' }
+        ]
+      });
+
+      if (!productModel) {
+        throw new Error(`Product with ID ${id} not found`);
+      }
+      const productWitUser = this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTO(productModel)
+      if (productWitUser) {
+        return productWitUser
       } else {
         return null
       }
@@ -51,7 +74,7 @@ export default class ProductRepository implements IProductRepository {
   }
 
 
-  async findByName(name: string): Promise<IProductWithUserAndCategory[] | null> {
+  async findByName(name: string): Promise<ProductWithUserAndCategoryDTO[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
@@ -64,8 +87,9 @@ export default class ProductRepository implements IProductRepository {
           { model: CategoriesModel, as: 'categories' }
         ]
       })
-      if (products.length > 0) {
-        return products
+      if (products && products.length > 0) {
+        const productWithUserAndCategoryDTO = this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products)
+        return productWithUserAndCategoryDTO
       } else {
         return null
       }
@@ -74,7 +98,7 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async findAllByUserId(userId: string): Promise<IProductWithUserAndCategory[] | null> {
+  async findAllByUserId(userId: string): Promise<ProductWithUserAndCategoryDTO[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
@@ -85,8 +109,9 @@ export default class ProductRepository implements IProductRepository {
           { model: CategoriesModel, as: 'categories' }
         ]
       })
-      if (products.length > 0) {
-        return products
+      if (products && products.length > 0) {
+        const productWithUserAndCategoryDTO = this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products)
+        return productWithUserAndCategoryDTO
       } else {
         return null
       }
@@ -95,7 +120,7 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async findAllByCategory(categoryId: string): Promise<ProductModel[] | null> {
+  async findAllByCategory(categoryId: string): Promise<ProductWithUserAndCategoryDTO[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
@@ -107,7 +132,8 @@ export default class ProductRepository implements IProductRepository {
         ]
       })
       if (products.length > 0) {
-        return products
+        const productWithUserAndCategoryDTO = this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products)
+        return productWithUserAndCategoryDTO
       } else {
         return null
       }
@@ -116,15 +142,14 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async updateProduct(productId: string, productData: Partial<Omit<ProductModel, "id">>): Promise<ProductModel | null> {
+  async updateProduct(productId: string, productData: Partial<Omit<Product, "id">>): Promise<Product | null> {
     try {
       const product = await this.findByIdInSystem(productId);
-
       if (!product) return null;
-
-      const productUpdate = await product.update(productData instanceof ProductModel ? productData.dataValues : productData);
-
-      return productUpdate.dataValues;
+      const productModel = this.productMapper.productToModel(productData as Product)
+      const productUpdate = await product.update(productModel);
+      const modelToProduct = this.productMapper.modelToProduct(productUpdate)
+      return modelToProduct;
     } catch (error: any) {
       throw new Error(error);
     }
@@ -144,7 +169,7 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async updateStock(id: string, stock: number): Promise<ProductModel | null> {
+  async updateStock(id: string, stock: number): Promise<Product | null> {
     try {
       const product = await this.findByIdInSystem(id);
       if (!product) {
@@ -154,14 +179,14 @@ export default class ProductRepository implements IProductRepository {
       product.update({
         stock: stock
       })
-
-      return product
+      const productEntity = this.productMapper.modelToProduct(product)
+      return productEntity
     } catch (error: any) {
       throw new Error(error)
     }
   }
 
- async  toggleProductPause(id: string, status: boolean): Promise<ProductModel | null> {
+ async  toggleProductPause(id: string, status: boolean): Promise<Product | null> {
     try {
       const product = await this.findByIdInSystem(id);
       if (!product) {
@@ -170,8 +195,8 @@ export default class ProductRepository implements IProductRepository {
       product.update({
         isPaused: !status
       })
-
-      return product
+      const productEntity = this.productMapper.modelToProduct(product)
+      return productEntity
     } catch (error: any) {
       throw new Error(error)
     }

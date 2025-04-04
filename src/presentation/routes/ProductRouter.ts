@@ -1,5 +1,5 @@
 import { Router } from "express";
-import container from "../../infraestructure/inversify/productContainer";
+import container from "../../infraestructure/inversify/ProductsContainer";
 import IProductController from "../controllers/interfaces/IProductController";
 import { PRODUCT_TYPES } from "../../types";
 import { validatorHandler } from "../../infraestructure/middlewares/validatorHandler";

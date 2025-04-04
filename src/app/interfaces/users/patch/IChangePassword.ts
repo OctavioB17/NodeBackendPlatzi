@@ -1,5 +1,5 @@
-import UserDTO from "../../../../infraestructure/dtos/UserDTO";
+import User from "../../../../domain/entities/Users";
 
 export interface IChangePassword {
-  execute(password: string, email: string): Promise<UserDTO | null>
+  execute(password: string, email: string): Promise<User | null>
 }

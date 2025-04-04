@@ -8,7 +8,7 @@ export interface IProductEntity {
   getWeigth(): number | null;
   getPrice(): string;
   getStock(): number;
-  getCategory(): string[];
+  getCategory(): string;
   getMaterial(): string[] | null;
   isProductPaused(): boolean;
   getUserId(): string;
@@ -21,7 +21,7 @@ export interface IProductEntity {
   setWeigth(weigth: number | null): void;
   setPrice(price: string): void;
   setStock(stock: number): void;
-  setCategory(category: string[]): void;
+  setCategory(category: string): void;
   setMaterial(material: string[] | null): void;
   setPaused(isPaused: boolean): void;
 }

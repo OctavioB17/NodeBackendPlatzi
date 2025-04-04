@@ -1,20 +1,21 @@
 import { inject, injectable } from "inversify";
-import { IUserRepository } from "../../../../domain/repositories/IUserRepository";
+import { IUserRepository } from "../../../../domain/repositories/IUsersRepository";
 import {USER_TYPES} from "../../../../types";
 import { IChangePassword } from "../../../interfaces/users/patch/IChangePassword";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import UserMapper from "../../../../infraestructure/mappers/UserMapper";
-import UserDTO from "../../../../infraestructure/dtos/UserDTO";
+import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
+import User from "../../../../domain/entities/Users";
 
 
 @injectable()
 export default class ChangePassword implements IChangePassword {
   constructor(
     @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
+    @inject(USER_TYPES.IUserMapper) private userMapper: IUserMapper
   ) {}
 
-  async execute(password: string, email: string): Promise<UserDTO> {
+  async execute(password: string, email: string): Promise<User> {
     try {
       const user = await this.userRepository.findByEmail(email);
       if (!user) {
@@ -33,7 +34,7 @@ export default class ChangePassword implements IChangePassword {
         })
       }
 
-      return UserMapper.userModelToDTO(changePassword.dataValues)
+      return changePassword
     } catch (error: any) {
       if (error instanceof BoomError) {
         throw error;

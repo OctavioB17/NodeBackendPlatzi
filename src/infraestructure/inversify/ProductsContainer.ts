@@ -1,6 +1,6 @@
 import { Container } from "inversify";
 import {PRODUCT_TYPES, UTIL_TYPES} from "../../types";
-import IProductRepository from "../../domain/repositories/IProductRepository";
+import IProductRepository from "../../domain/repositories/IProductsRepository";
 import ProductRepository from "../repositories/ProductRepository";
 import FindAllProductsByUser from "../../app/use-cases/products/get/FindAllProductsByUser";
 import IFindAllProductsByUser from "../../app/interfaces/products/get/IFindAllProductsByUser";
@@ -24,11 +24,14 @@ import IProductController from "../../presentation/controllers/interfaces/IProdu
 import ProductController from "../../presentation/controllers/ProductController";
 import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
 import UuidGenerator from "../services/utils/UuidGenerator";
+import IProductMapper from "../mappers/interfaces/IProductMapper";
+import ProductMapper from "../mappers/ProductMapper";
 
 const productContainer = new Container();
 
 productContainer.bind<IProductRepository>(PRODUCT_TYPES.IProductRepository).to(ProductRepository);
 productContainer.bind<IProductController>(PRODUCT_TYPES.IProductController).to(ProductController);
+productContainer.bind<IProductMapper>(PRODUCT_TYPES.IProductMapper).to(ProductMapper)
 productContainer.bind<IIdGenerator>(UTIL_TYPES.IIdGenerator).to(UuidGenerator);
 productContainer.bind<IFindAllProductsByUser>(PRODUCT_TYPES.IFindAllProductsByUser).to(FindAllProductsByUser);
 productContainer.bind<IFindProductById>(PRODUCT_TYPES.IFindProductById).to(FindProductById);

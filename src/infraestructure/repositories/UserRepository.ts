@@ -1,16 +1,27 @@
-import { injectable } from "inversify";
-import { IUserRepository } from "../../domain/repositories/IUserRepository";
+import { inject, injectable } from "inversify";
+import { IUserRepository } from "../../domain/repositories/IUsersRepository";
 import UserModel from "../database/models/UserModel";
 import UserMapper from "../mappers/UserMapper";
+import UserDTO from "../dtos/UserDTO";
+import IUserMapper from "../mappers/interfaces/IUserMapper";
+import { USER_TYPES } from "../../types";
+import User from "../../domain/entities/Users";
 
 @injectable()
 export default class UserRepository implements IUserRepository {
 
+  private userMapper: IUserMapper
+
+  constructor(@inject(USER_TYPES.IUserMapper) userMapper: IUserMapper) {
+    this.userMapper = userMapper
+  }
+
   // Post - User creation
 
-  async createUser(user: UserModel): Promise<boolean> {
+  async createUser(user: User): Promise<boolean> {
     try {
-      const newUser = await UserModel.create(user.dataValues);
+      const userToModel = this.userMapper.userToModel(user)
+      const newUser = await UserModel.create(userToModel);
       return newUser ? true : false
     } catch (error) {
       throw new Error(`Error creating user in repository: ${error}`)
@@ -18,12 +29,13 @@ export default class UserRepository implements IUserRepository {
   }
 
   // Get - Find user
-  async findById(id: string): Promise<UserModel | null> {
+  async findById(id: string): Promise<User | null> {
     try {
-      const user = await UserModel.findByPk(id)
-      if(!user) {
+      const userModel = await UserModel.findByPk(id)
+      if(!userModel) {
         return null
       }
+      const user = this.userMapper.modelToUser(userModel);
       return user
     } catch (error) {
       throw new Error(`Error finding user: ${error}`)
@@ -31,12 +43,13 @@ export default class UserRepository implements IUserRepository {
   }
 
 
-  async findByEmail(email: string): Promise<UserModel | null> {
+  async findByEmail(email: string): Promise<User | null> {
     try {
-      const user = await UserModel.findOne({ where: { email } });
-      if (!user) {
+      const userModel = await UserModel.findOne({ where: { email } });
+      if (!userModel) {
         return null;
       } else {
+        const user = this.userMapper.modelToUser(userModel);
         return user
       }
     } catch (error) {
@@ -44,14 +57,14 @@ export default class UserRepository implements IUserRepository {
     }
   }
 
-  async findAll(): Promise<UserModel[] | null> {
+  async findAll(): Promise<User[] | null> {
     try {
-      const users = await UserModel.findAll();
+      const usersModels = await UserModel.findAll();
 
-      if (!users || users.length === 0) {
+      if (!usersModels || usersModels.length === 0) {
         return null
       }
-
+      const users = this.userMapper.modelToUserList(usersModels);
       return users
     } catch (error) {
       throw new Error(`Error finding users: ${error}`)
@@ -59,14 +72,15 @@ export default class UserRepository implements IUserRepository {
   }
 
   // Patch - Update user
-  async changePassword(password: string, email: string): Promise<UserModel | null> {
+  async changePassword(password: string, email: string): Promise<User | null> {
     try {
-      const user = await this.findByEmail(email)
-
-      if (user) {
-        user.update(
+      const userModel = await this.findByEmail(email)
+      if (userModel) {
+        const userToModel = this.userMapper.userToModel(userModel)
+        userToModel.update(
           {password: password},
         )
+        const user = this.userMapper.modelToUser(userToModel);
         return user
       } else {
         throw new Error("User not found")

@@ -1,6 +1,5 @@
 import { Expose } from "class-transformer";
 import UserNoPasswordDTO from "./UserNoPasswordDTO";
-import CategoriesModel from "../database/models/CategoriesModel";
 import CategoryDTO from "./CategoryDTO";
 
 export default class ProductWithUserAndCategoryDTO {

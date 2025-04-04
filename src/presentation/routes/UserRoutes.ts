@@ -1,5 +1,5 @@
 import { Router } from "express";
-import container from "../../infraestructure/inversify/userContainer";
+import container from "../../infraestructure/inversify/UsersContainer";
 import { createUserSchema, updateUserSchema, getUserSchema, updatePasswordUserSchema, getUserSchemaEmail } from "../../infraestructure/validators/UserSchema"
 import { validatorHandler } from "../../infraestructure/middlewares/validatorHandler";
 import IUserController from "../controllers/interfaces/IUserController";

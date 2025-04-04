@@ -1,4 +1,4 @@
-import Product from "../../entities/Product";
+import Product from "../../entities/Products";
 
 export interface ICategories {
 id: number;

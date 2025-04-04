@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import {PRODUCT_TYPES} from "../../../../types";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import IProductRepository from "../../../../domain/repositories/IProductRepository";
+import IProductRepository from "../../../../domain/repositories/IProductsRepository";
 import IDeleteProduct from "../../../interfaces/products/delete/IDeleteProduct";
 
 @injectable()

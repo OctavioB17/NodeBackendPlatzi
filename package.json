@@ -8,7 +8,7 @@
     "dev": "bash start-dev.bash",
     "start": "nodemon --exec tsx ./src/Index.ts",
     "migration:generate": "sequelize-cli migration:generate --name",
-    "migration:run": "sequelize-cli db:migrate",
+    "migration:run": "sequelize-cli db:migrate --debug",
     "migration:revert": "sequelize-cli db:migrate:undo",
     "migration:delete": "sequelize-cli db:migrate:undo:all"
   },

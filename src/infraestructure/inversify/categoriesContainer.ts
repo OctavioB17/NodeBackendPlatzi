@@ -18,10 +18,13 @@ import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
 import UuidGenerator from "../services/utils/UuidGenerator";
 import IGetCategoryByName from "../../app/interfaces/categories/get/IGetCategoryByName";
 import GetCategoryByName from "../../app/use-cases/categories/get/GetCategoryByName";
+import ICategoryMapper from "../mappers/interfaces/ICategoriesMapper";
+import CategoryMapper from "../mappers/CategoriesMapper";
 
 const categoriesContainer = new Container();
 
 categoriesContainer.bind<ICategoriesRepository>(CATEGORY_TYPES.ICategoriesRepository).to(CategoriesRepository);
+categoriesContainer.bind<ICategoryMapper>(CATEGORY_TYPES.ICategoryMapper).to(CategoryMapper)
 categoriesContainer.bind<IIdGenerator>(UTIL_TYPES.IIdGenerator).to(UuidGenerator);
 categoriesContainer.bind<ICategoriesController>(CATEGORY_TYPES.ICategoriesController).to(CategoriesController);
 categoriesContainer.bind<ICreateCategory>(CATEGORY_TYPES.ICreateCategory).to(CreateCategory);

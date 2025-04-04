@@ -2,17 +2,19 @@ import { inject, injectable } from "inversify";
 import {PRODUCT_TYPES, UTIL_TYPES} from "../../../../types";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import IProductRepository from "../../../../domain/repositories/IProductRepository";
+import IProductRepository from "../../../../domain/repositories/IProductsRepository";
 import ICreateProduct from "../../../interfaces/products/post/ICreateProduct";
 import ProductDTO from "../../../../infraestructure/dtos/ProductDTO";
 import ProductMapper from "../../../../infraestructure/mappers/ProductMapper";
 import { IIdGenerator } from "../../../../domain/services/utils/IIdGenerator";
+import IProductMapper from "../../../../infraestructure/mappers/interfaces/IProductMapper";
 
 @injectable()
 export default class CreateProduct implements ICreateProduct {
   constructor(
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
-    @inject(UTIL_TYPES.IIdGenerator) private idGenerator: IIdGenerator
+    @inject(UTIL_TYPES.IIdGenerator) private idGenerator: IIdGenerator,
+    @inject(PRODUCT_TYPES.IProductMapper) private productMapper: IProductMapper
   ) {}
 
   async execute(productDto: ProductDTO): Promise<boolean | null> {
@@ -22,7 +24,7 @@ export default class CreateProduct implements ICreateProduct {
         id: this.idGenerator.generate(),
       }
 
-      const dtoToModel = await ProductMapper.productDtoToModel(newProduct)
+      const dtoToModel = await this.productMapper.dtoToProduct(newProduct)
       const result = await this.iProductRepository.createProduct(dtoToModel);
 
       if (!result) {

@@ -1,5 +1,5 @@
-import UserDTO from "../../../../infraestructure/dtos/UserDTO";
+import User from "../../../../domain/entities/Users";
 
 export interface IFindAllUsers {
-  execute(): Promise<UserDTO[] | null>
+  execute(): Promise<User[] | null>
 }

@@ -2,8 +2,7 @@ import { inject, injectable } from "inversify";
 import {PRODUCT_TYPES} from "../../../../types";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import IProductRepository from "../../../../domain/repositories/IProductRepository";
-import ProductMapper from "../../../../infraestructure/mappers/ProductMapper";
+import IProductRepository from "../../../../domain/repositories/IProductsRepository";
 import IFindProductsByName from "../../../interfaces/products/get/IFindProductByName";
 import ProductWithUserAndCategoryDTO from "../../../../infraestructure/dtos/ProductWithUserAndCategoryDTO";
 
@@ -24,9 +23,7 @@ export default class FindProductsByName implements IFindProductsByName {
           statusCode: 404
         })
       }
-      const productsDto = ProductMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products);
-
-      return productsDto
+      return products
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;

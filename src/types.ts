@@ -13,7 +13,8 @@ export const USER_TYPES = {
   IFindUserById: Symbol.for('IFindUserById'),
   IFindUserByIdNoPassword: Symbol.for('IFindUserByIdNoPassword'),
   IDeleteUser: Symbol.for('IDeleteUser'),
-  IChangePassword: Symbol.for('IChangePassword')
+  IChangePassword: Symbol.for('IChangePassword'),
+  IUserMapper: Symbol.for('IUserMapper')
 };
 
 export const PRODUCT_TYPES = {
@@ -27,7 +28,8 @@ export const PRODUCT_TYPES = {
   ICreateProduct: Symbol.for('ICreateProduct'),
   IUpdateProduct: Symbol.for('IUpdateProduct'),
   IUpdateStock: Symbol.for('IUpdateStock'),
-  IToggleProductPause: Symbol.for('IToggleProductPause')
+  IToggleProductPause: Symbol.for('IToggleProductPause'),
+  IProductMapper: Symbol.for('IProductMapper')
 }
 
 export const CATEGORY_TYPES = {
@@ -38,5 +40,10 @@ export const CATEGORY_TYPES = {
   IUpdateCategory: Symbol.for('IUpdateCategory'),
   ICreateCategory: Symbol.for('ICreateCategory'),
   IDeleteCategory: Symbol.for('IDeleteCategory'),
-  IGetCategoryByName: Symbol.for('IGetCategoryByName')
+  IGetCategoryByName: Symbol.for('IGetCategoryByName'),
+  ICategoryMapper: Symbol.for('ICategoryMapper')
+}
+
+export const ORDER_TYPES = {
+  IOrdersMapper: Symbol.for('IOrderMapper')
 }

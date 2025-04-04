@@ -1,10 +1,10 @@
 import { inject, injectable } from "inversify";
-import CategoryDTO from "../../../../infraestructure/dtos/CategoryDTO";
 import IFindAllCategories from "../../../interfaces/categories/get/IGetAllCategories";
 import { CATEGORY_TYPES } from "../../../../types";
 import { ICategoriesRepository } from "../../../../domain/repositories/ICategoryRepository";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
+import Category from "../../../../domain/entities/Categories";
 
 @injectable()
 export default class FindAllCategories implements IFindAllCategories {
@@ -12,7 +12,7 @@ export default class FindAllCategories implements IFindAllCategories {
     @inject(CATEGORY_TYPES.ICategoriesRepository) private categoryRepository: ICategoriesRepository
   ) {}
 
-  async execute(): Promise<CategoryDTO[] | null> {
+  async execute(): Promise<Category[] | null> {
     try {
       const categories = await this.categoryRepository.getAllCategories();
       if (!categories) {
