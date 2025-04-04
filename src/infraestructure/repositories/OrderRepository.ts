@@ -59,7 +59,7 @@ export default class OrderRepository implements IOrdersRepository {
 
   async findAllByUserId(userId: string): Promise<Orders[] | null> {
     try {
-      const ordersModel = await OrdersModel.findAll({ where: { user: userId } })
+      const ordersModel = await OrdersModel.findAll({ where: { userId: userId } })
       if (!ordersModel) {
         return null
       }

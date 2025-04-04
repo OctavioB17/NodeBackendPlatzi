@@ -3,17 +3,14 @@ import {PRODUCT_TYPES} from "../../../../types";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import IProductRepository from "../../../../domain/repositories/IProductsRepository";
-import ProductMapper from "../../../../infraestructure/mappers/ProductMapper";
 import IFindAllProductsByUser from "../../../interfaces/products/get/IFindAllProductsByUser";
 import ProductWithUserAndCategoryDTO from "../../../../infraestructure/dtos/ProductWithUserAndCategoryDTO";
-import IProductMapper from "../../../../infraestructure/mappers/interfaces/IProductMapper";
 
 
 @injectable()
 export default class FindAllProductsByUser implements IFindAllProductsByUser {
   constructor(
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
-    @inject(PRODUCT_TYPES.IProductMapper) private productMapper: IProductMapper
   ) {}
 
   async execute(userId: string): Promise<ProductWithUserAndCategoryDTO[]> {

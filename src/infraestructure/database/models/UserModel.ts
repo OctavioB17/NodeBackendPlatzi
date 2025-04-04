@@ -1,6 +1,7 @@
-import { Table, Column, Model, DataType, ForeignKey } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, HasMany } from 'sequelize-typescript';
 import { IUserModel } from '../../../domain/interfaces/user/IUserModel';
 import ProductModel from './ProductsModel';
+import OrdersModel from './OrdersModel';
 
 @Table({ tableName: 'users', timestamps: true })
 export default class UserModel extends Model<UserModel> implements IUserModel {
@@ -23,5 +24,5 @@ export default class UserModel extends Model<UserModel> implements IUserModel {
   declare password: string;
 
   @Column({ type: DataType.ARRAY(DataType.STRING), allowNull: true })
-  declare products: string[]
+  declare productId: string[]
 }

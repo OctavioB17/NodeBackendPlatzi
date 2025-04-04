@@ -1,13 +1,11 @@
 import { Taxes } from "../interfaces/orders/IOrders";
 import { IOrdersEntity } from "../interfaces/orders/IOrdersEntity";
-import Product from "./Products";
-import User from "./Users";
 
 export default class Orders implements IOrdersEntity {
 
   private id: string;
-  private products: Product[];
-  private user: User;
+  private productId: string;
+  private userId: string;
   private status: string;
   private totalPrice: number;
   private paymentMethod: string;
@@ -15,16 +13,16 @@ export default class Orders implements IOrdersEntity {
 
   constructor(
     id: string,
-    products: Product[],
-    user: User,
+    productId: string,
+    userId: string,
     status: string,
     totalPrice: number,
     paymentMethod: string,
     taxes: Taxes[]
   ) {
    this.id = id
-   this.products = products
-   this.user = user
+   this.productId = productId
+   this.userId = userId
    this.status = status
    this.totalPrice = totalPrice
    this.paymentMethod = paymentMethod
@@ -34,11 +32,11 @@ export default class Orders implements IOrdersEntity {
   getId(): string {
     return this.id
   }
-  getProducts(): Product[] {
-    return this.products
+  getProductId(): string {
+    return this.productId
   }
-  getUser(): User {
-    return this.user
+  getUserId(): string {
+    return this.userId
   }
   getTotalPrice(): number {
     return this.totalPrice
@@ -55,11 +53,11 @@ export default class Orders implements IOrdersEntity {
   setId(id: string): void {
     this.id  = id;
   }
-  setproducts(products: Product[]): void {
-    this.products  = products;
+  setproductId(productId: string): void {
+    this.productId  = productId;
   }
-  setUser(user: User): void {
-    this.user = user;
+  setUserId(userId: string): void {
+    this.userId = userId;
   }
   setTotalPrice(totalPrice: number): void {
     this.totalPrice = totalPrice;

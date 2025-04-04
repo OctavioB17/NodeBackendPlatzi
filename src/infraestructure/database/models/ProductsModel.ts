@@ -1,6 +1,6 @@
 
 import { IProductModel } from "../../../domain/interfaces/products/IProductModel";
-import { Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
 import UserModel from "./UserModel";
 import CategoriesModel from "./CategoriesModel";
 

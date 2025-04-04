@@ -1,18 +1,17 @@
-import { Model } from "sequelize";
 import { IOrders, Taxes } from "../../../domain/interfaces/orders/IOrders";
-import Product from "../../../domain/entities/Products";
-import User from "../../../domain/entities/Users";
-import { Column, DataType, } from "sequelize-typescript";
+import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table, } from "sequelize-typescript";
+import ProductModel from "./ProductsModel";
+import UserModel from "./UserModel";
+import OrderHasProductsModel from "./OrdersHasProducts";
 
+@Table({ tableName: 'orders', timestamps: true })
 export default class OrdersModel extends Model<OrdersModel> implements IOrders {
   @Column({ type: DataType.UUID, primaryKey: true, allowNull: false })
   declare id: string;
 
-  @Column({ type: DataType.ARRAY(DataType.STRING), allowNull: false })
-  declare products: Product[];
-
+  @ForeignKey(() => UserModel)
   @Column({ type: DataType.STRING, allowNull: false })
-  declare user: User;
+  declare userId: string;
 
   @Column({ type: DataType.STRING, allowNull: false})
   declare status: string;
