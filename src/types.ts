@@ -52,5 +52,6 @@ export const ORDER_TYPES = {
   IDeleteOrder: Symbol.for('IDeleteOrder'),
   IUpdateOrder: Symbol.for('IUpdateOrder'),
   IFindAllOrdersByUserId: Symbol.for('IFindAllOrdersByUserId'),
-  IUpdateStatus: Symbol.for('IUpdateStatus')
+  IUpdateStatus: Symbol.for('IUpdateStatus'),
+  IOrdersController: Symbol.for('IOrdersController')
 }

@@ -46,6 +46,7 @@ import IFindOrderById from './app/interfaces/orders/get/IFindOrderById';
 import IUpdateOrder from './app/interfaces/orders/patch/IUpdateOrder';
 import IUpdateStatus from './app/interfaces/orders/patch/IUpdateStatus';
 import ICreateOrder from './app/interfaces/orders/post/ICreateOrder';
+import IOrdersControllers from './presentation/controllers/interfaces/IOrdersController';
 
 const app = express();
 app.use(express.json());
@@ -88,6 +89,8 @@ ordersContainer.get<IDeleteOrder>(ORDER_TYPES.IDeleteOrder)
 ordersContainer.get<IUpdateOrder>(ORDER_TYPES.IUpdateOrder)
 ordersContainer.get<IFindAllOrdersByUserId>(ORDER_TYPES.IFindAllOrdersByUserId)
 ordersContainer.get<IUpdateStatus>(ORDER_TYPES.IUpdateStatus)
+ordersContainer.get<IOrdersControllers>(ORDER_TYPES.IOrdersController)
+
 
 routerApi(app);
 app.use(logError);

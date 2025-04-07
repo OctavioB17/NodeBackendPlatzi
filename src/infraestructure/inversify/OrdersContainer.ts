@@ -14,6 +14,8 @@ import DeleteOrders from "../../app/use-cases/orders/delete/DeleteOrders";
 import UpdateOrder from "../../app/use-cases/orders/patch/UpdateOrder";
 import FindAllOrdersByUserId from "../../app/use-cases/orders/get/FindAllOrdersByUserId";
 import UpdateStatus from "../../app/use-cases/orders/patch/UpdateStatus";
+import IOrdersControllers from "../../presentation/controllers/interfaces/IOrdersController";
+import OrdersController from "../../presentation/controllers/OrdersController";
 
 const ordersContainer = new Container();
 
@@ -24,5 +26,6 @@ ordersContainer.bind<IDeleteOrder>(ORDER_TYPES.IDeleteOrder).to(DeleteOrders)
 ordersContainer.bind<IUpdateOrder>(ORDER_TYPES.IUpdateOrder).to(UpdateOrder)
 ordersContainer.bind<IFindAllOrdersByUserId>(ORDER_TYPES.IFindAllOrdersByUserId).to(FindAllOrdersByUserId)
 ordersContainer.bind<IUpdateStatus>(ORDER_TYPES.IUpdateStatus).to(UpdateStatus)
+ordersContainer.bind<IOrdersControllers>(ORDER_TYPES.IOrdersController).to(OrdersController)
 
 export default ordersContainer
