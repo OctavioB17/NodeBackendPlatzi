@@ -1,6 +1,6 @@
 import { Container } from "inversify";
 import IOrdersMapper from "../mappers/interfaces/IOrdersMapper";
-import { ORDER_TYPES } from "../../types";
+import { ORDER_TYPES, UTIL_TYPES } from "../../types";
 import OrdersMapper from "../mappers/OrdersMapper";
 import IFindOrderById from "../../app/interfaces/orders/get/IFindOrderById";
 import ICreateOrder from "../../app/interfaces/orders/post/ICreateOrder";
@@ -16,10 +16,16 @@ import FindAllOrdersByUserId from "../../app/use-cases/orders/get/FindAllOrdersB
 import UpdateStatus from "../../app/use-cases/orders/patch/UpdateStatus";
 import IOrdersControllers from "../../presentation/controllers/interfaces/IOrdersController";
 import OrdersController from "../../presentation/controllers/OrdersController";
+import IOrdersRepository from "../../domain/repositories/IOrdersRepository";
+import OrderRepository from "../repositories/OrderRepository";
+import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
+import UuidGenerator from "../services/utils/UuidGenerator";
 
 const ordersContainer = new Container();
 
+ordersContainer.bind<IOrdersRepository>(ORDER_TYPES.IOrdersRepository).to(OrderRepository)
 ordersContainer.bind<IOrdersMapper>(ORDER_TYPES.IOrdersMapper).to(OrdersMapper);
+ordersContainer.bind<IIdGenerator>(UTIL_TYPES.IIdGenerator).to(UuidGenerator);
 ordersContainer.bind<IFindOrderById>(ORDER_TYPES.IFindOrderById).to(FindOrderById)
 ordersContainer.bind<ICreateOrder>(ORDER_TYPES.ICreateOrder).to(CreateOrder)
 ordersContainer.bind<IDeleteOrder>(ORDER_TYPES.IDeleteOrder).to(DeleteOrders)
