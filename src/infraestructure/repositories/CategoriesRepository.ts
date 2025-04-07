@@ -86,6 +86,7 @@ export default class CategoriesRepository implements ICategoriesRepository {
       throw new Error(error)
     }
   }
+
   async deleteCategory(id: string): Promise<boolean> {
     try {
       const category = await this.getCategoryById(id)

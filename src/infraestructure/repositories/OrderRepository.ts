@@ -72,7 +72,7 @@ export default class OrderRepository implements IOrdersRepository {
 
   async updateOrder(orderId: string, orderData: Partial<Orders>): Promise<Orders | null> {
     try {
-      const orderModel = await OrdersModel.findByPk(orderId)
+      const orderModel = await this.findByIdInSystem(orderId)
       if (!orderModel) {
         return null
       }

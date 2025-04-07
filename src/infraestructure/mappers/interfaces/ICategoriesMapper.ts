@@ -9,6 +9,10 @@ export default interface ICategoryMapper {
 
   dtoToCategoryList(categoryDto: CategoryDTO[]): Category[]
 
+  categoryToDto(category: Category): CategoryDTO
+
+  categoryToDtoList(categories: Category[]): CategoryDTO[]
+
   modelToCategory(model: CategoriesModel): Category
 
   modelToCategoryList(model: CategoriesModel[]): Category[]

@@ -10,6 +10,8 @@ import { inject } from "inversify";
 import { BoomError } from "../../domain/entities/DomainError";
 import { ErrorType } from "../../domain/interfaces/Error";
 import IGetCategoryByName from "../../app/interfaces/categories/get/IGetCategoryByName";
+import ICategoryMapper from "../../infraestructure/mappers/interfaces/ICategoriesMapper";
+import Category from "../../domain/entities/Categories";
 
 export default class CategoriesController implements ICategoriesController {
 
@@ -20,6 +22,7 @@ export default class CategoriesController implements ICategoriesController {
     @inject(CATEGORY_TYPES.IDeleteCategory) private deleteCategory: IDeleteCategory,
     @inject(CATEGORY_TYPES.ICreateCategory) private createCategory: ICreateCategory,
     @inject(CATEGORY_TYPES.IGetCategoryByName) private findCategoryByName: IGetCategoryByName,
+    @inject(CATEGORY_TYPES.ICategoryMapper) private categoryMapper: ICategoryMapper
   ) {}
 
   async createCategoryController(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -34,7 +37,6 @@ export default class CategoriesController implements ICategoriesController {
           statusCode: 500
         });
       }
-
       res.status(201).json( { message: 'Category created'} )
     } catch (error) {
       next(error)
@@ -52,8 +54,8 @@ export default class CategoriesController implements ICategoriesController {
           statusCode: 404
         });
       }
-
-      res.status(200).json(category)
+      const categoryDto = this.categoryMapper.categoryToDto(category)
+      res.status(200).json(categoryDto)
     } catch (error) {
       next(error)
     }
@@ -69,8 +71,8 @@ export default class CategoriesController implements ICategoriesController {
           statusCode: 404
         });
       }
-
-      res.status(200).json(categories)
+      const categoriesDto = this.categoryMapper.categoryToDtoList(categories)
+      res.status(200).json(categoriesDto)
     } catch (error) {
       next(error)
     }
@@ -79,16 +81,16 @@ export default class CategoriesController implements ICategoriesController {
   async findByNameController(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { name } = req.params
-      const categoty = await this.findCategoryByName.execute(name)
-      if (!categoty) {
+      const category = await this.findCategoryByName.execute(name)
+      if (!category) {
         throw new BoomError({
           message: `Failed to find ${name} category`,
           type: ErrorType.INTERNAL_ERROR,
           statusCode: 404
         });
       }
-
-      res.status(200).json(categoty)
+      const categoryDto = this.categoryMapper.categoryToDto(category as Category)
+      res.status(200).json(categoryDto)
     } catch (error) {
       next(error)
     }  }
@@ -106,8 +108,8 @@ export default class CategoriesController implements ICategoriesController {
           statusCode: 500
         });
       }
-
-      res.status(200).json(categoryUpdate)
+      const categoryDto = this.categoryMapper.categoryToDto(categoryUpdate as Category)
+      res.status(200).json(categoryDto)
     } catch (error) {
       next(error)
     }

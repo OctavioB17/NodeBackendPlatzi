@@ -13,6 +13,9 @@ import { BoomError } from "../../domain/entities/DomainError";
 import { ErrorType } from "../../domain/interfaces/Error";
 import IDeleteProduct from "../../app/interfaces/products/delete/IDeleteProduct";
 import ICreateProduct from "../../app/interfaces/products/post/ICreateProduct";
+import IProductMapper from "../../infraestructure/mappers/interfaces/IProductMapper";
+import ProductDTO from "../../infraestructure/dtos/ProductDTO";
+import Product from "../../domain/entities/Products";
 
 export default class ProductController implements IProductController {
 
@@ -26,6 +29,7 @@ export default class ProductController implements IProductController {
     @inject(PRODUCT_TYPES.IUpdateStock) private updateStock: IUpdateStock,
     @inject(PRODUCT_TYPES.IDeleteProduct) private deleteProduct: IDeleteProduct,
     @inject(PRODUCT_TYPES.ICreateProduct) private createProduct: ICreateProduct,
+    @inject(PRODUCT_TYPES.IProductMapper) private productMapper: IProductMapper
   ) {}
 
   async createProductController(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -53,7 +57,8 @@ export default class ProductController implements IProductController {
     try {
       const updatedProduct = await this.updateProduct.execute(id, productData);
       if (updatedProduct) {
-        res.status(200).json(updatedProduct);
+        const productDto = this.productMapper.productToDTO(updatedProduct as Product)
+        res.status(200).json(productDto);
       } else {
         throw new BoomError({
           message: 'Failed to update product',
@@ -163,7 +168,8 @@ export default class ProductController implements IProductController {
     try {
       const updatedProduct = await this.updateProduct.execute(id, productData);
       if (updatedProduct) {
-        res.status(200).json(updatedProduct);
+        const productDto = this.productMapper.productToDTO(updatedProduct as Product)
+        res.status(200).json(productDto);
       } else {
         throw new BoomError({
           message: 'Failed to update product',

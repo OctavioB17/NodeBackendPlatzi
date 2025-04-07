@@ -1,12 +1,10 @@
 import { inject, injectable } from "inversify";
-import CategoryDTO from "../../../../infraestructure/dtos/CategoryDTO";
 import IFindCategoryById from "../../../interfaces/categories/get/IGetCategoryById";
 import { CATEGORY_TYPES } from "../../../../types";
 import { ICategoriesRepository } from "../../../../domain/repositories/ICategoryRepository";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import Category from "../../../../domain/entities/Categories";
-import ICategoryMapper from "../../../../infraestructure/mappers/interfaces/ICategoriesMapper";
 
 @injectable()
 export default class FindCategoryById implements IFindCategoryById {

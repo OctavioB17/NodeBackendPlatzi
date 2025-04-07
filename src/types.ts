@@ -45,5 +45,12 @@ export const CATEGORY_TYPES = {
 }
 
 export const ORDER_TYPES = {
-  IOrdersMapper: Symbol.for('IOrderMapper')
+  IOrdersMapper: Symbol.for('IOrderMapper'),
+  IOrdersRepository: Symbol.for('IOrdersRepository'),
+  ICreateOrder: Symbol.for('ICreateOrder'),
+  IFindOrderById: Symbol.for('IFindOrderById'),
+  IDeleteOrder: Symbol.for('IDeleteOrder'),
+  IUpdateOrder: Symbol.for('IUpdateOrder'),
+  IFindAllOrdersByUserId: Symbol.for('IFindAllOrdersByUserId'),
+  IUpdateStatus: Symbol.for('IUpdateStatus')
 }

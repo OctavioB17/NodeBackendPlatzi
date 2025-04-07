@@ -7,12 +7,23 @@ import IUserMapper from "./interfaces/IUserMapper";
 import User from "../../domain/entities/Users";
 
 export default class UserMapper implements IUserMapper {
+
+  userToDto(user: User): UserDTO {
+    return plainToInstance(UserDTO, user)
+  }
+
+  userToDtoList(users: User[]): UserDTO[] {
+    return users.map(user => this.userToDto(user))
+  }
+
   dtoToUser(dto: UserDTO): User {
     return plainToInstance(User, dto)
   }
+
   dtoToUserList(dtos: UserDTO[]): User[] {
     return dtos.map(dto => this.dtoToUser(dto))
   }
+
   userToNoPasswordDTO(userModels: User): UserNoPasswordDTO {
     return plainToInstance(UserNoPasswordDTO, userModels);
   }

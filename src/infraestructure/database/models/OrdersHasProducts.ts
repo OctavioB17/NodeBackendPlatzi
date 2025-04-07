@@ -1,4 +1,4 @@
-import { BelongsTo, Column, DataType, ForeignKey, Table, BelongsToMany, Model } from "sequelize-typescript";
+import { Column, DataType, ForeignKey, Table, Model } from "sequelize-typescript";
 import ProductModel from "./ProductsModel";
 import OrdersModel from "./OrdersModel";
 import IOrderHasProducts from "../../../domain/interfaces/orders/IOrderHasProducts";

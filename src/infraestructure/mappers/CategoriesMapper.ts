@@ -7,6 +7,13 @@ import Category from "../../domain/entities/Categories";
 
 export default class CategoryMapper implements ICategoryMapper {
 
+  categoryToDto(category: Category): CategoryDTO {
+    return plainToInstance(CategoryDTO, category)
+  }
+  categoryToDtoList(categories: Category[]): CategoryDTO[] {
+    throw categories.map(category => this.categoryToDto(category))
+  }
+
   dtoToCategory(categoryDto: CategoryDTO): Category {
     return plainToInstance(Category, categoryDto);
   }

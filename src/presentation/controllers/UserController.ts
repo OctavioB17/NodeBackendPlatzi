@@ -14,6 +14,7 @@ import { validate as validateUUID } from 'uuid';
 import { ErrorType } from "../../domain/interfaces/Error";
 import IUserController from "./interfaces/IUserController";
 import { IFindUserByEmailNoPassword } from "../../app/interfaces/users/get/IFindUserByEmailNoPassword";
+import IUserMapper from "../../infraestructure/mappers/interfaces/IUserMapper";
 export default class UserController implements IUserController {
   constructor(
     @inject(USER_TYPES.ICreateUser) private createUser: ICreateUser,
@@ -24,7 +25,8 @@ export default class UserController implements IUserController {
     @inject(USER_TYPES.IFindUserByEmail) private findUserByEmail: IFindUserByEmail,
     @inject(USER_TYPES.IFindUserByEmailNoPassword) private findUserByEmailNoPassword: IFindUserByEmailNoPassword,
     @inject(USER_TYPES.IDeleteUser) private deleteUser: IDeleteUser,
-    @inject(USER_TYPES.IChangePassword) private changePassword: IChangePassword
+    @inject(USER_TYPES.IChangePassword) private changePassword: IChangePassword,
+    @inject(USER_TYPES.IUserMapper) private userMapper: IUserMapper
   ) {}
 
   async register(req: Request, res: Response, next: NextFunction) {
@@ -49,7 +51,8 @@ export default class UserController implements IUserController {
     try {
       const users = await this.findAll.execute()
       if (users) {
-        res.status(200).json(users)
+        const usersDtos = this.userMapper.userToDtoList(users)
+        res.status(200).json(usersDtos)
       } else {
         throw new BoomError({
           message: 'No users found',
@@ -67,7 +70,8 @@ export default class UserController implements IUserController {
     try {
       const user = await this.findUserByEmail.execute(email)
       if (user) {
-        res.status(200).json(user)
+        const userToDto = this.userMapper.userToDto(user)
+        res.status(200).json(userToDto)
       } else {
         throw new BoomError({
           message: 'No users found',
@@ -93,7 +97,8 @@ export default class UserController implements IUserController {
 
       const user = await this.findUserById.execute(id)
       if (user) {
-        res.status(200).json(user)
+        const userToDto = this.userMapper.userToDto(user)
+        res.status(200).json(userToDto)
       } else {
         throw new BoomError({
           message: 'No users found',

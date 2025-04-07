@@ -2,7 +2,6 @@ import { inject, injectable } from "inversify";
 import IUpdateProduct from "../../../interfaces/products/patch/IUpdateProduct";
 import { CATEGORY_TYPES } from "../../../../types";
 import { ICategoriesRepository } from "../../../../domain/repositories/ICategoryRepository";
-import CategoryMapper from "../../../../infraestructure/mappers/CategoriesMapper";
 import CategoryDTO from "../../../../infraestructure/dtos/CategoryDTO";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";

@@ -7,6 +7,10 @@ import User from "../../../domain/entities/Users";
 
 export default interface IUserMapper {
 
+  userToDto(user: User): UserDTO
+
+  userToDtoList(users: User[]): UserDTO[]
+
   dtoToUser(dto: UserDTO): User
 
   dtoToUserList(dto: UserDTO[]): User[]
