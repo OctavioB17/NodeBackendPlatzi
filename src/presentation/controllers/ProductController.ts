@@ -145,9 +145,8 @@ export default class ProductController implements IProductController {
 
   async toggleProductPauseController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params;
-    const { status } = req.body;
-    try {
-      const isToggled = await this.toggleProductPause.execute(id, status);
+        try {
+      const isToggled = await this.toggleProductPause.execute(id);
       if (isToggled) {
         res.status(200).json('Product status toggled');
       } else {
@@ -184,9 +183,9 @@ export default class ProductController implements IProductController {
 
   async updateStockController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params;
-    const { quantity } = req.body;
+    const { stock } = req.body;
     try {
-      const updatedStock = await this.updateStock.execute(id, quantity);
+      const updatedStock = await this.updateStock.execute(id, stock);
       if (updatedStock) {
         res.status(200).json('Stock updated');
       } else {

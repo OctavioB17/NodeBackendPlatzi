@@ -14,13 +14,6 @@ export default class User {
     email: string,
     role: string
   ) {
-    if (!id || !name || !surname || !password || !email || !role) {
-      throw new Error('All fields are required');
-    }
-    if (!this.isValidEmail(email)) {
-      throw new Error('Invalid email format');
-    }
-
     this.id = id;
     this.name = name;
     this.surname = surname;

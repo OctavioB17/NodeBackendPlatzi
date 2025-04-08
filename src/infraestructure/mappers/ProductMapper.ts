@@ -82,8 +82,9 @@ export default class ProductMapper implements IProductMapper {
     return plainToInstance(ProductWithUserAndCategoryDTO, {
       ...product,
       user: product.user ? plainToInstance(UserNoPasswordDTO, product.user.get({ plain: true })) : null,
+      categories: product.categories ? product.categories.dataValues : null
     });
-  }
+}
 
   iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(product: IProductWithUserAndCategory[]): ProductWithUserAndCategoryDTO[] {
     return product.map(product => this.iProductWithUserAndCategoryToProductWithUserAndCategoryDTO(product.dataValues))

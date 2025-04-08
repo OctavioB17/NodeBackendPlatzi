@@ -35,7 +35,7 @@ export default class UserRepository implements IUserRepository {
       if(!userModel) {
         return null
       }
-      const user = this.userMapper.modelToUser(userModel);
+      const user = this.userMapper.modelToUser(userModel.dataValues);
       return user
     } catch (error) {
       throw new Error(`Error finding user: ${error}`)
@@ -49,7 +49,7 @@ export default class UserRepository implements IUserRepository {
       if (!userModel) {
         return null;
       } else {
-        const user = this.userMapper.modelToUser(userModel);
+        const user = this.userMapper.modelToUser(userModel.dataValues);
         return user
       }
     } catch (error) {
@@ -60,11 +60,10 @@ export default class UserRepository implements IUserRepository {
   async findAll(): Promise<User[] | null> {
     try {
       const usersModels = await UserModel.findAll();
-
       if (!usersModels || usersModels.length === 0) {
         return null
       }
-      const users = this.userMapper.modelToUserList(usersModels);
+      const users = this.userMapper.modelToUserList(usersModels.map(user => user.dataValues));
       return users
     } catch (error) {
       throw new Error(`Error finding users: ${error}`)

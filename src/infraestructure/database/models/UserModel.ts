@@ -22,7 +22,4 @@ export default class UserModel extends Model<UserModel> implements IUserModel {
 
   @Column({ type: DataType.STRING, allowNull: false })
   declare password: string;
-
-  @Column({ type: DataType.ARRAY(DataType.STRING), allowNull: true })
-  declare productId: string[]
 }

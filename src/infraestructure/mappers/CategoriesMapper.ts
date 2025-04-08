@@ -1,17 +1,17 @@
-import { plainToInstance } from "class-transformer";
+import { classToPlain, instanceToPlain, plainToInstance } from "class-transformer";
 
 import CategoryDTO from "../dtos/CategoryDTO";
 import CategoriesModel from "../database/models/CategoriesModel";
 import ICategoryMapper from "./interfaces/ICategoriesMapper";
 import Category from "../../domain/entities/Categories";
-
 export default class CategoryMapper implements ICategoryMapper {
 
   categoryToDto(category: Category): CategoryDTO {
     return plainToInstance(CategoryDTO, category)
   }
+
   categoryToDtoList(categories: Category[]): CategoryDTO[] {
-    throw categories.map(category => this.categoryToDto(category))
+    return categories.map(category => this.categoryToDto(category));
   }
 
   dtoToCategory(categoryDto: CategoryDTO): Category {
@@ -29,6 +29,18 @@ export default class CategoryMapper implements ICategoryMapper {
   categoryToModelList(categories: Category[]): CategoriesModel[] {
     return categories.map(category => this.categoryToModel(category))
   }
+
+
+  categoryToModelNoId(category: Category): CategoriesModel {
+    const plainCategory = instanceToPlain(category);
+    delete plainCategory.id;
+    return plainToInstance(CategoriesModel, plainCategory);
+  }
+
+  categoryToModelNoIdList(categories: Category[]): CategoriesModel[] {
+    return categories.map(category => this.categoryToModelNoId(category))
+  }
+
 
   modelToCategory(model: CategoriesModel): Category {
     return plainToInstance(Category, model);
@@ -53,6 +65,10 @@ export default class CategoryMapper implements ICategoryMapper {
 
   categoryDTOToModelList(CategoryDTOs: CategoryDTO[]): CategoriesModel[] {
     return CategoryDTOs.map(category => this.categoryDTOToModel(category))
+  }
+
+  partialCategoryToModel(partialDtoModel: Partial<Category>): Partial<CategoriesModel> {
+    return plainToInstance(CategoriesModel, partialDtoModel);
   }
 
   partialCategoryDtoToModel(partialDtoModel: Partial<CategoryDTO>): Partial<CategoriesModel> {

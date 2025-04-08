@@ -1,12 +1,10 @@
 import Product from "../../entities/Products";
 
 export interface ICategoriesEntity {
-  getId(): number;
+  getId(): string;
   getName(): string;
   getDescription(): string;
-  getProducts(): Product[];
-  setId(id: number): void;
+  setId(id: string): void;
   setName(name: string): void;
   setDescription(description: string): void;
-  setProducts(products: Product[]): void;
 }

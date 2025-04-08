@@ -11,9 +11,9 @@ export default class ToggleProductPause implements IToggleProductPause {
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
   ) {}
 
-  execute(productId: string, status: boolean): Promise<Product | null> {
+  execute(productId: string): Promise<Product | null> {
     try {
-      const productPause = this.iProductRepository.toggleProductPause(productId, status)
+      const productPause = this.iProductRepository.toggleProductPause(productId)
       if (!productPause) {
         throw new BoomError({
           message: `Product not found or can not be updated`,

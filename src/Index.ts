@@ -59,7 +59,6 @@ userContainer.get<ICreateUser>(USER_TYPES.ICreateUser);
 userContainer.get<IUserRepository>(USER_TYPES.IUserRepository);
 userContainer.get<IFindAllUsers>(USER_TYPES.IFindAll)
 userContainer.get<IFindAllUsersNoPassword>(USER_TYPES.IFindAllNoPassword)
-userContainer.get<IFindAllUsersNoPassword>(USER_TYPES.IFindUserById)
 userContainer.get<IFindUserByIdNoPassword>(USER_TYPES.IFindUserByIdNoPassword)
 userContainer.get<IFindUserByEmail>(USER_TYPES.IFindUserByEmail)
 userContainer.get<IFindUserByEmailNoPassword>(USER_TYPES.IFindUserByEmailNoPassword)

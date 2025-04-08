@@ -1,16 +1,14 @@
-import Product from "./Products";
+import { ICategoriesEntity } from "../interfaces/categories/ICategoriesEntity";
 
-export default class Category {
+export default class Category implements ICategoriesEntity {
   private id: string;
   private name: string;
   private description: string;
-  private products: Product[]
 
   constructor(id: string, name: string, description: string) {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.products = [];
   }
 
   // Getters
@@ -41,11 +39,4 @@ export default class Category {
     this.description = description;
   }
 
-  getProducts(): Product[] {
-    return this.products;
-  }
-
-  setProducts(products: Product[]): void {
-    this.products = products;
-  }
 }

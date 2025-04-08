@@ -3,6 +3,11 @@ import CategoriesModel from "../../database/models/CategoriesModel";
 import CategoryDTO from "../../dtos/CategoryDTO";
 
 export default interface ICategoryMapper {
+
+  categoryToModelNoId(category: Category): CategoriesModel
+
+  categoryToModelNoIdList(category: Category[]): CategoriesModel[]
+
   categoryModeltoDTO(categoryModel: CategoriesModel): CategoryDTO
 
   dtoToCategory(categoryDto: CategoryDTO): Category
@@ -26,6 +31,8 @@ export default interface ICategoryMapper {
   categoryDTOToModel(CategoryDTO: CategoryDTO): CategoriesModel
 
   categoryDTOToModelList(CategoryDTOs: CategoryDTO[]): CategoriesModel[]
+
+  partialCategoryToModel(partialDtoModel: Partial<Category>): Partial<CategoriesModel>
 
   partialCategoryDtoToModel(partialDtoModel: Partial<CategoryDTO>): Partial<CategoriesModel>
 

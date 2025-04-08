@@ -18,7 +18,7 @@ export default class CategoriesRepository implements ICategoriesRepository {
   async createCategory(category: Category): Promise<boolean> {
     try {
       const categoryModel = this.categoriesMapper.categoryToModel(category)
-      const newCategory = await CategoriesModel.create(categoryModel)
+      const newCategory = await CategoriesModel.create(categoryModel.dataValues)
       if (newCategory) {
         return true
       } else {
@@ -33,7 +33,7 @@ export default class CategoriesRepository implements ICategoriesRepository {
     try {
       const categoryModel = await CategoriesModel.findOne({ where: { name: name } });
       if (categoryModel) {
-        const category = this.categoriesMapper.modelToCategory(categoryModel)
+        const category = this.categoriesMapper.modelToCategory(categoryModel.dataValues)
         return category
       } else {
         return null
@@ -47,8 +47,21 @@ export default class CategoriesRepository implements ICategoriesRepository {
     try {
       const categoryModel = await CategoriesModel.findByPk(id);
       if (categoryModel) {
-        const category = this.categoriesMapper.modelToCategory(categoryModel)
+        const category = this.categoriesMapper.modelToCategory(categoryModel.dataValues)
         return category
+      } else {
+        return null
+      }
+    } catch (error: any) {
+      throw new Error(error)
+    }
+  }
+
+  async getCategoryByIdInSystem(id: string): Promise<CategoriesModel | null> {
+    try {
+      const categoryModel = await CategoriesModel.findByPk(id);
+      if (categoryModel) {
+        return categoryModel
       } else {
         return null
       }
@@ -61,31 +74,34 @@ export default class CategoriesRepository implements ICategoriesRepository {
     try {
       const allCategoriesModel = await CategoriesModel.findAll();
       if (!allCategoriesModel) {
-        return null
+        return null;
       }
-      const allCategories = this.categoriesMapper.modelToCategoryList(allCategoriesModel)
-      return allCategories
-    } catch (error: any) {
-      throw new Error(error)
+      const allCategories = this.categoriesMapper.modelToCategoryList(allCategoriesModel.map(category => category.dataValues));
+      return allCategories;
+      } catch (error: any) {
+      throw new Error(error);
     }
   }
 
+
   async updateCategory(id: string, categories: Partial<Category>): Promise<Category | null> {
     try {
-      const categoryById = await this.getCategoryById(id)
-      if (categoryById) {
-        const categoryToModel = this.categoriesMapper.categoryToModel(categoryById)
-        const updateCategoryData = this.categoriesMapper.categoryToModel(categories as Category)
-        const updatedCategory = await categoryToModel.update({...updateCategoryData});
-        return this.categoriesMapper.modelToCategory(updatedCategory)
-      } else {
-        return null
-      }
+      const categoryById = await this.getCategoryByIdInSystem(id);
+      if (!categoryById) return null;
+
+      const categoryToModel = this.categoriesMapper.partialCategoryToModel(categories);
+
+      const updatedCategory = await categoryById.update({
+        ...categoryToModel.dataValues
+      });
+
+      return this.categoriesMapper.modelToCategory(updatedCategory.dataValues);
     } catch (error: any) {
       console.error('Error updating category:', error);
-      throw new Error(error)
+      throw new Error(error);
     }
   }
+
 
   async deleteCategory(id: string): Promise<boolean> {
     try {

@@ -24,7 +24,7 @@ export default class ProductRepository implements IProductRepository {
   async createProduct(product: Product): Promise<boolean> {
     try {
       const dtoToModel = this.productMapper.productToModel(product)
-      const newProduct = await ProductModel.create(dtoToModel)
+      const newProduct = await ProductModel.create(dtoToModel.dataValues)
       if (newProduct) {
         return true
       } else {
@@ -36,27 +36,21 @@ export default class ProductRepository implements IProductRepository {
   }
 
   async findById(id: string): Promise<ProductWithUserAndCategoryDTO | null> {
-    try {
       const productModel = await ProductModel.findByPk(id, {
         include: [
           { model: UserModel, as: 'user' },
           { model: CategoriesModel, as: 'categories' }
         ]
       });
-
       if (!productModel) {
         throw new Error(`Product with ID ${id} not found`);
       }
-      const productWitUser = this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTO(productModel)
+      const productWitUser = this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTO(productModel.dataValues)
       if (productWitUser) {
         return productWitUser
       } else {
         return null
       }
-    } catch (error: any) {
-      throw new Error(error)
-
-    }
   }
 
   async findByIdInSystem(id: string): Promise<ProductModel | null> {
@@ -147,8 +141,8 @@ export default class ProductRepository implements IProductRepository {
       const product = await this.findByIdInSystem(productId);
       if (!product) return null;
       const productModel = this.productMapper.productToModel(productData as Product)
-      const productUpdate = await product.update(productModel);
-      const modelToProduct = this.productMapper.modelToProduct(productUpdate)
+      const productUpdate = await product.update(productModel.dataValues);
+      const modelToProduct = this.productMapper.modelToProduct(productUpdate.dataValues)
       return modelToProduct;
     } catch (error: any) {
       throw new Error(error);
@@ -186,14 +180,14 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
- async  toggleProductPause(id: string, status: boolean): Promise<Product | null> {
+ async  toggleProductPause(id: string): Promise<Product | null> {
     try {
       const product = await this.findByIdInSystem(id);
       if (!product) {
         return null
       }
       product.update({
-        isPaused: !status
+        isPaused: !product.dataValues.isPaused
       })
       const productEntity = this.productMapper.modelToProduct(product)
       return productEntity

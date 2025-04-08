@@ -14,7 +14,6 @@ import ProductWithUserAndCategoryDTO from "../../../../infraestructure/dtos/Prod
     ) {}
 
     async execute(id: string): Promise<ProductWithUserAndCategoryDTO> {
-      try {
         const products = await this.productRepository.findById(id)
         if (!products) {
           throw new BoomError({
@@ -24,15 +23,5 @@ import ProductWithUserAndCategoryDTO from "../../../../infraestructure/dtos/Prod
           })
         }
         return products
-      } catch (error) {
-        if (error instanceof BoomError) {
-          throw error;
-        }
-        throw new BoomError({
-          message: `Error finding product`,
-          type: ErrorType.INTERNAL_ERROR,
-          statusCode: 500
-        })
-      }
     }
   }

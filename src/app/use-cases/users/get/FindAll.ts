@@ -12,7 +12,6 @@ import User from "../../../../domain/entities/Users";
 export default class FindAllUsers implements IFindAllUsers {
   constructor(
     @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
-    @inject(USER_TYPES.IUserMapper) private userMapper: IUserMapper
   ) {}
 
   async execute(): Promise<User[]> {

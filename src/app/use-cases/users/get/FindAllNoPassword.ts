@@ -25,7 +25,10 @@ export default class FindAllNoPassword implements IFindAllUsersNoPassword {
           statusCode: 404
         })
       }
-
+      console.log(users)
+      console.log(this.userMapper)
+      console.log(this.userMapper.userToNoPasswordDTO(users[0]))
+      console.log(this.userMapper.userToNoPasswordDTOList(users))
       return this.userMapper.userToNoPasswordDTOList(users)
     } catch (error) {
         if (error instanceof BoomError) {

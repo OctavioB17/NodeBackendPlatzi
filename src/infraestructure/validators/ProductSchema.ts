@@ -38,6 +38,10 @@ export const getProductSchema = Joi.object({
   id: Joi.string().uuid().required()
 })
 
+export const updateStockSchema = Joi.object({
+  stock: Joi.number().positive().required()
+})
+
 export const getProductSchemaByName = Joi.object({
   name: Joi.string().required()
 })
