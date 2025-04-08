@@ -11,6 +11,7 @@ import ICreateOrder from "../../app/interfaces/orders/post/ICreateOrder";
 import IOrdersMapper from "../../infraestructure/mappers/interfaces/IOrdersMapper";
 import { BoomError } from "../../domain/entities/DomainError";
 import { ErrorType } from "../../domain/interfaces/Error";
+import IAddProductsToOrder from "../../app/interfaces/orders/post/IAddProductsToOrder";
 
 export default class OrdersController implements IOrdersControllers {
 
@@ -22,10 +23,12 @@ export default class OrdersController implements IOrdersControllers {
     @inject(ORDER_TYPES.IOrdersMapper) private ordersMapper: IOrdersMapper,
     @inject(ORDER_TYPES.IUpdateOrder) private updateOrder: IUpdateOrder,
     @inject(ORDER_TYPES.IUpdateStatus) private updateStatus: IUpdateStatus,
+    @inject(ORDER_TYPES.IAddProductsToOrders) private addProductsToOrdes: IAddProductsToOrder
   ) {}
 
   async createOrderController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const orderData = req.body
+    console.log(orderData)
     try {
       const execute = await this.createOrder.execute(orderData)
       if (!execute) {
@@ -41,6 +44,24 @@ export default class OrdersController implements IOrdersControllers {
       next(error)
     }
   }
+
+  async addItemToOrderController(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const result = await this.addProductsToOrdes.execute(req.body);
+
+      if (!result) {
+        throw new BoomError({
+          message: 'Failed to add products to order',
+          type: ErrorType.INTERNAL_ERROR,
+          statusCode: 500
+        });
+      }
+
+      res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  };
 
   async findByIdController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params

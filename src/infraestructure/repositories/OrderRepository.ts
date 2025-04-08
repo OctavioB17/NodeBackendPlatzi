@@ -5,6 +5,10 @@ import IOrdersRepository from "../../domain/repositories/IOrdersRepository";
 import { ORDER_TYPES } from "../../types";
 import OrdersModel from "../database/models/OrdersModel";
 import IOrdersMapper from "../mappers/interfaces/IOrdersMapper";
+import OrderHasProductsModel from "../database/models/OrdersHasProducts";
+import UserModel from "../database/models/UserModel";
+import ProductModel from "../database/models/ProductsModel";
+import OrderHasProducts from "../../domain/entities/OrderHasProducts";
 
 @injectable()
 export default class OrderRepository implements IOrdersRepository {
@@ -16,7 +20,7 @@ export default class OrderRepository implements IOrdersRepository {
   }
 
   async createOrder(order: Orders): Promise<boolean | null> {
-    try {
+   /* try {*/
       if(!order) {
         return null
       }
@@ -27,22 +31,41 @@ export default class OrderRepository implements IOrdersRepository {
       } else {
         return false
       }
+   /* } catch (error) {
+      return null
+    }*/
+  }
+
+  async addItemToOrder(orderHasProduct: OrderHasProducts[]): Promise<OrderHasProducts[] | null> {
+    try {
+      const orderProductToModel = this.ordersMapper.orderHasProductsToModelList(orderHasProduct)
+      const orderAddItem = await OrderHasProductsModel.bulkCreate(orderProductToModel)
+      if (!orderAddItem) {
+        return null
+      }
+      return this.ordersMapper.orderHasProductModelToEntityList(orderAddItem)
     } catch (error) {
       return null
     }
   }
 
   async findById(id: string): Promise<Orders | null> {
-    try {
-        const orderModel = await OrdersModel.findByPk(id);
+    /*try {*/
+        const orderModel = await OrdersModel.findByPk(id, {
+          include: [
+            { model: UserModel, as: 'user'  },
+            { model: ProductModel, as: 'products' }
+          ],
+        });
+        console.log(orderModel)
         if (!orderModel) {
           return null
         }
         const order = this.ordersMapper.modelToOrder(orderModel);
         return order
-    } catch (error) {
+   /* } catch (error) {
       return null
-    }
+    }*/
   }
 
   async findByIdInSystem(id: string): Promise<OrdersModel | null> {

@@ -34,6 +34,7 @@ ProductModel.belongsTo(CategoriesModel, {
   onDelete: 'CASCADE',
   as: 'categories'
 });
+
 CategoriesModel.hasMany(ProductModel, {
   foreignKey: 'categoryId',
   onUpdate: 'CASCADE',
@@ -46,6 +47,7 @@ OrdersModel.belongsTo(UserModel, {
   onDelete: 'CASCADE',
   as: 'user'
 });
+
 UserModel.hasMany(OrdersModel, {
   foreignKey: 'userId',
   onUpdate: 'CASCADE',
@@ -58,6 +60,7 @@ OrdersModel.belongsToMany(ProductModel, {
   otherKey: 'productId',
   as: 'products'
 });
+
 ProductModel.belongsToMany(OrdersModel, {
   through: OrderHasProductsModel,
   foreignKey: 'productId',

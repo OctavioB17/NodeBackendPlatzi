@@ -7,4 +7,5 @@ export default interface IOrdersControllers {
   updateOrderController(req: Request, res: Response, next: NextFunction):  Promise<void>;
   updateStatusController(req: Request, res: Response, next: NextFunction):  Promise<void>;
   deleteOrderController(req: Request, res: Response, next: NextFunction):  Promise<void>;
+  addItemToOrderController(req: Request, res: Response, next: NextFunction): Promise<void>;
 }

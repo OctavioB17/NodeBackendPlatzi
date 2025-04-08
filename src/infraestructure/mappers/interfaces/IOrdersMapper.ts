@@ -1,9 +1,27 @@
-import { Order } from "sequelize";
 import Orders from "../../../domain/entities/Orders";
 import OrdersModel from "../../database/models/OrdersModel";
 import OrderDTO from "../../dtos/OrderDTO";
+import OrderHasProducts from "../../../domain/entities/OrderHasProducts";
+import OrderHasProductsModel from "../../database/models/OrdersHasProducts";
+import OrderHasProductsDTO from "../../dtos/OrderHasProductsDTO";
 
 export default interface IOrdersMapper {
+
+  orderHasProductDtoToEntity(dto: OrderHasProductsDTO): OrderHasProducts
+
+  orderHasProductDtoToEntityList(dtos: OrderHasProductsDTO[]): OrderHasProducts[]
+
+  orderHasProductEntityToDto(entity: OrderHasProducts): OrderHasProductsDTO
+
+  orderHasProductEntityToDtoList(entities: OrderHasProducts[]): OrderHasProductsDTO[]
+
+  orderHasProductToModel(orderHasProduct: OrderHasProducts): OrderHasProductsModel
+
+  orderHasProductsToModelList(orderHasProduct: OrderHasProducts[]): OrderHasProductsModel[]
+
+  orderHasProductModelToEntity(orderHasProductModel: OrderHasProductsModel): OrderHasProducts
+
+  orderHasProductModelToEntityList(orderHasProductModel: OrderHasProductsModel[]): OrderHasProducts[]
 
   partialDtoToOrder(dto: Partial<OrderDTO>): Partial<Orders>
 

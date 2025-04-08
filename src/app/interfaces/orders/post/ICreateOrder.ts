@@ -1,5 +1,5 @@
-import OrderDTO from "../../../../infraestructure/dtos/OrderDTO";
+import { CreateOrderRequest } from "../../../../domain/interfaces/orders/IOrders";
 
 export default interface ICreateOrder {
-  execute(orderDTO: OrderDTO): Promise<boolean | null>
+  execute(orderData: CreateOrderRequest): Promise<boolean | null>
 }

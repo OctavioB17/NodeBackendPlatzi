@@ -1,24 +1,41 @@
 import Joi from "joi";
 
-const id = Joi.string().uuid()
-const userId = Joi.string();
-const status = Joi.string()
-const totalPrice = Joi.number()
-const paymentMethod = Joi.string()
+
+const id = Joi.string().uuid();
+const userId = Joi.string().uuid();
+const status = Joi.string().valid('PENDING', 'PAID', 'CANCELLED');
+const totalPrice = Joi.number().positive();
+const paymentMethod = Joi.string().valid('CREDIT_CARD', 'DEBIT_CARD', 'PAYPAL');
+const productId = Joi.string().uuid();
+const quantity = Joi.number().integer().positive();
 const taxes = Joi.array().items(
   Joi.object({
-    type: Joi.string(),
-    number: Joi.number()
+    type: Joi.string().required(),
+    number: Joi.number().positive().required()
   })
-)
+);
 
-export const createOrderSchema = Joi.object({
+const orderHasProducts = Joi.array().items(
+  Joi.object({
+    productId: productId.required(),
+    quantity: quantity.required()
+  })
+).min(1).required();
+
+
+const createOrderOnlySchema = Joi.object({
   userId: userId.required(),
   status: status.required(),
   totalPrice: totalPrice.required(),
   paymentMethod: paymentMethod.required(),
-  taxes: taxes.optional()
+  taxes: taxes.optional(),
+});
+
+export const createOrderSchema = Joi.object({
+  order: createOrderOnlySchema,
+  orderHasProducts: orderHasProducts
 })
+
 
 export const updateOrderSchema = Joi.object({
   id: id.required(),

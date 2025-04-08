@@ -1,14 +1,13 @@
 import { inject, injectable } from "inversify";
-import ProductDTO from "../../../../infraestructure/dtos/OrderDTO";
 import ICreateOrder from "../../../interfaces/orders/post/ICreateOrder";
 import { ORDER_TYPES, UTIL_TYPES } from "../../../../types";
-import { ICategoriesRepository } from "../../../../domain/repositories/ICategoryRepository";
 import IOrdersMapper from "../../../../infraestructure/mappers/interfaces/IOrdersMapper";
-import OrderDTO from "../../../../infraestructure/dtos/OrderDTO";
 import IOrdersRepository from "../../../../domain/repositories/IOrdersRepository";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import { IIdGenerator } from "../../../../domain/services/utils/IIdGenerator";
+import IAddProductsToOrder from "../../../interfaces/orders/post/IAddProductsToOrder";
+import { CreateOrderRequest } from "../../../../domain/interfaces/orders/IOrders";
 
 @injectable()
 export default class CreateOrder implements ICreateOrder {
@@ -16,24 +15,36 @@ export default class CreateOrder implements ICreateOrder {
   constructor(
     @inject(ORDER_TYPES.IOrdersRepository) private orderRepository: IOrdersRepository,
     @inject(ORDER_TYPES.IOrdersMapper) private orderMapper: IOrdersMapper,
+    @inject(ORDER_TYPES.IAddProductsToOrders) private addProductsToOrder: IAddProductsToOrder,
     @inject(UTIL_TYPES.IIdGenerator) private idGenerator: IIdGenerator,
   ) {}
 
 
-  async execute(orderDTO: OrderDTO): Promise<boolean | null> {
-    try {
+  async execute(orderData: CreateOrderRequest): Promise<boolean | null> {
+    /*try {*/
       const newOrder = {
-        ...orderDTO,
+        ...orderData.order,
         id: this.idGenerator.generate()
       }
       const dtoToOrder = this.orderMapper.dtoToOrder(newOrder)
-      const create = this.orderRepository.createOrder(dtoToOrder)
+      console.log(dtoToOrder)
+      const create = await this.orderRepository.createOrder(dtoToOrder)
+      console.log(create)
+      if (create) {
+        const addItems = await this.addProductsToOrder.execute(orderData.orderHasProducts)
+        if (addItems) {
+          return true
+        }
+        else {
+          return false
+        }
+      }
       if (!create) {
         return false
       } else {
         return create
       }
-    } catch (error) {
+    /*} catch (error) {
       if (error instanceof BoomError) {
         throw error;
       }
@@ -43,6 +54,6 @@ export default class CreateOrder implements ICreateOrder {
         type: ErrorType.INTERNAL_ERROR,
         statusCode: 500
       });
-    }
+    }*/
   }
 }

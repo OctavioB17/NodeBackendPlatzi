@@ -20,6 +20,8 @@ import IOrdersRepository from "../../domain/repositories/IOrdersRepository";
 import OrderRepository from "../repositories/OrderRepository";
 import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
 import UuidGenerator from "../services/utils/UuidGenerator";
+import IAddProductsToOrder from "../../app/interfaces/orders/post/IAddProductsToOrder";
+import AddProductsToOrders from "../../app/use-cases/orders/post/AddProductsToOrder";
 
 const ordersContainer = new Container();
 
@@ -33,5 +35,6 @@ ordersContainer.bind<IUpdateOrder>(ORDER_TYPES.IUpdateOrder).to(UpdateOrder)
 ordersContainer.bind<IFindAllOrdersByUserId>(ORDER_TYPES.IFindAllOrdersByUserId).to(FindAllOrdersByUserId)
 ordersContainer.bind<IUpdateStatus>(ORDER_TYPES.IUpdateStatus).to(UpdateStatus)
 ordersContainer.bind<IOrdersControllers>(ORDER_TYPES.IOrdersController).to(OrdersController)
+ordersContainer.bind<IAddProductsToOrder>(ORDER_TYPES.IAddProductsToOrders).to(AddProductsToOrders)
 
 export default ordersContainer
