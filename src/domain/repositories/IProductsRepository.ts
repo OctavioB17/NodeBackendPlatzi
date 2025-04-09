@@ -1,5 +1,5 @@
 import ProductModel from "../../infraestructure/database/models/ProductsModel";
-import ProductWithUserAndCategoryDTO from "../../infraestructure/dtos/ProductWithUserAndCategoryDTO";
+import ProductWithUserAndCategoryDTO from "../../infraestructure/dtos/product/ProductWithUserAndCategoryDTO";
 import Product from "../entities/Products";
 
 export default interface IProductRepository {

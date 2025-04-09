@@ -5,7 +5,7 @@ import {USER_TYPES} from "../../../../types";
 import { IFindUserByEmail } from "../../../interfaces/users/get/IFindUserByEmail";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import { BoomError } from "../../../../domain/entities/DomainError";
-import UserDTO from "../../../../infraestructure/dtos/UserDTO";
+import UserDTO from "../../../../infraestructure/dtos/users/UserDTO";
 import UserMapper from "../../../../infraestructure/mappers/UserMapper";
 import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
 import User from "../../../../domain/entities/Users";

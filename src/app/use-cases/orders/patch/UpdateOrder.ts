@@ -1,12 +1,12 @@
 import { inject, injectable } from "inversify";
 import Orders from "../../../../domain/entities/Orders";
-import OrderDTO from "../../../../infraestructure/dtos/OrderDTO";
 import IUpdateOrder from "../../../interfaces/orders/patch/IUpdateOrder";
 import IOrdersRepository from "../../../../domain/repositories/IOrdersRepository";
 import { ORDER_TYPES } from "../../../../types";
 import IOrdersMapper from "../../../../infraestructure/mappers/interfaces/IOrdersMapper";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
+import OrderDTO from "../../../../infraestructure/dtos/orders/OrderDTO";
 
 @injectable()
 export default class UpdateOrder implements IUpdateOrder {

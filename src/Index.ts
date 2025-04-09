@@ -47,6 +47,7 @@ import IUpdateOrder from './app/interfaces/orders/patch/IUpdateOrder';
 import IUpdateStatus from './app/interfaces/orders/patch/IUpdateStatus';
 import ICreateOrder from './app/interfaces/orders/post/ICreateOrder';
 import IOrdersControllers from './presentation/controllers/interfaces/IOrdersController';
+import IAddProductsToOrder from './app/interfaces/orders/post/IAddProductsToOrder';
 
 const app = express();
 app.use(express.json());
@@ -84,6 +85,7 @@ categoriesContainer.get<IUpdateCategory>(CATEGORY_TYPES.IUpdateCategory)
 ordersContainer.get<IOrdersMapper>(ORDER_TYPES.IOrdersMapper);
 ordersContainer.get<IFindOrderById>(ORDER_TYPES.IFindOrderById)
 ordersContainer.get<ICreateOrder>(ORDER_TYPES.ICreateOrder)
+ordersContainer.get<IAddProductsToOrder>(ORDER_TYPES.IAddProductsToOrders)
 ordersContainer.get<IDeleteOrder>(ORDER_TYPES.IDeleteOrder)
 ordersContainer.get<IUpdateOrder>(ORDER_TYPES.IUpdateOrder)
 ordersContainer.get<IFindAllOrdersByUserId>(ORDER_TYPES.IFindAllOrdersByUserId)

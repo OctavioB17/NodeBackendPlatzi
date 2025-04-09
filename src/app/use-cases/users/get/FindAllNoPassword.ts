@@ -4,7 +4,7 @@ import {USER_TYPES} from "../../../../types";
 import { IFindAllUsersNoPassword } from "../../../interfaces/users/get/IFindAllUsersNoPassword";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import { BoomError } from "../../../../domain/entities/DomainError";
-import UserNoPasswordDTO from "../../../../infraestructure/dtos/UserNoPasswordDTO";
+import UserNoPasswordDTO from "../../../../infraestructure/dtos/users/UserNoPasswordDTO";
 import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
 
 
@@ -25,10 +25,6 @@ export default class FindAllNoPassword implements IFindAllUsersNoPassword {
           statusCode: 404
         })
       }
-      console.log(users)
-      console.log(this.userMapper)
-      console.log(this.userMapper.userToNoPasswordDTO(users[0]))
-      console.log(this.userMapper.userToNoPasswordDTOList(users))
       return this.userMapper.userToNoPasswordDTOList(users)
     } catch (error) {
         if (error instanceof BoomError) {

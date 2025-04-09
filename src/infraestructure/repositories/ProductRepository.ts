@@ -1,15 +1,13 @@
 import IProductRepository from "../../domain/repositories/IProductsRepository";
 import ProductModel from "../database/models/ProductsModel";
 import { Op } from "sequelize";
-import IProductWithUserAndCategory from "../../domain/interfaces/user/IProductWithUserAndCategory";
 import UserModel from "../database/models/UserModel";
 import CategoriesModel from "../database/models/CategoriesModel";
-import ProductDTO from "../dtos/ProductDTO";
 import { PRODUCT_TYPES } from "../../types";
 import IProductMapper from "../mappers/interfaces/IProductMapper";
 import { inject, injectable } from "inversify";
 import Product from "../../domain/entities/Products";
-import ProductWithUserAndCategoryDTO from "../dtos/ProductWithUserAndCategoryDTO";
+import ProductWithUserAndCategoryDTO from "../dtos/product/ProductWithUserAndCategoryDTO";
 
 @injectable()
 export default class ProductRepository implements IProductRepository {

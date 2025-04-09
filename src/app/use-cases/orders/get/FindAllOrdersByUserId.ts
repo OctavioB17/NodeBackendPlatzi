@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify';
-import Orders from '../../../../domain/entities/Orders';
 import IFindAllOrdersByUserId from '../../../interfaces/orders/get/IFindAllOrdersByUserId';
 import IOrdersRepository from '../../../../domain/repositories/IOrdersRepository';
 import { ORDER_TYPES } from '../../../../types';
 import { BoomError } from '../../../../domain/entities/DomainError';
 import { ErrorType } from '../../../../domain/interfaces/Error';
+import { OrderWithUserAndProducts } from '../../../../domain/interfaces/orders/IOrders';
 
 @injectable()
 export default class FindAllOrdersByUserId implements IFindAllOrdersByUserId {
@@ -13,7 +13,7 @@ export default class FindAllOrdersByUserId implements IFindAllOrdersByUserId {
     @inject(ORDER_TYPES.IOrdersRepository) private orderRepository: IOrdersRepository,
   ) {}
 
-  async execute(userId: string): Promise<Orders[] | null> {
+  async execute(userId: string): Promise<OrderWithUserAndProducts[] | null> {
     try {
       const ordersByUser = this.orderRepository.findAllByUserId(userId);
       if (!ordersByUser) {

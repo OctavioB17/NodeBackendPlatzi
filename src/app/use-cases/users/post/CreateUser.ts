@@ -7,7 +7,7 @@ import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import { IUser } from "../../../../domain/interfaces/user/IUser";
 import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
-import UserDTO from "../../../../infraestructure/dtos/UserDTO";
+import UserDTO from "../../../../infraestructure/dtos/users/UserDTO";
 
 
 @injectable()

@@ -1,8 +1,8 @@
 import { plainToInstance } from "class-transformer";
 import { IUser } from "../../../domain/interfaces/user/IUser";
 import UserModel from "../../database/models/UserModel";
-import UserDTO from "../../dtos/UserDTO";
-import UserNoPasswordDTO from "../../dtos/UserNoPasswordDTO";
+import UserDTO from "../../dtos/users/UserDTO";
+import UserNoPasswordDTO from "../../dtos/users/UserNoPasswordDTO";
 import User from "../../../domain/entities/Users";
 
 export default interface IUserMapper {

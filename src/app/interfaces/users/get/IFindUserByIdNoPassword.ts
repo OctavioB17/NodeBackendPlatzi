@@ -1,4 +1,4 @@
-import UserNoPasswordDTO from "../../../../infraestructure/dtos/UserNoPasswordDTO";
+import UserNoPasswordDTO from "../../../../infraestructure/dtos/users/UserNoPasswordDTO";
 
 export interface IFindUserByIdNoPassword {
   execute(id: string): Promise<UserNoPasswordDTO | null>

@@ -1,6 +1,6 @@
 import { classToPlain, instanceToPlain, plainToInstance } from "class-transformer";
 
-import CategoryDTO from "../dtos/CategoryDTO";
+import CategoryDTO from "../dtos/category/CategoryDTO";
 import CategoriesModel from "../database/models/CategoriesModel";
 import ICategoryMapper from "./interfaces/ICategoriesMapper";
 import Category from "../../domain/entities/Categories";

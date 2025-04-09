@@ -4,7 +4,7 @@ import { ORDER_TYPES } from "../../../../types";
 import IOrdersRepository from "../../../../domain/repositories/IOrdersRepository";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import Orders from "../../../../domain/entities/Orders";
+import { OrderWithUserAndProducts } from "../../../../domain/interfaces/orders/IOrders";
 
 @injectable()
 export default class FindOrderById implements IFindOrderById {
@@ -12,8 +12,9 @@ export default class FindOrderById implements IFindOrderById {
     @inject(ORDER_TYPES.IOrdersRepository) private orderRepository: IOrdersRepository,
   ) {}
 
-  async execute(id: string): Promise<Orders> {
+  async execute(id: string): Promise<OrderWithUserAndProducts> {
     try {
+      console.log(id)
       const order = await this.orderRepository.findById(id)
       if (!order) {
         throw new BoomError({

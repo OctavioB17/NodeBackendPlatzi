@@ -6,8 +6,8 @@ import IOrderHasProducts from "../../../domain/interfaces/orders/IOrderHasProduc
 @Table({ tableName: 'order_has_products', timestamps: true })
 export default class OrderHasProductsModel extends Model<OrderHasProductsModel> implements IOrderHasProducts {
 
-  @Column({ type: DataType.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false })
-  declare id: number;
+  @Column({ type: DataType.UUID, primaryKey: true, allowNull: false })
+  declare id: string;
 
   @ForeignKey(() => OrdersModel)
   @Column({ type: DataType.UUID, allowNull: false })

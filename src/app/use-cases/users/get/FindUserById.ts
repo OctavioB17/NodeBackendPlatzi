@@ -5,7 +5,7 @@
   import { BoomError } from "../../../../domain/entities/DomainError";
   import { ErrorType } from "../../../../domain/interfaces/Error";
   import UserMapper from "../../../../infraestructure/mappers/UserMapper";
-  import UserDTO from "../../../../infraestructure/dtos/UserDTO";
+  import UserDTO from "../../../../infraestructure/dtos/users/UserDTO";
 import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
 import User from "../../../../domain/entities/Users";
 

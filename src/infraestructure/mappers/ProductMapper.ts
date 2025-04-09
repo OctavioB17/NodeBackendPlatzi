@@ -1,14 +1,22 @@
 import { plainToInstance } from "class-transformer";
 import ProductModel from "../database/models/ProductsModel";
-import ProductDTO from "../dtos/ProductDTO";
+import ProductDTO from "../dtos/product/ProductDTO";
 import { IProduct } from "../../domain/interfaces/products/IProducts";
-import ProductWithUserAndCategoryDTO from "../dtos/ProductWithUserAndCategoryDTO";
-import UserNoPasswordDTO from "../dtos/UserNoPasswordDTO";
-import IProductWithUserAndCategory from "../../domain/interfaces/user/IProductWithUserAndCategory";
+import UserNoPasswordDTO from "../dtos/users/UserNoPasswordDTO";
+import IProductWithUserAndCategory from "../../domain/interfaces/products/IProductWithUserAndCategory";
 import IProductMapper from "./interfaces/IProductMapper";
 import Product from "../../domain/entities/Products";
+import ProductWithUserAndCategoryDTO from "../dtos/product/ProductWithUserAndCategoryDTO";
+import { ProductWithQuantityDTO } from "../dtos/product/ProductWithQuantityDTO";
+import { ProductWithJoin } from "../../domain/interfaces/products/IProductWithQuantityDTO";
 
 export default class ProductMapper implements IProductMapper {
+
+  modelToProductWithQuantity(model: ProductWithJoin): ProductWithQuantityDTO {
+    const dto = plainToInstance(ProductWithQuantityDTO, model.dataValues)
+    dto.quantity = model.OrderHasProductsModel?.quantity ?? 0
+    return dto
+  }
 
   partialProductDtoToProduct(partialProductDto: Partial<ProductDTO>): Partial<Product> {
     return plainToInstance(Product, partialProductDto);

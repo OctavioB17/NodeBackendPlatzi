@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../domain/repositories/IUsersRepository";
 import UserModel from "../database/models/UserModel";
 import UserMapper from "../mappers/UserMapper";
-import UserDTO from "../dtos/UserDTO";
+import UserDTO from "../dtos/users/UserDTO";
 import IUserMapper from "../mappers/interfaces/IUserMapper";
 import { USER_TYPES } from "../../types";
 import User from "../../domain/entities/Users";

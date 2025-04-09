@@ -1,6 +1,6 @@
-import Orders from "../../../../domain/entities/Orders";
+import { OrderWithUserAndProducts } from "../../../../domain/interfaces/orders/IOrders";
 
 
 export default interface IFindAllOrdersByUserId {
-  execute(userId: string): Promise<Orders[] | null>
+  execute(userId: string): Promise<OrderWithUserAndProducts[] | null>
 }

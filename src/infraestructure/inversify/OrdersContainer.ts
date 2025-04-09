@@ -1,6 +1,6 @@
 import { Container } from "inversify";
 import IOrdersMapper from "../mappers/interfaces/IOrdersMapper";
-import { ORDER_TYPES, UTIL_TYPES } from "../../types";
+import { ORDER_TYPES, PRODUCT_TYPES, USER_TYPES, UTIL_TYPES } from "../../types";
 import OrdersMapper from "../mappers/OrdersMapper";
 import IFindOrderById from "../../app/interfaces/orders/get/IFindOrderById";
 import ICreateOrder from "../../app/interfaces/orders/post/ICreateOrder";
@@ -22,6 +22,10 @@ import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
 import UuidGenerator from "../services/utils/UuidGenerator";
 import IAddProductsToOrder from "../../app/interfaces/orders/post/IAddProductsToOrder";
 import AddProductsToOrders from "../../app/use-cases/orders/post/AddProductsToOrder";
+import IUserMapper from "../mappers/interfaces/IUserMapper";
+import UserMapper from "../mappers/UserMapper";
+import IProductMapper from "../mappers/interfaces/IProductMapper";
+import ProductMapper from "../mappers/ProductMapper";
 
 const ordersContainer = new Container();
 
@@ -36,5 +40,7 @@ ordersContainer.bind<IFindAllOrdersByUserId>(ORDER_TYPES.IFindAllOrdersByUserId)
 ordersContainer.bind<IUpdateStatus>(ORDER_TYPES.IUpdateStatus).to(UpdateStatus)
 ordersContainer.bind<IOrdersControllers>(ORDER_TYPES.IOrdersController).to(OrdersController)
 ordersContainer.bind<IAddProductsToOrder>(ORDER_TYPES.IAddProductsToOrders).to(AddProductsToOrders)
+ordersContainer.bind<IUserMapper>(USER_TYPES.IUserMapper).to(UserMapper)
+ordersContainer.bind<IProductMapper>(PRODUCT_TYPES.IProductMapper).to(ProductMapper)
 
 export default ordersContainer

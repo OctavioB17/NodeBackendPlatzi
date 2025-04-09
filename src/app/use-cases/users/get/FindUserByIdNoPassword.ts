@@ -4,7 +4,7 @@ import {USER_TYPES} from "../../../../types";
 import { IFindUserByIdNoPassword } from "../../../interfaces/users/get/IFindUserByIdNoPassword";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import UserNoPasswordDTO from "../../../../infraestructure/dtos/UserNoPasswordDTO";
+import UserNoPasswordDTO from "../../../../infraestructure/dtos/users/UserNoPasswordDTO";
 import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
 
 

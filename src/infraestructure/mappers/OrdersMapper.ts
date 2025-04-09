@@ -2,12 +2,84 @@ import { plainToInstance, instanceToPlain } from "class-transformer";
 import Orders from "../../domain/entities/Orders";
 import OrdersModel from "../database/models/OrdersModel";
 import IOrdersMapper from "./interfaces/IOrdersMapper";
-import OrderDTO from "../dtos/OrderDTO";
 import OrderHasProducts from "../../domain/entities/OrderHasProducts";
 import OrderHasProductsModel from "../database/models/OrdersHasProducts";
-import OrderHasProductsDTO from "../dtos/OrderHasProductsDTO";
+import OrderHasProductsDTO from "../dtos/orders/OrderHasProductsDTO";
+import OrderDTO from "../dtos/orders/OrderDTO";
+import IUserMapper from "./interfaces/IUserMapper";
+import IProductMapper from "./interfaces/IProductMapper";
+import { inject } from "inversify";
+import { PRODUCT_TYPES, USER_TYPES } from "../../types";
+import ProductModel from "../database/models/ProductsModel";
+import UserModel from "../database/models/UserModel";
+import User from "../../domain/entities/Users";
+import Product from "../../domain/entities/Products";
+import { UserNoPassword } from "../../domain/interfaces/user/IUser";
+import { IProductWithQuantityDTO } from "../../domain/interfaces/products/IProductWithQuantityDTO";
+import { OrderWithUserAndProducts, OrderWithUserAndProductsModel } from "../../domain/interfaces/orders/IOrders";
+
 
 export default class OrdersMapper implements IOrdersMapper {
+
+  private userMapper: IUserMapper;
+  private productMapper: IProductMapper;
+  constructor(
+    @inject(USER_TYPES.IUserMapper) userMapper: IUserMapper,
+    @inject(PRODUCT_TYPES.IProductMapper) productMapper: IProductMapper
+  ) {
+    this.productMapper = productMapper;
+    this.userMapper = userMapper
+  }
+
+  orderModelToEntityWithRelations(model: OrderWithUserAndProductsModel): OrderWithUserAndProducts {
+
+    const user: UserNoPassword = {
+      id: model.user.id,
+      name: model.user.name,
+      surname: model.user.surname,
+      email: model.user.email,
+      role: model.user.role,
+    };
+
+    const products: IProductWithQuantityDTO[] = model.products?.map(product => ({
+      id: product.id,
+      name: product.name,
+      description: product.description ?? '',
+      imageUrl: product.imageUrl ?? '',
+      sku: product.sku ?? '',
+      dimensions: product.dimensions ?? null,
+      weight: product.weight ?? 0,
+      price: product.price,
+      stock: product.stock,
+      categoryId: product.categoryId ?? '',
+      material: product.material ?? [],
+      isPaused: product.isPaused ?? false,
+      userId: product.userId ?? '',
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+      quantity: product.OrderHasProductsModel.dataValues.quantity ?? 0,
+    })) ?? [];
+
+    const order = new Orders(
+      model.id,
+      model.userId,
+      model.status,
+      model.totalPrice,
+      model.paymentMethod,
+      model.taxes
+    );
+
+    const orderWithExtras = {
+      ...order,
+      user: user,
+      products: products
+    } as OrderWithUserAndProducts
+    return orderWithExtras;
+  }
+
+  orderModelToEntityWithRelationsList(models: OrderWithUserAndProductsModel[]): OrderWithUserAndProducts[] {
+    return models.map(model => this.orderModelToEntityWithRelations(model))
+  }
 
   orderHasProductDtoToEntity(dto: OrderHasProductsDTO): OrderHasProducts {
     return plainToInstance(OrderHasProducts, dto)

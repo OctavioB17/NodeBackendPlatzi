@@ -4,7 +4,7 @@ import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import IProductRepository from "../../../../domain/repositories/IProductsRepository";
 import ICreateProduct from "../../../interfaces/products/post/ICreateProduct";
-import ProductDTO from "../../../../infraestructure/dtos/ProductDTO";
+import ProductDTO from "../../../../infraestructure/dtos/product/ProductDTO";
 import { IIdGenerator } from "../../../../domain/services/utils/IIdGenerator";
 import IProductMapper from "../../../../infraestructure/mappers/interfaces/IProductMapper";
 

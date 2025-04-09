@@ -1,11 +1,17 @@
 import Product from "../../../domain/entities/Products"
 import { IProduct } from "../../../domain/interfaces/products/IProducts"
-import IProductWithUserAndCategory from "../../../domain/interfaces/user/IProductWithUserAndCategory"
+import { ProductWithJoin } from "../../../domain/interfaces/products/IProductWithQuantityDTO"
+import IProductWithUserAndCategory from "../../../domain/interfaces/products/IProductWithUserAndCategory"
 import ProductModel from "../../database/models/ProductsModel"
-import ProductDTO from "../../dtos/ProductDTO"
-import ProductWithUserAndCategoryDTO from "../../dtos/ProductWithUserAndCategoryDTO"
+import ProductDTO from "../../dtos/product/ProductDTO"
+import { ProductWithQuantityDTO } from "../../dtos/product/ProductWithQuantityDTO"
+import ProductWithUserAndCategoryDTO from "../../dtos/product/ProductWithUserAndCategoryDTO"
 
 export default interface IProductMapper {
+
+  modelToProductWithQuantity(model: ProductWithJoin): ProductWithQuantityDTO;
+
+
   productModeltoDTO(productModel: ProductModel): ProductDTO
 
   productModeltoDTOList(productModels: ProductModel[]): ProductDTO[]

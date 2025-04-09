@@ -1,5 +1,5 @@
-import Orders from "../../../../domain/entities/Orders";
+import { OrderWithUserAndProducts } from "../../../../domain/interfaces/orders/IOrders";
 
 export default interface IFindOrderById {
-  execute(id: string): Promise<Orders>
+  execute(id: string): Promise<OrderWithUserAndProducts>
 }

@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import CategoryDTO from "../../../../infraestructure/dtos/CategoryDTO";
+import CategoryDTO from "../../../../infraestructure/dtos/category/CategoryDTO";
 import ICreateCategory from "../../../interfaces/categories/post/ICreateCategory";
 import { CATEGORY_TYPES, UTIL_TYPES } from "../../../../types";
 import { ICategoriesRepository } from "../../../../domain/repositories/ICategoryRepository";

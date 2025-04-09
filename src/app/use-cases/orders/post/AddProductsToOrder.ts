@@ -4,7 +4,7 @@ import { ORDER_TYPES, UTIL_TYPES } from "../../../../types";
 import IOrdersRepository from "../../../../domain/repositories/IOrdersRepository";
 import { IIdGenerator } from "../../../../domain/services/utils/IIdGenerator";
 import IOrdersMapper from "../../../../infraestructure/mappers/interfaces/IOrdersMapper";
-import OrderHasProductsDTO from "../../../../infraestructure/dtos/OrderHasProductsDTO";
+import OrderHasProductsDTO from "../../../../infraestructure/dtos/orders/OrderHasProductsDTO";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 
@@ -15,27 +15,32 @@ export default class AddProductsToOrders implements IAddProductsToOrder {
     @inject(ORDER_TYPES.IOrdersMapper) private orderMapper: IOrdersMapper,
     @inject(UTIL_TYPES.IIdGenerator) private idGenerator: IIdGenerator,
   ) {}
-  async execute(orderHasProductsDto: OrderHasProductsDTO | OrderHasProductsDTO[]): Promise<OrderHasProductsDTO[] | null> {
-    try {
+  async execute(orderHasProductsDto: OrderHasProductsDTO | OrderHasProductsDTO[], orderId: string): Promise<OrderHasProductsDTO[] | null> {
+    /*try {*/
       if (!Array.isArray(orderHasProductsDto)) {
         orderHasProductsDto = [orderHasProductsDto]
       }
-      const order = await this.orderRepository.findById(orderHasProductsDto[0].id)
+      const order = await this.orderRepository.findById(orderId)
       if (!order) {
         throw new BoomError({
-          message: `Error finding order ${orderHasProductsDto[0].id}`,
+          message: `Error finding order ${orderId}`,
           type: ErrorType.INTERNAL_ERROR,
           statusCode: 500
         });
       }
-      const dtoToEntity = this.orderMapper.orderHasProductDtoToEntityList(orderHasProductsDto)
+      const newOrderHasProduct = orderHasProductsDto.map(productsOrder  => ({
+        ...productsOrder,
+        id: this.idGenerator.generate(),
+        orderId: orderId,
+      }))
+      const dtoToEntity = this.orderMapper.orderHasProductDtoToEntityList(newOrderHasProduct)
       const addItems = await this.orderRepository.addItemToOrder(dtoToEntity)
       if (!addItems) {
         return null
       }
       const entityToDto = this.orderMapper.orderHasProductEntityToDtoList(addItems)
       return entityToDto
-    } catch (error) {
+    /*} catch (error) {
       if (error instanceof BoomError) {
         throw error;
       }
@@ -45,6 +50,6 @@ export default class AddProductsToOrders implements IAddProductsToOrder {
         type: ErrorType.INTERNAL_ERROR,
         statusCode: 500
       });
-    }
+    }*/
   }
 }

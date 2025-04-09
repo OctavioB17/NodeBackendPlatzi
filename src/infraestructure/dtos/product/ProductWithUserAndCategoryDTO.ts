@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer";
-import UserNoPasswordDTO from "./UserNoPasswordDTO";
-import CategoryDTO from "./CategoryDTO";
+import CategoryDTO from "../category/CategoryDTO";
+import UserNoPasswordDTO from "../users/UserNoPasswordDTO";
 
 export default class ProductWithUserAndCategoryDTO {
   @Expose()

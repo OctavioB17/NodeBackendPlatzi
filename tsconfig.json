@@ -11,6 +11,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["src/**/*", "src/infraestructure/dtos/ProductDTO.ts"],
+  "include": ["src/**/*", "src/infraestructure/dtos/product/ProductDTO.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

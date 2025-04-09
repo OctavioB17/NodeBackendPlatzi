@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import IUpdateProduct from "../../../interfaces/products/patch/IUpdateProduct";
 import { CATEGORY_TYPES } from "../../../../types";
 import { ICategoriesRepository } from "../../../../domain/repositories/ICategoryRepository";
-import CategoryDTO from "../../../../infraestructure/dtos/CategoryDTO";
+import CategoryDTO from "../../../../infraestructure/dtos/category/CategoryDTO";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import ICategoryMapper from "../../../../infraestructure/mappers/interfaces/ICategoriesMapper";

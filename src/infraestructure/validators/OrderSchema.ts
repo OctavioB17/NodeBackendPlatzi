@@ -52,3 +52,7 @@ export const updateStatusOrderSchema = Joi.object({
 export const getOrderSchema = Joi.object({
   id: id.required()
 })
+
+export const getOrderSchemaByUserId = Joi.object({
+  userId: id.required()
+})

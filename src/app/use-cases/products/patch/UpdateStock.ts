@@ -1,5 +1,5 @@
 import { inject } from "inversify";
-import ProductDTO from "../../../../infraestructure/dtos/ProductDTO";
+import ProductDTO from "../../../../infraestructure/dtos/product/ProductDTO";
 import { PRODUCT_TYPES } from "../../../../types";
 import IUpdateStock from "../../../interfaces/products/patch/IUpdateStock";
 import IProductRepository from "../../../../domain/repositories/IProductsRepository";

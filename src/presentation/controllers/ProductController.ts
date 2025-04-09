@@ -14,7 +14,7 @@ import { ErrorType } from "../../domain/interfaces/Error";
 import IDeleteProduct from "../../app/interfaces/products/delete/IDeleteProduct";
 import ICreateProduct from "../../app/interfaces/products/post/ICreateProduct";
 import IProductMapper from "../../infraestructure/mappers/interfaces/IProductMapper";
-import ProductDTO from "../../infraestructure/dtos/ProductDTO";
+import ProductDTO from "../../infraestructure/dtos/product/ProductDTO";
 import Product from "../../domain/entities/Products";
 
 export default class ProductController implements IProductController {

@@ -9,6 +9,7 @@ import OrderHasProductsModel from "../database/models/OrdersHasProducts";
 import UserModel from "../database/models/UserModel";
 import ProductModel from "../database/models/ProductsModel";
 import OrderHasProducts from "../../domain/entities/OrderHasProducts";
+import { OrderWithUserAndProducts, OrderWithUserAndProductsModel } from "../../domain/interfaces/orders/IOrders";
 
 @injectable()
 export default class OrderRepository implements IOrdersRepository {
@@ -20,26 +21,27 @@ export default class OrderRepository implements IOrdersRepository {
   }
 
   async createOrder(order: Orders): Promise<boolean | null> {
-   /* try {*/
+    try {
       if(!order) {
         return null
       }
       const orderToModel = this.ordersMapper.orderToModel(order)
-      const newOrder = await OrdersModel.create(orderToModel)
+      const newOrder = await OrdersModel.create(orderToModel.dataValues)
       if (newOrder) {
         return true
       } else {
         return false
       }
-   /* } catch (error) {
+    } catch (error) {
       return null
-    }*/
+    }
   }
 
   async addItemToOrder(orderHasProduct: OrderHasProducts[]): Promise<OrderHasProducts[] | null> {
     try {
       const orderProductToModel = this.ordersMapper.orderHasProductsToModelList(orderHasProduct)
-      const orderAddItem = await OrderHasProductsModel.bulkCreate(orderProductToModel)
+      const orderAddItem = await OrderHasProductsModel.bulkCreate(orderProductToModel.map(orders => orders.dataValues))
+      console.log(orderAddItem)
       if (!orderAddItem) {
         return null
       }
@@ -49,23 +51,22 @@ export default class OrderRepository implements IOrdersRepository {
     }
   }
 
-  async findById(id: string): Promise<Orders | null> {
-    /*try {*/
+  async findById(id: string): Promise<OrderWithUserAndProducts | null> {
+    try {
         const orderModel = await OrdersModel.findByPk(id, {
           include: [
-            { model: UserModel, as: 'user'  },
-            { model: ProductModel, as: 'products' }
+            { model: UserModel, as: 'user',  },
+            { model: ProductModel, as: 'products'}
           ],
         });
-        console.log(orderModel)
         if (!orderModel) {
           return null
         }
-        const order = this.ordersMapper.modelToOrder(orderModel);
-        return order
-   /* } catch (error) {
+        const orderWithUserAndProductWQuantity = this.ordersMapper.orderModelToEntityWithRelations(orderModel?.dataValues as OrderWithUserAndProductsModel)
+        return orderWithUserAndProductWQuantity
+    } catch (error) {
       return null
-    }*/
+    }
   }
 
   async findByIdInSystem(id: string): Promise<OrdersModel | null> {
@@ -80,13 +81,16 @@ export default class OrderRepository implements IOrdersRepository {
     }
   }
 
-  async findAllByUserId(userId: string): Promise<Orders[] | null> {
+  async findAllByUserId(userId: string): Promise<OrderWithUserAndProducts[] | null> {
     try {
-      const ordersModel = await OrdersModel.findAll({ where: { userId: userId } })
+      const ordersModel = await OrdersModel.findAll({ where: { userId: userId }, include: [
+        { model: UserModel, as: 'user',  },
+        { model: ProductModel, as: 'products'}
+      ], })
       if (!ordersModel) {
         return null
       }
-      const orders = this.ordersMapper.modelToOrderList(ordersModel);
+      const orders = this.ordersMapper.orderModelToEntityWithRelationsList(ordersModel.map(order => order.dataValues) as OrderWithUserAndProductsModel[])
       return orders
     } catch (error) {
       return null

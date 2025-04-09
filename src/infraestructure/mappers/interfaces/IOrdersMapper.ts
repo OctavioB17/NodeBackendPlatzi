@@ -1,11 +1,18 @@
 import Orders from "../../../domain/entities/Orders";
 import OrdersModel from "../../database/models/OrdersModel";
-import OrderDTO from "../../dtos/OrderDTO";
 import OrderHasProducts from "../../../domain/entities/OrderHasProducts";
 import OrderHasProductsModel from "../../database/models/OrdersHasProducts";
-import OrderHasProductsDTO from "../../dtos/OrderHasProductsDTO";
+import OrderHasProductsDTO from "../../dtos/orders/OrderHasProductsDTO";
+import OrderDTO from "../../dtos/orders/OrderDTO";
+import ProductModel from "../../database/models/ProductsModel";
+import UserModel from "../../database/models/UserModel";
+import { OrderWithUserAndProducts, OrderWithUserAndProductsModel } from "../../../domain/interfaces/orders/IOrders";
 
 export default interface IOrdersMapper {
+
+  orderModelToEntityWithRelations(model: OrderWithUserAndProductsModel): OrderWithUserAndProducts
+
+  orderModelToEntityWithRelationsList(models: OrderWithUserAndProductsModel[]): OrderWithUserAndProducts[]
 
   orderHasProductDtoToEntity(dto: OrderHasProductsDTO): OrderHasProducts
 

@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer";
-import { Taxes } from "../../domain/interfaces/orders/IOrders";
+import { Taxes } from "../../../domain/interfaces/orders/IOrders";
 
 export default class OrderDTO {
   @Expose()

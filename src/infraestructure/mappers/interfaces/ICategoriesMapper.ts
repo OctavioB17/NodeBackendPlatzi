@@ -1,6 +1,6 @@
 import Category from "../../../domain/entities/Categories";
 import CategoriesModel from "../../database/models/CategoriesModel";
-import CategoryDTO from "../../dtos/CategoryDTO";
+import CategoryDTO from "../../dtos/category/CategoryDTO";
 
 export default interface ICategoryMapper {
 

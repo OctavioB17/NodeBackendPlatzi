@@ -1,7 +1,7 @@
 import { plainToInstance } from "class-transformer";
 import UserModel from "../database/models/UserModel";
-import UserDTO from "../dtos/UserDTO";
-import UserNoPasswordDTO from "../dtos/UserNoPasswordDTO";
+import UserDTO from "../dtos/users/UserDTO";
+import UserNoPasswordDTO from "../dtos/users/UserNoPasswordDTO";
 import { IUser } from "../../domain/interfaces/user/IUser";
 import IUserMapper from "./interfaces/IUserMapper";
 import User from "../../domain/entities/Users";

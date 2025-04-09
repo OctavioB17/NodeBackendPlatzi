@@ -22,16 +22,16 @@ export default class CreateOrder implements ICreateOrder {
 
   async execute(orderData: CreateOrderRequest): Promise<boolean | null> {
     /*try {*/
+      const orderId = this.idGenerator.generate()
       const newOrder = {
         ...orderData.order,
-        id: this.idGenerator.generate()
+        id: orderId
       }
+      console.log(orderData.orderHasProducts)
       const dtoToOrder = this.orderMapper.dtoToOrder(newOrder)
-      console.log(dtoToOrder)
       const create = await this.orderRepository.createOrder(dtoToOrder)
-      console.log(create)
       if (create) {
-        const addItems = await this.addProductsToOrder.execute(orderData.orderHasProducts)
+        const addItems = await this.addProductsToOrder.execute(orderData.orderHasProducts, orderId)
         if (addItems) {
           return true
         }

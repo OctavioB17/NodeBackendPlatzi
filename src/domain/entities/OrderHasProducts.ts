@@ -1,11 +1,11 @@
 export default class OrderHasProducts {
-  private id: number;
+  private id: string;
   private orderId: string;
   private productId: string;
   private quantity: number;
 
   constructor(
-    id: number,
+    id: string,
     orderId: string,
     productId: string,
     quantity: number

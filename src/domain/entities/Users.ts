@@ -3,6 +3,8 @@ export default class User {
   private name: string;
   private surname: string;
   private password: string;
+  private createdAt: Date
+  private updatedAt: Date
   private email: string;
   private role: string;
 
@@ -12,7 +14,9 @@ export default class User {
     surname: string,
     password: string,
     email: string,
-    role: string
+    role: string,
+    createdAt: Date,
+    updatedAt: Date
   ) {
     this.id = id;
     this.name = name;
@@ -20,10 +24,8 @@ export default class User {
     this.email = email;
     this.password = password;
     this.role = role;
-  }
-
-  private isValidEmail(email: string): boolean {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    this.createdAt = createdAt,
+    this.updatedAt = updatedAt
   }
 
   getEmail(): string {

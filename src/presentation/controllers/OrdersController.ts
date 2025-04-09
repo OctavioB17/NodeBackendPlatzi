@@ -28,7 +28,6 @@ export default class OrdersController implements IOrdersControllers {
 
   async createOrderController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const orderData = req.body
-    console.log(orderData)
     try {
       const execute = await this.createOrder.execute(orderData)
       if (!execute) {
