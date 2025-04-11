@@ -1,7 +1,9 @@
 export enum statusTypes {
+  PENDING ='pending',
   PAID = 'paid',
   SHIPPED = 'shipped',
-  DELIVERED = 'delivered',
   CANCELLED = 'cancelled',
-  REFUNDED = 'refunded'
+  REFUNDED = 'refunded',
+  RETURN = 'return',
+  DELIVERED = 'delivered'
 }

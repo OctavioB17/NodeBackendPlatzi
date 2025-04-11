@@ -14,7 +14,6 @@ export default class FindOrderById implements IFindOrderById {
 
   async execute(id: string): Promise<OrderWithUserAndProducts> {
     try {
-      console.log(id)
       const order = await this.orderRepository.findById(id)
       if (!order) {
         throw new BoomError({

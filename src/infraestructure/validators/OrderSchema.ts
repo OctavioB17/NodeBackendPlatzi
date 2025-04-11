@@ -3,7 +3,7 @@ import Joi from "joi";
 
 const id = Joi.string().uuid();
 const userId = Joi.string().uuid();
-const status = Joi.string().valid('PENDING', 'PAID', 'CANCELLED');
+const status = Joi.string().valid('PENDING', 'PAID', 'CANCELLED', 'SHIPPED', 'DELIVERED', 'RETURN', 'REFUNDED');
 const totalPrice = Joi.number().positive();
 const paymentMethod = Joi.string().valid('CREDIT_CARD', 'DEBIT_CARD', 'PAYPAL');
 const productId = Joi.string().uuid();

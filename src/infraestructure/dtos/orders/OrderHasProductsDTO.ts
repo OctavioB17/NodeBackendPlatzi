@@ -12,4 +12,10 @@ export default class OrderHasProductsDTO {
 
   @Expose()
   quantity!: number;
+
+  @Expose()
+  createdAt?: Date
+
+  @Expose()
+  updatedAt?: Date
 }

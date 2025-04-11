@@ -20,10 +20,9 @@ export default class OrdersController implements IOrdersControllers {
     @inject(ORDER_TYPES.IDeleteOrder) private deleteOrder: IDeleteOrder,
     @inject(ORDER_TYPES.IFindAllOrdersByUserId) private findByUserId: IFindAllOrdersByUserId,
     @inject(ORDER_TYPES.IFindOrderById) private findById: IFindOrderById,
-    @inject(ORDER_TYPES.IOrdersMapper) private ordersMapper: IOrdersMapper,
     @inject(ORDER_TYPES.IUpdateOrder) private updateOrder: IUpdateOrder,
     @inject(ORDER_TYPES.IUpdateStatus) private updateStatus: IUpdateStatus,
-    @inject(ORDER_TYPES.IAddProductsToOrders) private addProductsToOrdes: IAddProductsToOrder
+    @inject(ORDER_TYPES.IAddProductsToOrders) private addProductsToOrders: IAddProductsToOrder
   ) {}
 
   async createOrderController(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -46,8 +45,9 @@ export default class OrdersController implements IOrdersControllers {
 
   async addItemToOrderController(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const result = await this.addProductsToOrdes.execute(req.body);
-
+      const { id } =  req.params
+      const products = req.body
+      const result = await this.addProductsToOrders.execute(products, id);
       if (!result) {
         throw new BoomError({
           message: 'Failed to add products to order',
@@ -73,8 +73,7 @@ export default class OrdersController implements IOrdersControllers {
           statusCode: 500
         });
       }
-      const orderDto = this.ordersMapper.orderToDto(order)
-      res.status(200).json(orderDto)
+      res.status(200).json(order)
     } catch (error) {
       next(error)
     }
@@ -91,8 +90,7 @@ export default class OrdersController implements IOrdersControllers {
           statusCode: 500
         });
       }
-      const orderDto = this.ordersMapper.orderToDtoList(orders)
-      res.status(200).json(orderDto)
+      res.status(200).json(orders)
     } catch (error) {
       next(error)
     }

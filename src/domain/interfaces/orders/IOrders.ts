@@ -21,7 +21,7 @@ export interface Taxes {
 
 export interface CreateOrderRequest {
   order: OrderDTO;
-  orderHasProducts: OrderHasProductsDTO;
+  orderHasProducts: OrderHasProductsDTO[];
 }
 
 export interface OrdersModelWithUserAndProductRelations extends OrdersModel {

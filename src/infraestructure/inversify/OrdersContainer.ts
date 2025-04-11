@@ -26,12 +26,16 @@ import IUserMapper from "../mappers/interfaces/IUserMapper";
 import UserMapper from "../mappers/UserMapper";
 import IProductMapper from "../mappers/interfaces/IProductMapper";
 import ProductMapper from "../mappers/ProductMapper";
+import IDeleteItemInOrder from "../../app/interfaces/orders/delete/IDeleteItemInOrder";
+import DeleteItemInOrder from "../../app/use-cases/orders/delete/DeleteItemInOrder";
+import IModifyQuantityInOrder from "../../app/interfaces/orders/patch/IModifyQuantityInOrder";
+import ModifyQuantityInOrder from "../../app/use-cases/orders/post/ModifyQuantityInOrder";
 
 const ordersContainer = new Container();
 
 ordersContainer.bind<IOrdersRepository>(ORDER_TYPES.IOrdersRepository).to(OrderRepository)
-ordersContainer.bind<IOrdersMapper>(ORDER_TYPES.IOrdersMapper).to(OrdersMapper);
-ordersContainer.bind<IIdGenerator>(UTIL_TYPES.IIdGenerator).to(UuidGenerator);
+ordersContainer.bind<IOrdersMapper>(ORDER_TYPES.IOrdersMapper).to(OrdersMapper)
+ordersContainer.bind<IIdGenerator>(UTIL_TYPES.IIdGenerator).to(UuidGenerator)
 ordersContainer.bind<IFindOrderById>(ORDER_TYPES.IFindOrderById).to(FindOrderById)
 ordersContainer.bind<ICreateOrder>(ORDER_TYPES.ICreateOrder).to(CreateOrder)
 ordersContainer.bind<IDeleteOrder>(ORDER_TYPES.IDeleteOrder).to(DeleteOrders)
@@ -42,5 +46,7 @@ ordersContainer.bind<IOrdersControllers>(ORDER_TYPES.IOrdersController).to(Order
 ordersContainer.bind<IAddProductsToOrder>(ORDER_TYPES.IAddProductsToOrders).to(AddProductsToOrders)
 ordersContainer.bind<IUserMapper>(USER_TYPES.IUserMapper).to(UserMapper)
 ordersContainer.bind<IProductMapper>(PRODUCT_TYPES.IProductMapper).to(ProductMapper)
+ordersContainer.bind<IModifyQuantityInOrder>(ORDER_TYPES.IModifyQuantityInOrder).to(ModifyQuantityInOrder)
+ordersContainer.bind<IDeleteItemInOrder>(ORDER_TYPES.IDeleteItemInOrder).to(DeleteItemInOrder)
 
 export default ordersContainer

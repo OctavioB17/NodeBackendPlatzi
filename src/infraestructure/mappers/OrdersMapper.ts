@@ -57,7 +57,7 @@ export default class OrdersMapper implements IOrdersMapper {
       userId: product.userId ?? '',
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
-      quantity: product.OrderHasProductsModel.dataValues.quantity ?? 0,
+      quantity: product.OrderHasProductsModel.dataValues.quantity || product.OrderHasProductsModel.quantity,
     })) ?? [];
 
     const order = new Orders(

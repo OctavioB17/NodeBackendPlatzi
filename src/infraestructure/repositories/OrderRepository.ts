@@ -20,18 +20,18 @@ export default class OrderRepository implements IOrdersRepository {
     this.ordersMapper = ordersMapper
   }
 
-  async createOrder(order: Orders): Promise<boolean | null> {
+  async createOrder(order: Orders): Promise<Orders | null> {
     try {
       if(!order) {
         return null
       }
       const orderToModel = this.ordersMapper.orderToModel(order)
       const newOrder = await OrdersModel.create(orderToModel.dataValues)
-      if (newOrder) {
-        return true
-      } else {
-        return false
+      if (!newOrder) {
+        return null
       }
+
+      return this.ordersMapper.modelToOrder(newOrder.dataValues)
     } catch (error) {
       return null
     }
@@ -41,13 +41,50 @@ export default class OrderRepository implements IOrdersRepository {
     try {
       const orderProductToModel = this.ordersMapper.orderHasProductsToModelList(orderHasProduct)
       const orderAddItem = await OrderHasProductsModel.bulkCreate(orderProductToModel.map(orders => orders.dataValues))
-      console.log(orderAddItem)
       if (!orderAddItem) {
         return null
       }
-      return this.ordersMapper.orderHasProductModelToEntityList(orderAddItem)
+      return this.ordersMapper.orderHasProductModelToEntityList(orderAddItem.map(model =>  model.dataValues))
     } catch (error) {
       return null
+    }
+  }
+
+  async deleteItemToOrder(id: string): Promise<Boolean | null> {
+    try {
+      const deleteOrder = OrderHasProductsModel.destroy({
+        where: {
+          id: id
+        }
+      });
+      if (!deleteOrder) {
+        return false
+      }
+      return true
+    } catch (error) {
+      return null
+    }
+  }
+
+  async modifyQuantityItemsInAnOrder(orders: OrderHasProducts[]): Promise<OrderHasProducts[] | null> {
+    try {
+      const updatePromises = orders.map(async order => {
+        const orderProducts = await this.findOrderHasProductById(order.getId());
+        if (!orderProducts) {
+          return null;
+        }
+        return orderProducts.update({
+          quantity: order.getQuantity()
+        });
+      });
+
+      const promiseResolve = await Promise.all(updatePromises);
+
+      const validProducts = promiseResolve.filter((product): product is OrderHasProductsModel => product !== null);
+
+      return this.ordersMapper.orderHasProductModelToEntityList(validProducts);
+    } catch (error) {
+      return null;
     }
   }
 
@@ -76,6 +113,32 @@ export default class OrderRepository implements IOrdersRepository {
         return null
       }
       return orderModel
+    } catch (error) {
+      return null
+    }
+  }
+
+  async findOrderHasProductById(orderHasProductId: string): Promise<OrderHasProductsModel | null> {
+    try {
+      const orderProducts = await OrderHasProductsModel.findOne({ where: { id: orderHasProductId }})
+      if (!orderProducts) {
+        return null
+      }
+
+      return orderProducts
+    } catch (error) {
+      return null
+    }
+  }
+
+  async findProductInOrder(orderId: string, productId: string): Promise<OrderHasProducts | null> {
+    try {
+      const findProduct = await OrderHasProductsModel.findOne({ where: { productId:  productId, orderId: orderId }});
+      if (!findProduct) {
+        return null
+      }
+      const productEntity = this.ordersMapper.orderHasProductDtoToEntity(findProduct.dataValues)
+      return productEntity
     } catch (error) {
       return null
     }
