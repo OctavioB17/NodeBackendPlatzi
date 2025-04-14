@@ -48,10 +48,11 @@ export default class UserController implements IUserController {
   }
 
   async findAllUsers(req: Request, res: Response, next: NextFunction) {
+    const { limit, offset } = req.query
     try {
-      const users = await this.findAll.execute()
+      const users = await this.findAll.execute(Number(limit), Number(offset))
       if (users) {
-        const usersDtos = this.userMapper.userToDtoList(users)
+        const usersDtos = this.userMapper.userWPaginationToDtoList(users)
         res.status(200).json(usersDtos)
       } else {
         throw new BoomError({
@@ -112,8 +113,9 @@ export default class UserController implements IUserController {
   }
 
   async findAllUsersNoPassword(req: Request, res: Response, next: NextFunction) {
+    const { limit, offset } = req.query
     try {
-      const users = await this.findAllNoPassword.execute()
+      const users = await this.findAllNoPassword.execute(Number(limit), Number(offset))
       if (users) {
         res.status(200).json(users)
       } else {

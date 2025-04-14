@@ -144,12 +144,15 @@ export default class OrderRepository implements IOrdersRepository {
     }
   }
 
-  async findAllByUserId(userId: string): Promise<OrderWithUserAndProducts[] | null> {
+  async findAllByUserId(userId: string, limit: number, offset: number): Promise<OrderWithUserAndProducts[] | null> {
     try {
       const ordersModel = await OrdersModel.findAll({ where: { userId: userId }, include: [
         { model: UserModel, as: 'user',  },
         { model: ProductModel, as: 'products'}
-      ], })
+      ],
+      limit: limit,
+      offset: offset,
+     })
       if (!ordersModel) {
         return null
       }

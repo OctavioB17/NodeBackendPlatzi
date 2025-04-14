@@ -5,6 +5,10 @@ import { ORDER_TYPES } from '../../../../types';
 import { BoomError } from '../../../../domain/entities/DomainError';
 import { ErrorType } from '../../../../domain/interfaces/Error';
 import { OrderWithUserAndProducts } from '../../../../domain/interfaces/orders/IOrders';
+import { IPagination } from '../../../../domain/interfaces/IPagination';
+import PaginationMapper from '../../../../infraestructure/mappers/PaginationMapper';
+import { number } from 'joi';
+import { validatePaginationParams } from '../../../../infraestructure/utils/ValidatePaginationParams';
 
 @injectable()
 export default class FindAllOrdersByUserId implements IFindAllOrdersByUserId {
@@ -13,9 +17,11 @@ export default class FindAllOrdersByUserId implements IFindAllOrdersByUserId {
     @inject(ORDER_TYPES.IOrdersRepository) private orderRepository: IOrdersRepository,
   ) {}
 
-  async execute(userId: string): Promise<OrderWithUserAndProducts[] | null> {
+  async execute(userId: string, limit: number, offset: number): Promise<IPagination<OrderWithUserAndProducts[]> | null> {
     try {
-      const ordersByUser = this.orderRepository.findAllByUserId(userId);
+      const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
+
+      const ordersByUser = await this.orderRepository.findAllByUserId(userId, validatedLimit, validatedOffset);
       if (!ordersByUser) {
         throw new BoomError({
           message: `Orders not found`,
@@ -24,7 +30,8 @@ export default class FindAllOrdersByUserId implements IFindAllOrdersByUserId {
         });
       }
 
-      return ordersByUser
+      const dataWPagination = PaginationMapper.paginationResponseMapper(ordersByUser, validatedLimit, validatedOffset)
+      return dataWPagination
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;

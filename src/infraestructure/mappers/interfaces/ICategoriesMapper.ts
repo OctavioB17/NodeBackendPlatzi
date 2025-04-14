@@ -1,4 +1,5 @@
 import Category from "../../../domain/entities/Categories";
+import { IPagination } from "../../../domain/interfaces/IPagination";
 import CategoriesModel from "../../database/models/CategoriesModel";
 import CategoryDTO from "../../dtos/category/CategoryDTO";
 
@@ -17,6 +18,10 @@ export default interface ICategoryMapper {
   categoryToDto(category: Category): CategoryDTO
 
   categoryToDtoList(categories: Category[]): CategoryDTO[]
+
+  categoryWPaginationToDto(category: IPagination<Category>): IPagination<CategoryDTO>
+
+  categoryWPaginationToDtoList(categories: IPagination<Category[]>): IPagination<CategoryDTO[]>
 
   modelToCategory(model: CategoriesModel): Category
 

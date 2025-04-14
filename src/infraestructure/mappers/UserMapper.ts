@@ -5,8 +5,20 @@ import UserNoPasswordDTO from "../dtos/users/UserNoPasswordDTO";
 import { IUser } from "../../domain/interfaces/user/IUser";
 import IUserMapper from "./interfaces/IUserMapper";
 import User from "../../domain/entities/Users";
-
+import { IPagination } from "../../domain/interfaces/IPagination";
 export default class UserMapper implements IUserMapper {
+  userWPaginationToDto(user: IPagination<User>): IPagination<UserDTO> {
+    return {
+      ...user,
+      data: this.userToDto(user.data)
+    };
+  }
+  userWPaginationToDtoList(users: IPagination<User[]>): IPagination<UserDTO[]> {
+    return {
+      ...users,
+      data: this.userToDtoList(users.data)
+    };
+  }
 
   userToDto(user: User): UserDTO {
     return plainToInstance(UserDTO, user)

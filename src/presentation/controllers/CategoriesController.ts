@@ -62,8 +62,9 @@ export default class CategoriesController implements ICategoriesController {
   }
 
   async findAllController(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { limit, offset } = req.query
     try {
-      const categories = await this.findAllCategories.execute()
+      const categories = await this.findAllCategories.execute(Number(limit), Number(offset))
       if (!categories) {
         throw new BoomError({
           message: 'Failed to find categories',
@@ -71,7 +72,7 @@ export default class CategoriesController implements ICategoriesController {
           statusCode: 404
         });
       }
-      const categoriesDto = this.categoryMapper.categoryToDtoList(categories)
+      const categoriesDto = this.categoryMapper.categoryWPaginationToDtoList(categories)
       res.status(200).json(categoriesDto)
     } catch (error) {
       next(error)

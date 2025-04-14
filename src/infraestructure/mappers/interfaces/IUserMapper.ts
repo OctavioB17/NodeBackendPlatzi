@@ -1,15 +1,19 @@
-import { plainToInstance } from "class-transformer";
 import { IUser } from "../../../domain/interfaces/user/IUser";
 import UserModel from "../../database/models/UserModel";
 import UserDTO from "../../dtos/users/UserDTO";
 import UserNoPasswordDTO from "../../dtos/users/UserNoPasswordDTO";
 import User from "../../../domain/entities/Users";
+import { IPagination } from "../../../domain/interfaces/IPagination";
 
 export default interface IUserMapper {
 
   userToDto(user: User): UserDTO
 
   userToDtoList(users: User[]): UserDTO[]
+
+  userWPaginationToDto(user: IPagination<User>): IPagination<UserDTO>
+
+  userWPaginationToDtoList(users: IPagination<User[]>): IPagination<UserDTO[]>
 
   dtoToUser(dto: UserDTO): User
 

@@ -12,7 +12,7 @@ export default interface IOrdersRepository {
   modifyQuantityItemsInAnOrder(order: OrderHasProducts[]): Promise<OrderHasProducts[] | null>
   findById(id: string): Promise<OrderWithUserAndProducts | null>;
   findByIdInSystem(id: string): Promise<OrdersModel | null>;
-  findAllByUserId(userId: string): Promise<OrderWithUserAndProducts[] | null>;
+  findAllByUserId(userId: string, limit: number, offset: number): Promise<OrderWithUserAndProducts[] | null>;
   updateOrder(orderId: string, orderData: Partial<Orders>): Promise<Orders | null>;
   updateStatus(orderId: string, status: statusTypes): Promise<string | null>
   deleteOrder(id: string): Promise<boolean | null>;

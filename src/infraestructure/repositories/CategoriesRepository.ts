@@ -70,9 +70,9 @@ export default class CategoriesRepository implements ICategoriesRepository {
     }
   }
 
-  async getAllCategories(): Promise<Category[] | null> {
+  async getAllCategories(limit: number, offset: number): Promise<Category[] | null> {
     try {
-      const allCategoriesModel = await CategoriesModel.findAll();
+      const allCategoriesModel = await CategoriesModel.findAll({ limit: limit, offset: offset });
       if (!allCategoriesModel) {
         return null;
       }
@@ -97,7 +97,6 @@ export default class CategoriesRepository implements ICategoriesRepository {
 
       return this.categoriesMapper.modelToCategory(updatedCategory.dataValues);
     } catch (error: any) {
-      console.error('Error updating category:', error);
       throw new Error(error);
     }
   }

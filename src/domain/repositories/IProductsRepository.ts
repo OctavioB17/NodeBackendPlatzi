@@ -6,9 +6,9 @@ export default interface IProductRepository {
   createProduct(product: Product): Promise<boolean | null>
   findById(id: string): Promise<ProductWithUserAndCategoryDTO | null>
   findByIdInSystem(id: string): Promise<ProductModel | null>
-  findByName(email: string): Promise<ProductWithUserAndCategoryDTO[] | null>;
-  findAllByUserId(userId: string): Promise<ProductWithUserAndCategoryDTO[] | null>;
-  findAllByCategory(categoryId: string): Promise<ProductWithUserAndCategoryDTO[] | null>;
+  findByName(email: string, limit: number, offset: number): Promise<ProductWithUserAndCategoryDTO[] | null>;
+  findAllByUserId(userId: string, limit: number, offset: number): Promise<ProductWithUserAndCategoryDTO[] | null>;
+  findAllByCategory(categoryId: string, limit: number, offset: number): Promise<ProductWithUserAndCategoryDTO[] | null>;
   updateProduct(productId: string, productData: Partial<Product>): Promise<Product | null>;
   deleteProduct(id: string): Promise<boolean | null>;
   updateStock(id: string, stock: number): Promise<Product | null>;

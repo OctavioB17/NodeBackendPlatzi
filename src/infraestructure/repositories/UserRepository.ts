@@ -57,9 +57,9 @@ export default class UserRepository implements IUserRepository {
     }
   }
 
-  async findAll(): Promise<User[] | null> {
+  async findAll(limit: number, offset: number): Promise<User[] | null> {
     try {
-      const usersModels = await UserModel.findAll();
+      const usersModels = await UserModel.findAll({ limit: limit, offset: offset });
       if (!usersModels || usersModels.length === 0) {
         return null
       }

@@ -73,9 +73,10 @@ export default class ProductController implements IProductController {
 
   async findAllByUserIdController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params;
+    const { limit, offset } = req.query;
     try {
-      const products = await this.findAllProductsByUser.execute(id);
-      if (products && products.length > 0) {
+      const products = await this.findAllProductsByUser.execute(id, Number(limit), Number(offset));
+      if (products && products.data.length > 0) {
         res.status(200).json(products);
       } else {
         throw new BoomError({
@@ -109,8 +110,9 @@ export default class ProductController implements IProductController {
 
   async findByNameController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { name } = req.params;
+    const { limit, offset } = req.query
     try {
-      const product = await this.findProductByName.execute(name);
+      const product = await this.findProductByName.execute(name, Number(limit), Number(offset));
       if (product) {
         res.status(200).json(product);
       } else {
@@ -127,9 +129,11 @@ export default class ProductController implements IProductController {
 
   async findAllByCategoryController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params;
+    const { limit, offset } = req.query
+
     try {
-      const products = await this.findAllProductByCategory.execute(id);
-      if (products && products.length > 0) {
+      const products = await this.findAllProductByCategory.execute(id, Number(limit), Number(offset));
+      if (products && products.data.length > 0) {
         res.status(200).json(products);
       } else {
         throw new BoomError({

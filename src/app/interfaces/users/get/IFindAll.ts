@@ -1,5 +1,6 @@
 import User from "../../../../domain/entities/Users";
+import { IPagination } from "../../../../domain/interfaces/IPagination";
 
 export interface IFindAllUsers {
-  execute(): Promise<User[] | null>
+  execute(limit: number, offset: number): Promise<IPagination<User[]> | null>
 }

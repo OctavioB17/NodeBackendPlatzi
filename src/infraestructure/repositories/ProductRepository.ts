@@ -66,7 +66,7 @@ export default class ProductRepository implements IProductRepository {
   }
 
 
-  async findByName(name: string): Promise<ProductWithUserAndCategoryDTO[] | null> {
+  async findByName(name: string, limit: number, offset: number): Promise<ProductWithUserAndCategoryDTO[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
@@ -77,7 +77,9 @@ export default class ProductRepository implements IProductRepository {
         include: [
           { model: UserModel, as: 'user' },
           { model: CategoriesModel, as: 'categories' }
-        ]
+        ],
+        limit: limit,
+        offset: offset
       })
       if (products && products.length > 0) {
         const productWithUserAndCategoryDTO = this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products)
@@ -90,7 +92,7 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async findAllByUserId(userId: string): Promise<ProductWithUserAndCategoryDTO[] | null> {
+  async findAllByUserId(userId: string, limit: number, offset: number): Promise<ProductWithUserAndCategoryDTO[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
@@ -99,7 +101,9 @@ export default class ProductRepository implements IProductRepository {
         include: [
           { model: UserModel, as: 'user' },
           { model: CategoriesModel, as: 'categories' }
-        ]
+        ],
+        limit: limit,
+        offset: offset
       })
       if (products && products.length > 0) {
         const productWithUserAndCategoryDTO = this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products)
@@ -112,7 +116,7 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async findAllByCategory(categoryId: string): Promise<ProductWithUserAndCategoryDTO[] | null> {
+  async findAllByCategory(categoryId: string, limit: number, offset: number): Promise<ProductWithUserAndCategoryDTO[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
@@ -121,7 +125,9 @@ export default class ProductRepository implements IProductRepository {
         include: [
           { model: UserModel, as: 'user' },
           { model: CategoriesModel, as: 'categories' }
-        ]
+        ],
+        limit: limit,
+        offset: offset
       })
       if (products.length > 0) {
         const productWithUserAndCategoryDTO = this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products)

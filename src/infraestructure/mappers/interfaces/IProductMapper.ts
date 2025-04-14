@@ -11,7 +11,6 @@ export default interface IProductMapper {
 
   modelToProductWithQuantity(model: ProductWithJoin): ProductWithQuantityDTO;
 
-
   productModeltoDTO(productModel: ProductModel): ProductDTO
 
   productModeltoDTOList(productModels: ProductModel[]): ProductDTO[]

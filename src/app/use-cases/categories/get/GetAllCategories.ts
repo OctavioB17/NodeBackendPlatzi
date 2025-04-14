@@ -5,6 +5,9 @@ import { ICategoriesRepository } from "../../../../domain/repositories/ICategory
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import Category from "../../../../domain/entities/Categories";
+import { IPagination } from "../../../../domain/interfaces/IPagination";
+import PaginationMapper from "../../../../infraestructure/mappers/PaginationMapper";
+import { validatePaginationParams } from "../../../../infraestructure/utils/ValidatePaginationParams";
 
 @injectable()
 export default class FindAllCategories implements IFindAllCategories {
@@ -12,9 +15,12 @@ export default class FindAllCategories implements IFindAllCategories {
     @inject(CATEGORY_TYPES.ICategoriesRepository) private categoryRepository: ICategoriesRepository
   ) {}
 
-  async execute(): Promise<Category[] | null> {
+  async execute(limit: number, offset: number): Promise<IPagination<Category[]> | null> {
     try {
-      const categories = await this.categoryRepository.getAllCategories();
+      const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
+
+
+      const categories = await this.categoryRepository.getAllCategories(validatedLimit, validatedOffset);
       if (!categories) {
         throw new BoomError({
           message: `Categories not found`,
@@ -23,7 +29,8 @@ export default class FindAllCategories implements IFindAllCategories {
         });
       }
 
-      return categories
+      const dataWPagination = PaginationMapper.paginationResponseMapper(categories, validatedLimit, validatedOffset)
+      return dataWPagination
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;

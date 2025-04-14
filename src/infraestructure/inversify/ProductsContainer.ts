@@ -23,7 +23,7 @@ import ToggleProductPause from "../../app/use-cases/products/patch/ToggleProduct
 import IProductController from "../../presentation/controllers/interfaces/IProductController";
 import ProductController from "../../presentation/controllers/ProductController";
 import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
-import UuidGenerator from "../services/utils/UuidGenerator";
+import UuidGenerator from "../utils/UuidGenerator";
 import IProductMapper from "../mappers/interfaces/IProductMapper";
 import ProductMapper from "../mappers/ProductMapper";
 

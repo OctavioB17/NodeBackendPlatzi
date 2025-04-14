@@ -8,7 +8,6 @@ import IFindOrderById from "../../app/interfaces/orders/get/IFindOrderById";
 import IUpdateOrder from "../../app/interfaces/orders/patch/IUpdateOrder";
 import IUpdateStatus from "../../app/interfaces/orders/patch/IUpdateStatus";
 import ICreateOrder from "../../app/interfaces/orders/post/ICreateOrder";
-import IOrdersMapper from "../../infraestructure/mappers/interfaces/IOrdersMapper";
 import { BoomError } from "../../domain/entities/DomainError";
 import { ErrorType } from "../../domain/interfaces/Error";
 import IAddProductsToOrder from "../../app/interfaces/orders/post/IAddProductsToOrder";
@@ -81,8 +80,9 @@ export default class OrdersController implements IOrdersControllers {
 
   async findByUserIdController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { userId } = req.params
+    const { limit, offset } = req.query
     try {
-      const orders = await this.findByUserId.execute(userId);
+      const orders = await this.findByUserId.execute(userId, Number(limit), Number(offset));
       if (!orders) {
         throw new BoomError({
           message: 'Failed to find order',

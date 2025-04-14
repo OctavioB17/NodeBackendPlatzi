@@ -6,6 +6,9 @@ import { ErrorType } from "../../../../domain/interfaces/Error";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import UserNoPasswordDTO from "../../../../infraestructure/dtos/users/UserNoPasswordDTO";
 import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
+import PaginationMapper from "../../../../infraestructure/mappers/PaginationMapper";
+import { IPagination } from "../../../../domain/interfaces/IPagination";
+import { validatePaginationParams } from "../../../../infraestructure/utils/ValidatePaginationParams";
 
 
 @injectable()
@@ -15,9 +18,11 @@ export default class FindAllNoPassword implements IFindAllUsersNoPassword {
     @inject(USER_TYPES.IUserMapper) private userMapper: IUserMapper
   ) {}
 
-  async execute(): Promise<UserNoPasswordDTO[] | null> {
+  async execute(limit: number, offset: number): Promise<IPagination<UserNoPasswordDTO[]> | null> {
     try {
-      const users = await this.userRepository.findAll()
+      const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
+
+      const users = await this.userRepository.findAll(validatedLimit, validatedOffset)
       if (!users) {
         throw new BoomError({
           message: `Users Not Found`,
@@ -25,7 +30,10 @@ export default class FindAllNoPassword implements IFindAllUsersNoPassword {
           statusCode: 404
         })
       }
-      return this.userMapper.userToNoPasswordDTOList(users)
+      const dataDto = this.userMapper.userToNoPasswordDTOList(users)
+
+      const dataWPagination = PaginationMapper.paginationResponseMapper(dataDto, validatedLimit, validatedOffset)
+      return dataWPagination
     } catch (error) {
         if (error instanceof BoomError) {
           throw error;

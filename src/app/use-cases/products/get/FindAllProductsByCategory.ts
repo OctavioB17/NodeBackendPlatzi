@@ -5,6 +5,9 @@ import { ErrorType } from "../../../../domain/interfaces/Error";
 import IProductRepository from "../../../../domain/repositories/IProductsRepository";
 import IFindAllProductByCategory from "../../../interfaces/products/get/IFindAllProductByCategory";
 import ProductWithUserAndCategoryDTO from "../../../../infraestructure/dtos/product/ProductWithUserAndCategoryDTO";
+import PaginationMapper from "../../../../infraestructure/mappers/PaginationMapper";
+import { IPagination } from "../../../../domain/interfaces/IPagination";
+import { validatePaginationParams } from "../../../../infraestructure/utils/ValidatePaginationParams";
 
 
 @injectable()
@@ -13,9 +16,11 @@ export default class FindAllProductsByCategory implements IFindAllProductByCateg
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
   ) {}
 
-  async execute(categoryId: string): Promise<ProductWithUserAndCategoryDTO[]> {
+  async execute(categoryId: string, limit: number, offset: number): Promise<IPagination<ProductWithUserAndCategoryDTO[]> | null> {
     try {
-      const products = await this.iProductRepository.findAllByCategory(categoryId)
+      const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
+
+      const products = await this.iProductRepository.findAllByCategory(categoryId, validatedLimit, validatedOffset)
       if (!products) {
         throw new BoomError({
           message: `Product not found`,
@@ -23,8 +28,8 @@ export default class FindAllProductsByCategory implements IFindAllProductByCateg
           statusCode: 404
         })
       }
-
-      return products
+      const dataWPagination = PaginationMapper.paginationResponseMapper(products, validatedLimit, validatedOffset)
+      return dataWPagination
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;

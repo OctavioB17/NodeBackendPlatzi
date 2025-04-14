@@ -19,7 +19,7 @@ import OrdersController from "../../presentation/controllers/OrdersController";
 import IOrdersRepository from "../../domain/repositories/IOrdersRepository";
 import OrderRepository from "../repositories/OrderRepository";
 import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
-import UuidGenerator from "../services/utils/UuidGenerator";
+import UuidGenerator from "../utils/UuidGenerator";
 import IAddProductsToOrder from "../../app/interfaces/orders/post/IAddProductsToOrder";
 import AddProductsToOrders from "../../app/use-cases/orders/post/AddProductsToOrder";
 import IUserMapper from "../mappers/interfaces/IUserMapper";

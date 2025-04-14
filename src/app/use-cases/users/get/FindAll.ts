@@ -6,6 +6,9 @@ import { ErrorType } from "../../../../domain/interfaces/Error";
 import { IFindAllUsers } from "../../../interfaces/users/get/IFindAll";
 import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
 import User from "../../../../domain/entities/Users";
+import { IPagination } from "../../../../domain/interfaces/IPagination";
+import PaginationMapper from "../../../../infraestructure/mappers/PaginationMapper";
+import { validatePaginationParams } from "../../../../infraestructure/utils/ValidatePaginationParams";
 
 
 @injectable()
@@ -14,9 +17,11 @@ export default class FindAllUsers implements IFindAllUsers {
     @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
   ) {}
 
-  async execute(): Promise<User[]> {
+  async execute(limit: number, offset: number): Promise<IPagination<User[]> | null> {
     try {
-      const users = await this.userRepository.findAll()
+      const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
+
+      const users = await this.userRepository.findAll(validatedLimit, validatedOffset)
       if (!users) {
         throw new BoomError({
           message: `Users not found`,
@@ -25,7 +30,8 @@ export default class FindAllUsers implements IFindAllUsers {
         })
       }
 
-      return users
+      const dataWPagination = PaginationMapper.paginationResponseMapper(users, validatedLimit, validatedOffset)
+      return dataWPagination
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;

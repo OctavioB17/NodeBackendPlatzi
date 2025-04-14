@@ -52,14 +52,7 @@ export default class AddProductsToOrders implements IAddProductsToOrder {
               statusCode: 400
             });
           }
-          console.log({
-            id: product.getId(),
-            productId: product.getProductId(),
-            orderId: product.getOrderId(),
-            quantity: newQuantity,
-            createdAt: product.getCreatedAt(),
-            updatedAt: product.getUpdatedAt()
-          })
+
           if (newQuantity === 0) {
             await this.deleteItemInOrder.execute(product.getId());
             return productsToModify;
@@ -97,7 +90,6 @@ export default class AddProductsToOrders implements IAddProductsToOrder {
       const entityToDto = this.orderMapper.orderHasProductEntityToDtoList(addItems);
       return entityToDto;
     } catch (error) {
-      console.log(error)
       if (error instanceof BoomError) {
         throw error;
       }

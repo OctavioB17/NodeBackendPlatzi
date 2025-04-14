@@ -4,7 +4,20 @@ import CategoryDTO from "../dtos/category/CategoryDTO";
 import CategoriesModel from "../database/models/CategoriesModel";
 import ICategoryMapper from "./interfaces/ICategoriesMapper";
 import Category from "../../domain/entities/Categories";
+import { IPagination } from "../../domain/interfaces/IPagination";
 export default class CategoryMapper implements ICategoryMapper {
+  categoryWPaginationToDto(category: IPagination<Category>): IPagination<CategoryDTO> {
+    return {
+      ...category,
+      data: plainToInstance(CategoryDTO, category.data)
+    };
+  }
+  categoryWPaginationToDtoList(categories: IPagination<Category[]>): IPagination<CategoryDTO[]> {
+    return {
+      ...categories,
+      data: categories.data.map(category => plainToInstance(CategoryDTO, category))
+    };
+  }
 
   categoryToDto(category: Category): CategoryDTO {
     return plainToInstance(CategoryDTO, category)

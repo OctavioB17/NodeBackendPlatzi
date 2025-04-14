@@ -23,7 +23,7 @@ import IUserController from "../../presentation/controllers/interfaces/IUserCont
 import FindUserByMailNoPassword from "../../app/use-cases/users/get/FindUserByMailNoPassword";
 import { IFindAllUsers } from "../../app/interfaces/users/get/IFindAll";
 import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
-import UuidGenerator from "../services/utils/UuidGenerator";
+import UuidGenerator from "../utils/UuidGenerator";
 import IUserMapper from "../mappers/interfaces/IUserMapper";
 import UserMapper from "../mappers/UserMapper";
 
