@@ -14,7 +14,6 @@ import { ErrorType } from "../../domain/interfaces/Error";
 import IDeleteProduct from "../../app/interfaces/products/delete/IDeleteProduct";
 import ICreateProduct from "../../app/interfaces/products/post/ICreateProduct";
 import IProductMapper from "../../infraestructure/mappers/interfaces/IProductMapper";
-import ProductDTO from "../../infraestructure/dtos/product/ProductDTO";
 import Product from "../../domain/entities/Products";
 
 export default class ProductController implements IProductController {
@@ -73,9 +72,9 @@ export default class ProductController implements IProductController {
 
   async findAllByUserIdController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params;
-    const { limit, offset } = req.query;
+    const { limit, offset, max_price, min_price } = req.query;
     try {
-      const products = await this.findAllProductsByUser.execute(id, Number(limit), Number(offset));
+      const products = await this.findAllProductsByUser.execute(id, Number(limit), Number(offset), Number(max_price), Number(min_price));
       if (products && products.data.length > 0) {
         res.status(200).json(products);
       } else {
@@ -110,9 +109,9 @@ export default class ProductController implements IProductController {
 
   async findByNameController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { name } = req.params;
-    const { limit, offset } = req.query
+    const { limit, offset, max_price, min_price } = req.query
     try {
-      const product = await this.findProductByName.execute(name, Number(limit), Number(offset));
+      const product = await this.findProductByName.execute(name, Number(limit), Number(offset), Number(max_price), Number(min_price));
       if (product) {
         res.status(200).json(product);
       } else {
@@ -129,10 +128,9 @@ export default class ProductController implements IProductController {
 
   async findAllByCategoryController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params;
-    const { limit, offset } = req.query
-
+    const { limit, offset, max_price, min_price } = req.query
     try {
-      const products = await this.findAllProductByCategory.execute(id, Number(limit), Number(offset));
+      const products = await this.findAllProductByCategory.execute(id, Number(limit), Number(offset), Number(max_price), Number(min_price));
       if (products && products.data.length > 0) {
         res.status(200).json(products);
       } else {

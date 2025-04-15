@@ -16,12 +16,15 @@ export default class FindAllProductsByUser implements IFindAllProductsByUser {
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
   ) {}
 
-  async execute(userId: string, limit: number, offset: number): Promise<IPagination<ProductWithUserAndCategoryDTO[]>> {
+  async execute(userId: string, limit: number, offset: number,  maxPrice: number, minPrice: number): Promise<IPagination<ProductWithUserAndCategoryDTO[]>> {
 
     try {
       const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
 
-      const products = await this.iProductRepository.findAllByUserId(userId, validatedLimit, validatedOffset)
+      const maxPriceValue = maxPrice === undefined || maxPrice === null || isNaN(maxPrice) ? 999999999 : maxPrice;
+      const minPriceValue = minPrice === undefined || minPrice === null || isNaN(minPrice) ? 0 : minPrice;
+
+      const products = await this.iProductRepository.findAllByUserId(userId, validatedLimit, validatedOffset, maxPriceValue, minPriceValue)
       if (!products) {
         throw new BoomError({
           message: `Products not found`,

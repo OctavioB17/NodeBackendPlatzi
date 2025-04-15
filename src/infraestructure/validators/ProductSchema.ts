@@ -1,4 +1,8 @@
 import Joi from "joi";
+import { limitQuery, offsetQuery } from "./QuerySchema";
+
+const maxPrice = Joi.number().positive().max(999999999).min(1).default(999999999)
+const minPrice = Joi.number().positive().min(0).default(0)
 
 const dimensionsSchema = Joi.object({
   length: Joi.number().positive().min(0).allow(null),
@@ -44,4 +48,11 @@ export const updateStockSchema = Joi.object({
 
 export const getProductSchemaByName = Joi.object({
   name: Joi.string().required()
+})
+
+export const getProductWPaginationAndPriceOperators = Joi.object({
+  limit: limitQuery.optional(),
+  offset: offsetQuery.optional(),
+  max_price: maxPrice.optional(),
+  min_price: minPrice.optional()
 })

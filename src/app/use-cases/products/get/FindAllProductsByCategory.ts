@@ -16,11 +16,14 @@ export default class FindAllProductsByCategory implements IFindAllProductByCateg
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
   ) {}
 
-  async execute(categoryId: string, limit: number, offset: number): Promise<IPagination<ProductWithUserAndCategoryDTO[]> | null> {
+  async execute(categoryId: string, limit: number, offset: number, maxPrice: number, minPrice: number): Promise<IPagination<ProductWithUserAndCategoryDTO[]> | null> {
     try {
       const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
 
-      const products = await this.iProductRepository.findAllByCategory(categoryId, validatedLimit, validatedOffset)
+      const maxPriceValue = maxPrice === undefined || maxPrice === null || isNaN(maxPrice) ? 999999999 : maxPrice;
+      const minPriceValue = minPrice === undefined || minPrice === null || isNaN(minPrice) ? 0 : minPrice;
+
+      const products = await this.iProductRepository.findAllByCategory(categoryId, validatedLimit, validatedOffset, maxPriceValue, minPriceValue)
       if (!products) {
         throw new BoomError({
           message: `Product not found`,

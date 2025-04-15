@@ -66,12 +66,16 @@ export default class ProductRepository implements IProductRepository {
   }
 
 
-  async findByName(name: string, limit: number, offset: number): Promise<ProductWithUserAndCategoryDTO[] | null> {
+  async findByName(name: string, limit: number, offset: number, maxPrice?: number, minPrice?: number): Promise<ProductWithUserAndCategoryDTO[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
           name: {
-            [Op.iLike]: `%${name}%`
+            [Op.iLike]: `%${name}%`,
+          },
+          price: {
+            [Op.gte]: minPrice,
+            [Op.lte]: maxPrice
           }
         },
         include: [
@@ -92,11 +96,15 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async findAllByUserId(userId: string, limit: number, offset: number): Promise<ProductWithUserAndCategoryDTO[] | null> {
+  async findAllByUserId(userId: string, limit: number, offset: number, maxPrice: number, minPrice: number): Promise<ProductWithUserAndCategoryDTO[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
-          userId: userId
+          userId: userId,
+          price: {
+            [Op.gte]: minPrice,
+            [Op.lte]: maxPrice
+          }
         },
         include: [
           { model: UserModel, as: 'user' },
@@ -112,15 +120,21 @@ export default class ProductRepository implements IProductRepository {
         return null
       }
     } catch (error: any) {
+      console.log(error)
       throw new Error(error)
     }
   }
 
-  async findAllByCategory(categoryId: string, limit: number, offset: number): Promise<ProductWithUserAndCategoryDTO[] | null> {
+  async findAllByCategory(categoryId: string, limit: number, offset: number, maxPrice: number, minPrice: number): Promise<ProductWithUserAndCategoryDTO[] | null> {
     try {
+
       const products = await ProductModel.findAll({
         where: {
-          categoryId: categoryId
+          categoryId: categoryId,
+          price: {
+            [Op.gte]: minPrice,
+            [Op.lte]: maxPrice
+          }
         },
         include: [
           { model: UserModel, as: 'user' },
