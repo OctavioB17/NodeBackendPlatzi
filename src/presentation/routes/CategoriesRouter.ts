@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { CATEGORY_TYPES } from "../../types";
 import ICategoriesController from "../controllers/interfaces/ICategoriesController";
-import container from "../../infraestructure/inversify/CategoriesContainer";
+import container from "../../infraestructure/inversify/categoriesContainer";
 import { validatorHandler } from "../../infraestructure/middlewares/validatorHandler";
 import { createCategorySchema, getCategorySchema, getCategorySchemaByName, updateCategorySchema } from "../../infraestructure/validators/CategorySchema";
 import { paginationSchema } from "../../infraestructure/validators/QuerySchema";

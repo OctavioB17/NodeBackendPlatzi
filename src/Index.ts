@@ -29,7 +29,7 @@ import IFindProductById from './app/interfaces/products/get/IFindProductById';
 import IFindProductByName from './app/interfaces/products/get/IFindProductByName';
 import IToggleProductPause from './app/interfaces/products/patch/IToggleProductPause';
 import IUpdateProduct from './app/interfaces/products/patch/IUpdateProduct';
-import categoriesContainer from './infraestructure/inversify/CategoriesContainer';
+import categoriesContainer from './infraestructure/inversify/categoriesContainer';
 import { ICategoriesRepository } from './domain/repositories/ICategoryRepository';
 import ICategoriesController from './presentation/controllers/interfaces/ICategoriesController';
 import IDeleteCategory from './app/interfaces/categories/delete/IDeleteCategory';
