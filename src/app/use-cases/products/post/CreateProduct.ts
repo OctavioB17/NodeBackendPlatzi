@@ -5,7 +5,7 @@ import { ErrorType } from "../../../../domain/interfaces/Error";
 import IProductRepository from "../../../../domain/repositories/IProductsRepository";
 import ICreateProduct from "../../../interfaces/products/post/ICreateProduct";
 import ProductDTO from "../../../../infraestructure/dtos/product/ProductDTO";
-import { IIdGenerator } from "../../../../domain/services/utils/IIdGenerator";
+import { IIdGenerator } from "../../../../infraestructure/services/interfaces/IIdGenerator";
 import IProductMapper from "../../../../infraestructure/mappers/interfaces/IProductMapper";
 
 @injectable()

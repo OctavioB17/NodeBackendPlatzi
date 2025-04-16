@@ -7,8 +7,7 @@ import { ErrorType } from '../../../../domain/interfaces/Error';
 import { OrderWithUserAndProducts } from '../../../../domain/interfaces/orders/IOrders';
 import { IPagination } from '../../../../domain/interfaces/IPagination';
 import PaginationMapper from '../../../../infraestructure/mappers/PaginationMapper';
-import { number } from 'joi';
-import { validatePaginationParams } from '../../../../infraestructure/utils/ValidatePaginationParams';
+import { validatePaginationParams } from '../../../../infraestructure/services/utils/ValidatePaginationParams';
 
 @injectable()
 export default class FindAllOrdersByUserId implements IFindAllOrdersByUserId {

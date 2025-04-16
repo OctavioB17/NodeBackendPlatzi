@@ -8,7 +8,7 @@ import UserNoPasswordDTO from "../../../../infraestructure/dtos/users/UserNoPass
 import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
 import PaginationMapper from "../../../../infraestructure/mappers/PaginationMapper";
 import { IPagination } from "../../../../domain/interfaces/IPagination";
-import { validatePaginationParams } from "../../../../infraestructure/utils/ValidatePaginationParams";
+import { validatePaginationParams } from "../../../../infraestructure/services/utils/ValidatePaginationParams";
 
 
 @injectable()

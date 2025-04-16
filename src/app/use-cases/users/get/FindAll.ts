@@ -4,11 +4,10 @@ import {USER_TYPES} from "../../../../types";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import { IFindAllUsers } from "../../../interfaces/users/get/IFindAll";
-import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
 import User from "../../../../domain/entities/Users";
 import { IPagination } from "../../../../domain/interfaces/IPagination";
 import PaginationMapper from "../../../../infraestructure/mappers/PaginationMapper";
-import { validatePaginationParams } from "../../../../infraestructure/utils/ValidatePaginationParams";
+import { validatePaginationParams } from "../../../../infraestructure/services/utils/ValidatePaginationParams";
 
 
 @injectable()

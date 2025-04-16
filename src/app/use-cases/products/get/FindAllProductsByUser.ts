@@ -7,7 +7,7 @@ import IFindAllProductsByUser from "../../../interfaces/products/get/IFindAllPro
 import ProductWithUserAndCategoryDTO from "../../../../infraestructure/dtos/product/ProductWithUserAndCategoryDTO";
 import { IPagination } from "../../../../domain/interfaces/IPagination";
 import PaginationMapper from "../../../../infraestructure/mappers/PaginationMapper";
-import { validatePaginationParams } from "../../../../infraestructure/utils/ValidatePaginationParams";
+import { validatePaginationParams } from "../../../../infraestructure/services/utils/ValidatePaginationParams";
 
 
 @injectable()

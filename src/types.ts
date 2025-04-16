@@ -56,5 +56,17 @@ export const ORDER_TYPES = {
   IOrdersController: Symbol.for('IOrdersController'),
   IAddProductsToOrders: Symbol.for('IAddProductsToOrders'),
   IModifyQuantityInOrder: Symbol.for('IModifyQuantityInOrder'),
-  IDeleteItemInOrder: Symbol.for('IDeleteItemInOrder')
+  IDeleteItemInOrder: Symbol.for('IDeleteItemInOrder'),
+  IvaCalculator: Symbol.for('IvaCalculator'),
+  SaleTaxCalculator: Symbol.for('SaleTaxCalculator'),
+  SpecificProductTaxCalculator: Symbol.for('SpecificProductTaxCalculator'),
+  CalculateAllTaxes: Symbol.for('CalculateAllTaxes'),
+  IAddTaxesObject: Symbol.for('IAddTaxesObject'),
+  ICalculateTotalProductPrices: Symbol.for('ICalculateTotalProductPrices')
+}
+
+export const ENCRYPTION_TYPES = {
+  IEncryptionServices: Symbol.for('IEncryptionServices'),
+  IHashCompare: Symbol.for('IHashCompare'),
+  IHashCode: Symbol.for('IHashCode')
 }

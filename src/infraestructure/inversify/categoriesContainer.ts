@@ -14,12 +14,12 @@ import IGetCategoryById from "../../app/interfaces/categories/get/IGetCategoryBy
 import GetCategoryById from "../../app/use-cases/categories/get/GetCategoryById";
 import UpdateCategory from "../../app/use-cases/categories/patch/UpdateCategory";
 import IUpdateCategory from "../../app/interfaces/categories/patch/IUpdateCategory";
-import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
-import UuidGenerator from "../utils/UuidGenerator";
+import { IIdGenerator } from "../services/interfaces/IIdGenerator";
 import IGetCategoryByName from "../../app/interfaces/categories/get/IGetCategoryByName";
 import GetCategoryByName from "../../app/use-cases/categories/get/GetCategoryByName";
 import ICategoryMapper from "../mappers/interfaces/ICategoriesMapper";
 import CategoryMapper from "../mappers/CategoriesMapper";
+import UuidGenerator from "../services/utils/UuidGenerator";
 
 const categoriesContainer = new Container();
 

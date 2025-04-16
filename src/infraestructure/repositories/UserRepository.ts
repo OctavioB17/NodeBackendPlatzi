@@ -21,7 +21,7 @@ export default class UserRepository implements IUserRepository {
   async createUser(user: User): Promise<boolean> {
     try {
       const userToModel = this.userMapper.userToModel(user)
-      const newUser = await UserModel.create(userToModel);
+      const newUser = await UserModel.create(userToModel.dataValues);
       return newUser ? true : false
     } catch (error) {
       throw new Error(`Error creating user in repository: ${error}`)

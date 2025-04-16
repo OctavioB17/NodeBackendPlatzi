@@ -3,9 +3,14 @@ import ICreateOrder from "../../../interfaces/orders/post/ICreateOrder";
 import { ORDER_TYPES, UTIL_TYPES } from "../../../../types";
 import IOrdersMapper from "../../../../infraestructure/mappers/interfaces/IOrdersMapper";
 import IOrdersRepository from "../../../../domain/repositories/IOrdersRepository";
-import { IIdGenerator } from "../../../../domain/services/utils/IIdGenerator";
+import { IIdGenerator } from "../../../../infraestructure/services/interfaces/IIdGenerator";
 import IAddProductsToOrder from "../../../interfaces/orders/post/IAddProductsToOrder";
 import { CreateOrderRequest } from "../../../../domain/interfaces/orders/IOrders";
+import { IAddTaxesObject } from "../../../interfaces/orders/IAddTaxObject";
+import ICalculateTotalProductPrices from "../../../interfaces/orders/ICalculateTotalProductPrices";
+import { ITaxCalculator } from "../../../interfaces/orders/ITaxCalculator";
+import { BoomError } from "../../../../domain/entities/DomainError";
+import { ErrorType } from "../../../../domain/interfaces/Error";
 
 
 @injectable()
@@ -16,15 +21,34 @@ export default class CreateOrder implements ICreateOrder {
     @inject(ORDER_TYPES.IOrdersMapper) private orderMapper: IOrdersMapper,
     @inject(ORDER_TYPES.IAddProductsToOrders) private addProductsToOrder: IAddProductsToOrder,
     @inject(UTIL_TYPES.IIdGenerator) private idGenerator: IIdGenerator,
+    @inject(ORDER_TYPES.IAddTaxesObject) private addTaxesObject: IAddTaxesObject,
+    @inject(ORDER_TYPES.ICalculateTotalProductPrices) private calculateTotalPrices: ICalculateTotalProductPrices,
+    @inject(ORDER_TYPES.CalculateAllTaxes) private calculateAllTaxes: ITaxCalculator,
   ) {}
 
 
   async execute(orderData: CreateOrderRequest): Promise<boolean | null> {
-    /*try {*/
+    try {
       const orderId = this.idGenerator.generate();
+      const totalPriceProducts = await this.calculateTotalPrices.calculate(orderData.orderHasProducts)
+      if (!totalPriceProducts) {
+        return null
+      }
+
+      const totalPricesPlusTaxes = this.calculateAllTaxes.calculate(totalPriceProducts);
+      if (!totalPricesPlusTaxes) {
+        return null
+      }
+      const taxes = this.addTaxesObject.addTaxesObject(totalPriceProducts)
+      if (!taxes) {
+        return null
+      }
+
       const newOrder = {
         ...orderData.order,
-        id: orderId
+        totalPrice: totalPricesPlusTaxes,
+        id: orderId,
+        taxes: taxes
       };
 
       const dtoToOrder = this.orderMapper.dtoToOrder(newOrder)
@@ -45,7 +69,7 @@ export default class CreateOrder implements ICreateOrder {
 
       return false;
       }
-     /*catch (error) {
+     catch (error) {
       if (error instanceof BoomError) {
         throw error;
       }
@@ -56,5 +80,5 @@ export default class CreateOrder implements ICreateOrder {
         statusCode: 500
       });
     }
-  }*/
+  }
 }

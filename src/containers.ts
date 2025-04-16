@@ -1,6 +1,6 @@
 import { ICreateUser } from './app/interfaces/users/post/ICreateUser'
-import {CATEGORY_TYPES, ORDER_TYPES, PRODUCT_TYPES, USER_TYPES, UTIL_TYPES} from './types'
-import { IIdGenerator } from './domain/services/utils/IIdGenerator'
+import {CATEGORY_TYPES, ENCRYPTION_TYPES, ORDER_TYPES, PRODUCT_TYPES, USER_TYPES, UTIL_TYPES} from './types'
+import { IIdGenerator } from './infraestructure/services/interfaces/IIdGenerator'
 import { IUserRepository } from './domain/repositories/IUsersRepository'
 import { IFindAllUsers } from './app/interfaces/users/get/IFindAll'
 import { IFindAllUsersNoPassword } from './app/interfaces/users/get/IFindAllUsersNoPassword'
@@ -21,7 +21,7 @@ import IFindProductById from './app/interfaces/products/get/IFindProductById'
 import IFindProductByName from './app/interfaces/products/get/IFindProductByName'
 import IToggleProductPause from './app/interfaces/products/patch/IToggleProductPause'
 import IUpdateProduct from './app/interfaces/products/patch/IUpdateProduct'
-import categoriesContainer from './infraestructure/inversify/categoriesContainer'
+import categoriesContainer from './infraestructure/inversify/CategoriesContainer'
 import { ICategoriesRepository } from './domain/repositories/ICategoryRepository'
 import ICategoriesController from './presentation/controllers/interfaces/ICategoriesController'
 import IDeleteCategory from './app/interfaces/categories/delete/IDeleteCategory'
@@ -40,6 +40,13 @@ import IUpdateStatus from './app/interfaces/orders/patch/IUpdateStatus'
 import ICreateOrder from './app/interfaces/orders/post/ICreateOrder'
 import IOrdersControllers from './presentation/controllers/interfaces/IOrdersController'
 import IAddProductsToOrder from './app/interfaces/orders/post/IAddProductsToOrder'
+import ICalculateTotalProductPrices from './app/interfaces/orders/ICalculateTotalProductPrices'
+import { ITaxCalculator } from './app/interfaces/orders/ITaxCalculator'
+import { IAddTaxesObject } from './app/interfaces/orders/IAddTaxObject'
+import IHashCode from './app/interfaces/encryption/IHashCode'
+import encryptionContainer from './infraestructure/inversify/EncryptionContainer'
+import IEncriptionServices from './infraestructure/services/interfaces/IEncryptionServices'
+import ICompareHash from './app/interfaces/encryption/ICompareHash'
 
 export function initContainers() {
   utilContainer.get<IIdGenerator>(UTIL_TYPES.IIdGenerator)
@@ -78,4 +85,13 @@ export function initContainers() {
   ordersContainer.get<IFindAllOrdersByUserId>(ORDER_TYPES.IFindAllOrdersByUserId)
   ordersContainer.get<IUpdateStatus>(ORDER_TYPES.IUpdateStatus)
   ordersContainer.get<IOrdersControllers>(ORDER_TYPES.IOrdersController)
+  ordersContainer.get<ITaxCalculator>(ORDER_TYPES.IvaCalculator)
+  ordersContainer.get<ITaxCalculator>(ORDER_TYPES.SaleTaxCalculator)
+  ordersContainer.get<ITaxCalculator>(ORDER_TYPES.SpecificProductTaxCalculator)
+  ordersContainer.get<ITaxCalculator>(ORDER_TYPES.CalculateAllTaxes)
+  ordersContainer.get<IAddTaxesObject>(ORDER_TYPES.IAddTaxesObject)
+  ordersContainer.get<ICalculateTotalProductPrices>(ORDER_TYPES.ICalculateTotalProductPrices)
+  encryptionContainer.get<IEncriptionServices>(ENCRYPTION_TYPES.IEncryptionServices)
+  encryptionContainer.get<IHashCode>(ENCRYPTION_TYPES.IHashCode)
+  encryptionContainer.get<ICompareHash>(ENCRYPTION_TYPES.IHashCompare)
 }

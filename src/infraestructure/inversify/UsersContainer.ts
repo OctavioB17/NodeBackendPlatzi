@@ -2,7 +2,7 @@ import { Container } from "inversify";
 import { IUserRepository } from "../../domain/repositories/IUsersRepository";
 import UserRepository from "../repositories/UserRepository";
 import { ICreateUser } from "../../app/interfaces/users/post/ICreateUser";
-import { USER_TYPES, UTIL_TYPES } from "../../types";
+import { ENCRYPTION_TYPES, USER_TYPES, UTIL_TYPES } from "../../types";
 import CreateUser from "../../app/use-cases/users/post/CreateUser";
 import { IFindAllUsersNoPassword } from "../../app/interfaces/users/get/IFindAllUsersNoPassword";
 import { IFindUserById } from "../../app/interfaces/users/get/IFindUserById";
@@ -22,10 +22,14 @@ import UserController from "../../presentation/controllers/UserController";
 import IUserController from "../../presentation/controllers/interfaces/IUserController";
 import FindUserByMailNoPassword from "../../app/use-cases/users/get/FindUserByMailNoPassword";
 import { IFindAllUsers } from "../../app/interfaces/users/get/IFindAll";
-import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
-import UuidGenerator from "../utils/UuidGenerator";
+import { IIdGenerator } from "../services/interfaces/IIdGenerator";
 import IUserMapper from "../mappers/interfaces/IUserMapper";
 import UserMapper from "../mappers/UserMapper";
+import UuidGenerator from "../services/utils/UuidGenerator";
+import IHashCode from "../../app/interfaces/encryption/IHashCode";
+import HashCode from "../../app/use-cases/encryption/HashCode";
+import EncryptionServices from "../services/EncryptionServices";
+import IEncriptionServices from "../services/interfaces/IEncryptionServices";
 
 const userContainer = new Container();
 
@@ -42,5 +46,7 @@ userContainer.bind<IFindUserByEmailNoPassword>(USER_TYPES.IFindUserByEmailNoPass
 userContainer.bind<IChangePassword>(USER_TYPES.IChangePassword).to(ChangePassword)
 userContainer.bind<IDeleteUser>(USER_TYPES.IDeleteUser).to(DeleteUser)
 userContainer.bind<IUserController>(USER_TYPES.IUserController).to(UserController)
+userContainer.bind<IEncriptionServices>(ENCRYPTION_TYPES.IEncryptionServices).to(EncryptionServices)
+userContainer.bind<IHashCode>(ENCRYPTION_TYPES.IHashCode).to(HashCode)
 
 export default userContainer

@@ -18,8 +18,7 @@ import IOrdersControllers from "../../presentation/controllers/interfaces/IOrder
 import OrdersController from "../../presentation/controllers/OrdersController";
 import IOrdersRepository from "../../domain/repositories/IOrdersRepository";
 import OrderRepository from "../repositories/OrderRepository";
-import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
-import UuidGenerator from "../utils/UuidGenerator";
+import { IIdGenerator } from "../services/interfaces/IIdGenerator";
 import IAddProductsToOrder from "../../app/interfaces/orders/post/IAddProductsToOrder";
 import AddProductsToOrders from "../../app/use-cases/orders/post/AddProductsToOrder";
 import IUserMapper from "../mappers/interfaces/IUserMapper";
@@ -30,6 +29,20 @@ import IDeleteItemInOrder from "../../app/interfaces/orders/delete/IDeleteItemIn
 import DeleteItemInOrder from "../../app/use-cases/orders/delete/DeleteItemInOrder";
 import IModifyQuantityInOrder from "../../app/interfaces/orders/patch/IModifyQuantityInOrder";
 import ModifyQuantityInOrder from "../../app/use-cases/orders/post/ModifyQuantityInOrder";
+import { ITaxCalculator } from "../../app/interfaces/orders/ITaxCalculator";
+import { IAddTaxesObject } from "../../app/interfaces/orders/IAddTaxObject";
+import CalculateTotalProductPrices from "../../app/use-cases/orders/CalculateTotalProductPrices";
+import ICalculateTotalProductPrices from "../../app/interfaces/orders/ICalculateTotalProductPrices";
+import IFindProductById from "../../app/interfaces/products/get/IFindProductById";
+import FindProductById from "../../app/use-cases/products/get/FindProductById";
+import IProductRepository from "../../domain/repositories/IProductsRepository";
+import ProductRepository from "../repositories/ProductRepository";
+import AddTaxesObject from "../../app/use-cases/orders/AddTaxesObject";
+import CalculatedAllTaxes from "../../app/use-cases/orders/CalculateAllTaxes";
+import IvaCalculator from "../../app/use-cases/orders/IvaCalculator";
+import SaleTaxCalculator from "../../app/use-cases/orders/SaleTaxCalculator";
+import SpecificProductTaxCalculator from "../../app/use-cases/orders/SpecificProductTaxCalculator";
+import UuidGenerator from "../services/utils/UuidGenerator";
 
 const ordersContainer = new Container();
 
@@ -48,5 +61,14 @@ ordersContainer.bind<IUserMapper>(USER_TYPES.IUserMapper).to(UserMapper)
 ordersContainer.bind<IProductMapper>(PRODUCT_TYPES.IProductMapper).to(ProductMapper)
 ordersContainer.bind<IModifyQuantityInOrder>(ORDER_TYPES.IModifyQuantityInOrder).to(ModifyQuantityInOrder)
 ordersContainer.bind<IDeleteItemInOrder>(ORDER_TYPES.IDeleteItemInOrder).to(DeleteItemInOrder)
+ordersContainer.bind<ITaxCalculator>(ORDER_TYPES.IvaCalculator).to(IvaCalculator)
+ordersContainer.bind<ITaxCalculator>(ORDER_TYPES.SaleTaxCalculator).to(SaleTaxCalculator)
+ordersContainer.bind<ITaxCalculator>(ORDER_TYPES.SpecificProductTaxCalculator).to(SpecificProductTaxCalculator)
+ordersContainer.bind<ITaxCalculator>(ORDER_TYPES.CalculateAllTaxes).to(CalculatedAllTaxes)
+ordersContainer.bind<IAddTaxesObject>(ORDER_TYPES.IAddTaxesObject).to(AddTaxesObject)
+ordersContainer.bind<ICalculateTotalProductPrices>(ORDER_TYPES.ICalculateTotalProductPrices).to(CalculateTotalProductPrices)
+ordersContainer.bind<IFindProductById>(PRODUCT_TYPES.IFindProductById).to(FindProductById)
+ordersContainer.bind<IProductRepository>(PRODUCT_TYPES.IProductRepository).to(ProductRepository)
+
 
 export default ordersContainer

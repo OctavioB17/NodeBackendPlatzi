@@ -1,7 +1,7 @@
 import { Container } from "inversify";
-import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
+import { IIdGenerator } from "../services/interfaces/IIdGenerator";
 import { UTIL_TYPES } from "../../types";
-import UuidGenerator from "../utils/UuidGenerator";
+import UuidGenerator from "../services/utils/UuidGenerator";
 
 const utilContainer = new Container()
 

@@ -2,7 +2,7 @@ import { inject, injectable } from "inversify";
 import IAddProductsToOrder from "../../../interfaces/orders/post/IAddProductsToOrder";
 import { ORDER_TYPES, UTIL_TYPES } from "../../../../types";
 import IOrdersRepository from "../../../../domain/repositories/IOrdersRepository";
-import { IIdGenerator } from "../../../../domain/services/utils/IIdGenerator";
+import { IIdGenerator } from "../../../../infraestructure/services/interfaces/IIdGenerator";
 import IOrdersMapper from "../../../../infraestructure/mappers/interfaces/IOrdersMapper";
 import OrderHasProductsDTO from "../../../../infraestructure/dtos/orders/OrderHasProductsDTO";
 import { BoomError } from "../../../../domain/entities/DomainError";

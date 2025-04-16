@@ -7,7 +7,7 @@ import { ErrorType } from "../../../../domain/interfaces/Error";
 import Category from "../../../../domain/entities/Categories";
 import { IPagination } from "../../../../domain/interfaces/IPagination";
 import PaginationMapper from "../../../../infraestructure/mappers/PaginationMapper";
-import { validatePaginationParams } from "../../../../infraestructure/utils/ValidatePaginationParams";
+import { validatePaginationParams } from "../../../../infraestructure/services/utils/ValidatePaginationParams";
 
 @injectable()
 export default class FindAllCategories implements IFindAllCategories {

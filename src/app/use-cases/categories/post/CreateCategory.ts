@@ -6,7 +6,7 @@ import { ICategoriesRepository } from "../../../../domain/repositories/ICategory
 import CategoryMapper from "../../../../infraestructure/mappers/CategoriesMapper";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import { IIdGenerator } from "../../../../domain/services/utils/IIdGenerator";
+import { IIdGenerator } from "../../../../infraestructure/services/interfaces/IIdGenerator";
 import ICategoryMapper from "../../../../infraestructure/mappers/interfaces/ICategoriesMapper";
 
 @injectable()

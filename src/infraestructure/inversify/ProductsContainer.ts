@@ -22,10 +22,10 @@ import IToggleProductPause from "../../app/interfaces/products/patch/IToggleProd
 import ToggleProductPause from "../../app/use-cases/products/patch/ToggleProductPause";
 import IProductController from "../../presentation/controllers/interfaces/IProductController";
 import ProductController from "../../presentation/controllers/ProductController";
-import { IIdGenerator } from "../../domain/services/utils/IIdGenerator";
-import UuidGenerator from "../utils/UuidGenerator";
+import { IIdGenerator } from "../services/interfaces/IIdGenerator";
 import IProductMapper from "../mappers/interfaces/IProductMapper";
 import ProductMapper from "../mappers/ProductMapper";
+import UuidGenerator from "../services/utils/UuidGenerator";
 
 const productContainer = new Container();
 

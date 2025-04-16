@@ -15,7 +15,6 @@ syncDatabase()
 routerApi(app)
 initContainers()
 
-
 app.use(logError)
 app.use(boomErrorHandling)
 app.use(errorHandlingMiddleware)
