@@ -77,5 +77,7 @@ export const AUTH_TYPES = {
   ILocalStrategyServices: Symbol.for('ILocalStrategyServices'),
   IAuthAdapter: Symbol.for('IAuthAdapter'),
   IAuthController: Symbol.for('IAuthController'),
-  PassportConfig: Symbol.for('PassportConfig')
+  PassportConfig: Symbol.for('PassportConfig'),
+  IJwtServices: Symbol.for('IJwtServices'),
+  ISignToken: Symbol.for('ISignToken')
 }

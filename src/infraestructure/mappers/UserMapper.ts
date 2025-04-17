@@ -6,7 +6,16 @@ import { IUser } from "../../domain/interfaces/user/IUser";
 import IUserMapper from "./interfaces/IUserMapper";
 import User from "../../domain/entities/Users";
 import { IPagination } from "../../domain/interfaces/IPagination";
+import UserJwtPayload from "../dtos/users/UserJwtPayloadDTO";
 export default class UserMapper implements IUserMapper {
+
+  UserToUserJwtPayload(user: User): UserJwtPayload {
+    return {
+      id: user.getId(),
+      role: user.getRole()
+    }
+  }
+
   userWPaginationToDto(user: IPagination<User>): IPagination<UserDTO> {
     return {
       ...user,

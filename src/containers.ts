@@ -52,6 +52,8 @@ import ILocalLogin from './app/interfaces/auth/strategies/ILocalLogin'
 import ILocalStrategyServices from './infraestructure/services/interfaces/ILocalStrategyServices'
 import IAuthController from './presentation/controllers/interfaces/IAuthController'
 import PassportConfig from './infraestructure/config/passportConfig'
+import ISignToken from './app/interfaces/auth/ISignToken'
+import IJwtServices from './infraestructure/services/interfaces/IJwtServices'
 
 export function initContainers() {
   authContainer.get<PassportConfig>(AUTH_TYPES.PassportConfig)
@@ -103,4 +105,6 @@ export function initContainers() {
   authContainer.get<IAuthController>(AUTH_TYPES.IAuthController)
   authContainer.get<ILocalLogin>(AUTH_TYPES.ILocalLogin)
   authContainer.get<ILocalStrategyServices>(AUTH_TYPES.ILocalStrategyServices)
+  authContainer.get<IJwtServices>(AUTH_TYPES.IJwtServices)
+  authContainer.get<ISignToken>(AUTH_TYPES.ISignToken)
 }

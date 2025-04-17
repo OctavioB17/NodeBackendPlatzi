@@ -19,6 +19,10 @@ import IEncriptionServices from "../services/interfaces/IEncryptionServices";
 import ICompareHash from "../../app/interfaces/encryption/ICompareHash";
 import CompareHash from "../../app/use-cases/encryption/CompareHash";
 import PassportConfig from "../config/passportConfig";
+import ISignToken from "../../app/interfaces/auth/ISignToken";
+import SignToken from "../../app/use-cases/auth/SignToken";
+import IJwtServices from "../services/interfaces/IJwtServices";
+import JwtServices from "../services/auth/jwt/JwtServices";
 
 const authContainer = new Container();
 
@@ -30,7 +34,9 @@ authContainer.bind<IEncriptionServices>(ENCRYPTION_TYPES.IEncryptionServices).to
 authContainer.bind<IHashCode>(ENCRYPTION_TYPES.IHashCode).to(HashCode)
 authContainer.bind<ICompareHash>(ENCRYPTION_TYPES.ICompareHash).to(CompareHash)
 authContainer.bind<IUserMapper>(USER_TYPES.IUserMapper).to(UserMapper)
-authContainer.bind<IUserRepository>(USER_TYPES.IUserRepository).to(UserRepository);
+authContainer.bind<IUserRepository>(USER_TYPES.IUserRepository).to(UserRepository)
 authContainer.bind<IFindUserByEmail>(USER_TYPES.IFindUserByEmail).to(FindUserByMail)
+authContainer.bind<IJwtServices>(AUTH_TYPES.IJwtServices).to(JwtServices)
+authContainer.bind<ISignToken>(AUTH_TYPES.ISignToken).to(SignToken)
 
 export default authContainer

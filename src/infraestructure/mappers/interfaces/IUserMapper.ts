@@ -4,8 +4,11 @@ import UserDTO from "../../dtos/users/UserDTO";
 import UserNoPasswordDTO from "../../dtos/users/UserNoPasswordDTO";
 import User from "../../../domain/entities/Users";
 import { IPagination } from "../../../domain/interfaces/IPagination";
+import UserJwtPayload from "../../dtos/users/UserJwtPayloadDTO";
 
 export default interface IUserMapper {
+
+  UserToUserJwtPayload(user: User): UserJwtPayload
 
   userToDto(user: User): UserDTO
 
