@@ -1,5 +1,5 @@
 import { ICreateUser } from './app/interfaces/users/post/ICreateUser'
-import {CATEGORY_TYPES, ENCRYPTION_TYPES, ORDER_TYPES, PRODUCT_TYPES, USER_TYPES, UTIL_TYPES} from './types'
+import {AUTH_TYPES, CATEGORY_TYPES, ENCRYPTION_TYPES, ORDER_TYPES, PRODUCT_TYPES, USER_TYPES, UTIL_TYPES} from './types'
 import { IIdGenerator } from './infraestructure/services/interfaces/IIdGenerator'
 import { IUserRepository } from './domain/repositories/IUsersRepository'
 import { IFindAllUsers } from './app/interfaces/users/get/IFindAll'
@@ -47,8 +47,14 @@ import IHashCode from './app/interfaces/encryption/IHashCode'
 import encryptionContainer from './infraestructure/inversify/EncryptionContainer'
 import IEncriptionServices from './infraestructure/services/interfaces/IEncryptionServices'
 import ICompareHash from './app/interfaces/encryption/ICompareHash'
+import authContainer from './infraestructure/inversify/AuthContainer'
+import ILocalLogin from './app/interfaces/auth/strategies/ILocalLogin'
+import ILocalStrategyServices from './infraestructure/services/interfaces/ILocalStrategyServices'
+import IAuthController from './presentation/controllers/interfaces/IAuthController'
+import PassportConfig from './infraestructure/config/passportConfig'
 
 export function initContainers() {
+  authContainer.get<PassportConfig>(AUTH_TYPES.PassportConfig)
   utilContainer.get<IIdGenerator>(UTIL_TYPES.IIdGenerator)
   userContainer.get<ICreateUser>(USER_TYPES.ICreateUser)
   userContainer.get<IUserRepository>(USER_TYPES.IUserRepository)
@@ -93,5 +99,8 @@ export function initContainers() {
   ordersContainer.get<ICalculateTotalProductPrices>(ORDER_TYPES.ICalculateTotalProductPrices)
   encryptionContainer.get<IEncriptionServices>(ENCRYPTION_TYPES.IEncryptionServices)
   encryptionContainer.get<IHashCode>(ENCRYPTION_TYPES.IHashCode)
-  encryptionContainer.get<ICompareHash>(ENCRYPTION_TYPES.IHashCompare)
+  encryptionContainer.get<ICompareHash>(ENCRYPTION_TYPES.ICompareHash)
+  authContainer.get<IAuthController>(AUTH_TYPES.IAuthController)
+  authContainer.get<ILocalLogin>(AUTH_TYPES.ILocalLogin)
+  authContainer.get<ILocalStrategyServices>(AUTH_TYPES.ILocalStrategyServices)
 }

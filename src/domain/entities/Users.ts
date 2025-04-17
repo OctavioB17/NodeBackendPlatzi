@@ -36,6 +36,10 @@ export default class User {
     return this.id;
   }
 
+  getPassword(): string {
+    return this.password;
+  }
+
   getName(): string {
     return this.name;
   }
@@ -46,5 +50,37 @@ export default class User {
 
   getRole(): string {
     return this.role
+  }
+
+  setEmail(email: string): void {
+    this.email = email;
+  }
+
+  setId(id: string): void {
+    this.id = id;
+  }
+
+  setPassword(password: string): void {
+    this.password = password;
+  }
+
+  setName(name: string): void {
+    this.name = name;
+  }
+
+  setSurname(surname: string): void {
+    this.surname = surname;
+  }
+
+  setRole(role: string): void {
+    this.role = role;
+  }
+
+  setCreatedAt(date: Date): void {
+    this.createdAt = date;
+  }
+
+  setUpdatedAt(date: Date): void {
+    this.updatedAt = date;
   }
 }

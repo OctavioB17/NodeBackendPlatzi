@@ -17,5 +17,5 @@ export default class UserDTO {
   role!: string
 
   @Expose()
-  password!: string
+  password?: string
 }

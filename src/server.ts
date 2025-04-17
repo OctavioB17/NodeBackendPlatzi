@@ -4,8 +4,9 @@ import express from 'express';
 import routerApi from './presentation/routes';
 import { boomErrorHandling, errorHandlingMiddleware, logError } from './infraestructure/middlewares/httpError';
 import syncDatabase from './infraestructure/database/DataBaseSync';
-import { corsConfig } from './infraestructure/server/corsConfig';
+import { corsConfig } from './infraestructure/config/server/corsConfig';
 import { initContainers } from './containers';
+import passport from 'passport';
 
 
 const app = express()
@@ -18,5 +19,6 @@ initContainers()
 app.use(logError)
 app.use(boomErrorHandling)
 app.use(errorHandlingMiddleware)
+app.use(passport.initialize());
 
 export default app

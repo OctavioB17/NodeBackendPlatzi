@@ -1,7 +1,7 @@
 import { Container } from "inversify";
 import IEncriptionServices from "../services/interfaces/IEncryptionServices";
 import { ENCRYPTION_TYPES } from "../../types";
-import EncryptionServices from "../services/EncryptionServices";
+import EncryptionServices from "../services/encryption/EncryptionServices";
 import HashCode from "../../app/use-cases/encryption/HashCode";
 import CompareHash from "../../app/use-cases/encryption/CompareHash";
 import IHashCode from "../../app/interfaces/encryption/IHashCode";
@@ -11,6 +11,6 @@ const encryptionContainer = new Container();
 
 encryptionContainer.bind<IEncriptionServices>(ENCRYPTION_TYPES.IEncryptionServices).to(EncryptionServices)
 encryptionContainer.bind<IHashCode>(ENCRYPTION_TYPES.IHashCode).to(HashCode)
-encryptionContainer.bind<ICompareHash>(ENCRYPTION_TYPES.IHashCompare).to(CompareHash)
+encryptionContainer.bind<ICompareHash>(ENCRYPTION_TYPES.ICompareHash).to(CompareHash)
 
 export default encryptionContainer

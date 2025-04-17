@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import IEncriptionServices from "./interfaces/IEncryptionServices";
+import IEncriptionServices from "../interfaces/IEncryptionServices";
 import bcrypt from 'bcrypt';
 
 @injectable()

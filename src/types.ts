@@ -1,3 +1,4 @@
+
 export const UTIL_TYPES = {
   IIdGenerator: Symbol.for('IIdGenerator'),
 }
@@ -67,6 +68,14 @@ export const ORDER_TYPES = {
 
 export const ENCRYPTION_TYPES = {
   IEncryptionServices: Symbol.for('IEncryptionServices'),
-  IHashCompare: Symbol.for('IHashCompare'),
+  ICompareHash: Symbol.for('ICompareHash'),
   IHashCode: Symbol.for('IHashCode')
+}
+
+export const AUTH_TYPES = {
+  ILocalLogin: Symbol.for('ILocalLogin'),
+  ILocalStrategyServices: Symbol.for('ILocalStrategyServices'),
+  IAuthAdapter: Symbol.for('IAuthAdapter'),
+  IAuthController: Symbol.for('IAuthController'),
+  PassportConfig: Symbol.for('PassportConfig')
 }

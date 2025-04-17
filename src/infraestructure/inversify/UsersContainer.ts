@@ -28,8 +28,10 @@ import UserMapper from "../mappers/UserMapper";
 import UuidGenerator from "../services/utils/UuidGenerator";
 import IHashCode from "../../app/interfaces/encryption/IHashCode";
 import HashCode from "../../app/use-cases/encryption/HashCode";
-import EncryptionServices from "../services/EncryptionServices";
+import EncryptionServices from "../services/encryption/EncryptionServices";
 import IEncriptionServices from "../services/interfaces/IEncryptionServices";
+import ICompareHash from "../../app/interfaces/encryption/ICompareHash";
+import CompareHash from "../../app/use-cases/encryption/CompareHash";
 
 const userContainer = new Container();
 
@@ -48,5 +50,7 @@ userContainer.bind<IDeleteUser>(USER_TYPES.IDeleteUser).to(DeleteUser)
 userContainer.bind<IUserController>(USER_TYPES.IUserController).to(UserController)
 userContainer.bind<IEncriptionServices>(ENCRYPTION_TYPES.IEncryptionServices).to(EncryptionServices)
 userContainer.bind<IHashCode>(ENCRYPTION_TYPES.IHashCode).to(HashCode)
+userContainer.bind<ICompareHash>(ENCRYPTION_TYPES.ICompareHash).to(CompareHash)
+
 
 export default userContainer
