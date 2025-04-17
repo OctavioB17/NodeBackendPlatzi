@@ -30,6 +30,13 @@ export default class CreateUser implements ICreateUser {
         })
       }
 
+      if (!userDto.password) {
+        throw new BoomError({
+          message: `Password required`,
+          type: ErrorType.VALIDATION_ERROR,
+          statusCode: 400
+        })
+      }
     const newUser = {
       ...userDto,
       id: this.idGenerator.generate(),
