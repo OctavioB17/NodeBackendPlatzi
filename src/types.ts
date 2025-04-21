@@ -75,6 +75,7 @@ export const ENCRYPTION_TYPES = {
 export const AUTH_TYPES = {
   ILocalLogin: Symbol.for('ILocalLogin'),
   ILocalStrategyServices: Symbol.for('ILocalStrategyServices'),
+  IJwtStrategyServices: Symbol.for('IJwtStrategyServices'),
   IAuthAdapter: Symbol.for('IAuthAdapter'),
   IAuthController: Symbol.for('IAuthController'),
   PassportConfig: Symbol.for('PassportConfig'),

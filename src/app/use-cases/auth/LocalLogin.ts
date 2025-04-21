@@ -1,15 +1,14 @@
 import { inject, injectable } from "inversify";
-import ILocalStrategy from "../../interfaces/auth/strategies/ILocalLogin";
-import { USER_TYPES, ENCRYPTION_TYPES, AUTH_TYPES } from "../../../types";
-import ICompareHash from "../../interfaces/encryption/ICompareHash";
+import { AUTH_TYPES, ENCRYPTION_TYPES, USER_TYPES } from "../../../types";
 import { IFindUserByEmail } from "../../interfaces/users/get/IFindUserByEmail";
 import { BoomError } from "../../../domain/entities/DomainError";
 import { ErrorType } from "../../../domain/interfaces/Error";
-import User from "../../../domain/entities/Users";
+import ILocalLogin from "../../interfaces/auth/strategies/ILocalLogin";
 import ISignToken from "../../interfaces/auth/ISignToken";
+import ICompareHash from "../../interfaces/encryption/ICompareHash";
 
 @injectable()
-export default class LocalStrategy implements ILocalStrategy {
+export default class LocalLogin implements ILocalLogin {
   private findUserByMail: IFindUserByEmail;
   private hashCompare: ICompareHash;
   private signToken: ISignToken;

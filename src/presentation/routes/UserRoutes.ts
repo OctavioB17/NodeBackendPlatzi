@@ -5,6 +5,7 @@ import { validatorHandler } from "../../infraestructure/middlewares/validatorHan
 import IUserController from "../controllers/interfaces/IUserController";
 import { USER_TYPES } from "../../types";
 import { paginationSchema } from "../../infraestructure/validators/QuerySchema";
+import passport from "passport";
 
 
 const router = Router();
@@ -17,7 +18,7 @@ router.get("/find/id/:id", validatorHandler(getUserSchema, 'params'), (req, res,
 router.get("/find/no-password/id/:id", validatorHandler(getUserSchema, 'params'), (req, res, next) => userController.getUserByIdNoPassword(req, res, next));
 router.get("/find/email/:email", validatorHandler(getUserSchemaEmail, 'params'), (req, res, next) => userController.findUserByMail(req, res, next));
 router.get("/find/email/no-password/:email", validatorHandler(getUserSchemaEmail, 'params'), (req, res, next) => userController.findUserByMailNoPassword(req, res, next));
-router.patch('/change/password', validatorHandler(updatePasswordUserSchema, 'body'), (req, res, next) => userController.changeUserPassword(req, res, next))
-router.delete('/delete/:id', validatorHandler(updateUserSchema, 'params'), (req, res, next) => userController.userDelete(req, res, next))
+router.patch('/change/password', passport.authenticate('jwt', { session: false }), validatorHandler(updatePasswordUserSchema, 'body'), (req, res, next) => userController.changeUserPassword(req, res, next))
+router.delete('/delete/:id', passport.authenticate('jwt', { session: false }), validatorHandler(updateUserSchema, 'params'), (req, res, next) => userController.userDelete(req, res, next))
 
 export default router;

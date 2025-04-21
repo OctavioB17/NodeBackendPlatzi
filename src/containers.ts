@@ -49,11 +49,12 @@ import IEncriptionServices from './infraestructure/services/interfaces/IEncrypti
 import ICompareHash from './app/interfaces/encryption/ICompareHash'
 import authContainer from './infraestructure/inversify/AuthContainer'
 import ILocalLogin from './app/interfaces/auth/strategies/ILocalLogin'
-import ILocalStrategyServices from './infraestructure/services/interfaces/ILocalStrategyServices'
+import ILocalStrategyServices from './infraestructure/services/interfaces/auth/ILocalStrategyServices'
 import IAuthController from './presentation/controllers/interfaces/IAuthController'
 import PassportConfig from './infraestructure/config/passportConfig'
 import ISignToken from './app/interfaces/auth/ISignToken'
 import IJwtServices from './infraestructure/services/interfaces/IJwtServices'
+import IJwtStrategyServices from './infraestructure/services/interfaces/auth/IJwtStrategyServices'
 
 export function initContainers() {
   authContainer.get<PassportConfig>(AUTH_TYPES.PassportConfig)
@@ -107,4 +108,5 @@ export function initContainers() {
   authContainer.get<ILocalStrategyServices>(AUTH_TYPES.ILocalStrategyServices)
   authContainer.get<IJwtServices>(AUTH_TYPES.IJwtServices)
   authContainer.get<ISignToken>(AUTH_TYPES.ISignToken)
+  authContainer.get<IJwtStrategyServices>(AUTH_TYPES.IJwtStrategyServices)
 }

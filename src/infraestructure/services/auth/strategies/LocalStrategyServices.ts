@@ -1,5 +1,5 @@
 import { Strategy } from "passport-local";
-import ILocalStrategyServices from "../../interfaces/ILocalStrategyServices";
+import ILocalStrategyServices from "../../interfaces/auth/ILocalStrategyServices";
 import ILocalLogin from "../../../../app/interfaces/auth/strategies/ILocalLogin";
 import { AUTH_TYPES } from "../../../../types";
 import { inject, injectable } from "inversify";

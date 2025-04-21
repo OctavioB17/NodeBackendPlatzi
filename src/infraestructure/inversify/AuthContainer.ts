@@ -5,7 +5,7 @@ import AuthController from "../../presentation/controllers/AuthController";
 import ILocalLogin from "../../app/interfaces/auth/strategies/ILocalLogin";
 import LocalLogin from "../../app/use-cases/auth/LocalLogin";
 import LocalStrategyServices from "../services/auth/strategies/LocalStrategyServices";
-import ILocalStrategyServices from "../services/interfaces/ILocalStrategyServices";
+import ILocalStrategyServices from "../services/interfaces/auth/ILocalStrategyServices";
 import { IFindUserByEmail } from "../../app/interfaces/users/get/IFindUserByEmail";
 import FindUserByMail from "../../app/use-cases/users/get/FindUserByMail";
 import { IUserRepository } from "../../domain/repositories/IUsersRepository";
@@ -23,6 +23,8 @@ import ISignToken from "../../app/interfaces/auth/ISignToken";
 import SignToken from "../../app/use-cases/auth/SignToken";
 import IJwtServices from "../services/interfaces/IJwtServices";
 import JwtServices from "../services/auth/jwt/JwtServices";
+import JwtStrategyServices from "../services/auth/strategies/JwtStrategyServices";
+import IJwtStrategyServices from "../services/interfaces/auth/IJwtStrategyServices";
 
 const authContainer = new Container();
 
@@ -38,5 +40,6 @@ authContainer.bind<IUserRepository>(USER_TYPES.IUserRepository).to(UserRepositor
 authContainer.bind<IFindUserByEmail>(USER_TYPES.IFindUserByEmail).to(FindUserByMail)
 authContainer.bind<IJwtServices>(AUTH_TYPES.IJwtServices).to(JwtServices)
 authContainer.bind<ISignToken>(AUTH_TYPES.ISignToken).to(SignToken)
+authContainer.bind<IJwtStrategyServices>(AUTH_TYPES.IJwtStrategyServices).to(JwtStrategyServices)
 
 export default authContainer
