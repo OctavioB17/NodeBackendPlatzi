@@ -15,9 +15,5 @@ export const obtainIp = (): string | null => {
 
 export const checkRole = (userRole: keyof UserRoles, requiredRole: keyof UserRoles): boolean => {
   const accessibleRoles = RoleHierarchy[userRole];
-  if (!accessibleRoles) {
-    console.log(`Role "${userRole}" is not defined in RoleHierarchy`);
-  }
-
   return accessibleRoles.includes(requiredRole);
 };
