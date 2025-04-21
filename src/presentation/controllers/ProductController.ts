@@ -15,6 +15,7 @@ import IDeleteProduct from "../../app/interfaces/products/delete/IDeleteProduct"
 import ICreateProduct from "../../app/interfaces/products/post/ICreateProduct";
 import IProductMapper from "../../infraestructure/mappers/interfaces/IProductMapper";
 import Product from "../../domain/entities/Products";
+import UserJwtPayload from "../../infraestructure/dtos/users/UserJwtPayloadDTO";
 
 export default class ProductController implements IProductController {
 
@@ -33,8 +34,9 @@ export default class ProductController implements IProductController {
 
   async createProductController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const productData = req.body;
+    const userData = req.user as UserJwtPayload
     try {
-      const createdProduct = await this.createProduct.execute(productData);
+      const createdProduct = await this.createProduct.execute(productData, userData.id);
       if (createdProduct) {
         res.status(201).json({ message: 'Product created' });
       } else {

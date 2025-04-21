@@ -16,11 +16,12 @@ export default class CreateProduct implements ICreateProduct {
     @inject(PRODUCT_TYPES.IProductMapper) private productMapper: IProductMapper
   ) {}
 
-  async execute(productDto: ProductDTO): Promise<boolean | null> {
+  async execute(productDto: ProductDTO, userId: string): Promise<boolean | null> {
     try {
       const newProduct: ProductDTO = {
         ...productDto,
         id: this.idGenerator.generate(),
+        userId: userId
       }
 
       const dtoToModel = await this.productMapper.dtoToProduct(newProduct)

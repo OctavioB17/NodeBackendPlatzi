@@ -46,8 +46,9 @@ export default class OrdersController implements IOrdersControllers {
 
   async createOrderController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const orderData = req.body
+    const userData = req.user as UserJwtPayload
     try {
-      const execute = await this.createOrder.execute(orderData)
+      const execute = await this.createOrder.execute(orderData, userData.id)
       if (!execute) {
         throw new BoomError({
           message: 'Failed to create order',

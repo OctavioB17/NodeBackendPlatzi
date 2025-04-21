@@ -24,8 +24,6 @@ const orderHasProducts = Joi.array().items(
 
 
 const createOrderOnlySchema = Joi.object({
-  userId: userId.required(),
-  status: status.required(),
   paymentMethod: paymentMethod.required(),
 });
 

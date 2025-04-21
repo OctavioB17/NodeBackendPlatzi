@@ -27,7 +27,7 @@ export default class CreateOrder implements ICreateOrder {
   ) {}
 
 
-  async execute(orderData: CreateOrderRequest): Promise<boolean | null> {
+  async execute(orderData: CreateOrderRequest, userId: string): Promise<boolean | null> {
     try {
       const orderId = this.idGenerator.generate();
       const totalPriceProducts = await this.calculateTotalPrices.calculate(orderData.orderHasProducts)
@@ -48,7 +48,9 @@ export default class CreateOrder implements ICreateOrder {
         ...orderData.order,
         totalPrice: totalPricesPlusTaxes,
         id: orderId,
-        taxes: taxes
+        taxes: taxes,
+        userId: userId,
+        status: 'PENDING'
       };
 
       const dtoToOrder = this.orderMapper.dtoToOrder(newOrder)
