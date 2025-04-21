@@ -11,6 +11,7 @@ import ICreateOrder from "../../app/interfaces/orders/post/ICreateOrder";
 import { BoomError } from "../../domain/entities/DomainError";
 import { ErrorType } from "../../domain/interfaces/Error";
 import IAddProductsToOrder from "../../app/interfaces/orders/post/IAddProductsToOrder";
+import UserJwtPayload from "../../infraestructure/dtos/users/UserJwtPayloadDTO";
 
 export default class OrdersController implements IOrdersControllers {
 
@@ -23,6 +24,25 @@ export default class OrdersController implements IOrdersControllers {
     @inject(ORDER_TYPES.IUpdateStatus) private updateStatus: IUpdateStatus,
     @inject(ORDER_TYPES.IAddProductsToOrders) private addProductsToOrders: IAddProductsToOrder
   ) {}
+
+  async findUserOrdersController(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const userData = req.user as UserJwtPayload
+    const { limit, offset } = req.query
+    try {
+      const orders = await this.findByUserId.execute(userData.id, Number(limit), Number(offset))
+      if (!orders) {
+        throw new BoomError({
+          message: 'Failed to find order',
+          type: ErrorType.NOT_FOUND,
+          statusCode: 500
+        });
+      }
+
+      res.status(200).json(orders)
+    } catch (error) {
+      next(error)
+    }
+  }
 
   async createOrderController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const orderData = req.body

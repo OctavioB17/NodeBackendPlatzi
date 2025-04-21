@@ -17,15 +17,20 @@ export default class CalculateTotalProductPrices implements ICalculateTotalProdu
 
   async calculate(products: OrderHasProducts[] | OrderHasProductsDTO[]): Promise<number | null> {
     try {
-      const productIds = products.map(orderProduct => orderProduct instanceof OrderHasProducts ? orderProduct.getProductId() : orderProduct.productId);
-      const productPromises = productIds.map(id => this.findProductById.execute(id));
-      const productsData = await Promise.all(productPromises);
+      let sum = 0
 
-      const productSum = productsData.reduce((sum, product) => {
-        return sum + (product?.price || 0);
-      }, 0);
+      for (const product of products) {
+        const productId = product instanceof OrderHasProducts ? product.getProductId() : product.productId
+        const productQuantity = product instanceof OrderHasProducts ? product.getQuantity() : product.quantity
+        const productItem = await this.findProductById.execute(productId);
+        if (!productItem) {
+          return null
+        }
+        const productPriceXQuantity = productItem?.price * productQuantity
+        sum += productPriceXQuantity
+      }
 
-      return productSum
+      return sum
     } catch (error) {
       return null
     }

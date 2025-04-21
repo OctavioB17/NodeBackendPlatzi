@@ -53,7 +53,7 @@ export default class CreateOrder implements ICreateOrder {
 
       const dtoToOrder = this.orderMapper.dtoToOrder(newOrder)
 
-      const create = await this.orderRepository.createOrder(dtoToOrder)
+       const create = await this.orderRepository.createOrder(dtoToOrder)
       if (create) {
         const orderProducts = orderData.orderHasProducts.map(orderProduct => {
           return {
