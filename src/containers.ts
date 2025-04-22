@@ -1,5 +1,5 @@
 import { ICreateUser } from './app/interfaces/users/post/ICreateUser'
-import {AUTH_TYPES, CATEGORY_TYPES, ENCRYPTION_TYPES, ORDER_TYPES, PRODUCT_TYPES, USER_TYPES, UTIL_TYPES} from './types'
+import {AUTH_TYPES, CATEGORY_TYPES, ENCRYPTION_TYPES, MAIL_TYPES, ORDER_TYPES, PRODUCT_TYPES, USER_TYPES, UTIL_TYPES} from './types'
 import { IIdGenerator } from './infraestructure/services/interfaces/IIdGenerator'
 import { IUserRepository } from './domain/repositories/IUsersRepository'
 import { IFindAllUsers } from './app/interfaces/users/get/IFindAll'
@@ -51,62 +51,73 @@ import authContainer from './infraestructure/inversify/AuthContainer'
 import ILocalLogin from './app/interfaces/auth/strategies/ILocalLogin'
 import ILocalStrategyServices from './infraestructure/services/interfaces/auth/ILocalStrategyServices'
 import IAuthController from './presentation/controllers/interfaces/IAuthController'
-import PassportConfig from './infraestructure/config/passportConfig'
+import PassportConfig from './infraestructure/config/PassportConfig'
 import ISignToken from './app/interfaces/auth/ISignToken'
 import IJwtServices from './infraestructure/services/interfaces/IJwtServices'
 import IJwtStrategyServices from './infraestructure/services/interfaces/auth/IJwtStrategyServices'
+import emailContainer from './infraestructure/inversify/EmailContainer'
+import INodeMailer from './infraestructure/config/interfaces/INodeMailer'
+import INodeMailerServices from './infraestructure/services/interfaces/INodeMailerServices'
+import ISendConfirmationEmail from './app/interfaces/users/ISendConfirmationEmail'
+import ISendMail from './app/interfaces/mail/ISendMail'
+import IChangeRole from './app/interfaces/users/patch/IChangeRole'
 
 export function initContainers() {
-  authContainer.get<PassportConfig>(AUTH_TYPES.PassportConfig)
-  utilContainer.get<IIdGenerator>(UTIL_TYPES.IIdGenerator)
-  userContainer.get<ICreateUser>(USER_TYPES.ICreateUser)
-  userContainer.get<IUserRepository>(USER_TYPES.IUserRepository)
-  userContainer.get<IFindAllUsers>(USER_TYPES.IFindAll)
-  userContainer.get<IFindAllUsersNoPassword>(USER_TYPES.IFindAllNoPassword)
-  userContainer.get<IFindUserByIdNoPassword>(USER_TYPES.IFindUserByIdNoPassword)
-  userContainer.get<IFindUserByEmail>(USER_TYPES.IFindUserByEmail)
-  userContainer.get<IFindUserByEmailNoPassword>(USER_TYPES.IFindUserByEmailNoPassword)
-  userContainer.get<IChangePassword>(USER_TYPES.IChangePassword)
-  userContainer.get<IDeleteUser>(USER_TYPES.IDeleteUser)
-  userContainer.get<IUserController>(USER_TYPES.IUserController)
-  productContainer.get<IProductRepository>(PRODUCT_TYPES.IProductRepository)
-  productContainer.get<IProductController>(PRODUCT_TYPES.IProductController)
-  productContainer.get<ICreateProduct>(PRODUCT_TYPES.ICreateProduct)
-  productContainer.get<IFindAllProductByCategory>(PRODUCT_TYPES.IFindAllProductByCategory)
-  productContainer.get<IFindAllProductsByUser>(PRODUCT_TYPES.IFindAllProductsByUser)
-  productContainer.get<IFindProductById>(PRODUCT_TYPES.IFindProductById)
-  productContainer.get<IFindProductByName>(PRODUCT_TYPES.IFindProductByName)
-  productContainer.get<IToggleProductPause>(PRODUCT_TYPES.IToggleProductPause)
-  productContainer.get<IUpdateProduct>(PRODUCT_TYPES.IUpdateProduct)
-  categoriesContainer.get<ICategoriesRepository>(CATEGORY_TYPES.ICategoriesRepository)
-  categoriesContainer.get<ICategoriesController>(CATEGORY_TYPES.ICategoriesController)
-  categoriesContainer.get<ICreateCategory>(CATEGORY_TYPES.ICreateCategory)
-  categoriesContainer.get<IDeleteCategory>(CATEGORY_TYPES.IDeleteCategory)
-  categoriesContainer.get<IGetAllCategories>(CATEGORY_TYPES.IGetAllCategories)
-  categoriesContainer.get<IGetCategoryById>(CATEGORY_TYPES.IGetCategoryById)
-  categoriesContainer.get<IUpdateCategory>(CATEGORY_TYPES.IUpdateCategory)
-  ordersContainer.get<IOrdersMapper>(ORDER_TYPES.IOrdersMapper)
-  ordersContainer.get<IFindOrderById>(ORDER_TYPES.IFindOrderById)
-  ordersContainer.get<ICreateOrder>(ORDER_TYPES.ICreateOrder)
-  ordersContainer.get<IAddProductsToOrder>(ORDER_TYPES.IAddProductsToOrders)
-  ordersContainer.get<IDeleteOrder>(ORDER_TYPES.IDeleteOrder)
-  ordersContainer.get<IUpdateOrder>(ORDER_TYPES.IUpdateOrder)
-  ordersContainer.get<IFindAllOrdersByUserId>(ORDER_TYPES.IFindAllOrdersByUserId)
-  ordersContainer.get<IUpdateStatus>(ORDER_TYPES.IUpdateStatus)
-  ordersContainer.get<IOrdersControllers>(ORDER_TYPES.IOrdersController)
-  ordersContainer.get<ITaxCalculator>(ORDER_TYPES.IvaCalculator)
-  ordersContainer.get<ITaxCalculator>(ORDER_TYPES.SaleTaxCalculator)
-  ordersContainer.get<ITaxCalculator>(ORDER_TYPES.SpecificProductTaxCalculator)
-  ordersContainer.get<ITaxCalculator>(ORDER_TYPES.CalculateAllTaxes)
-  ordersContainer.get<IAddTaxesObject>(ORDER_TYPES.IAddTaxesObject)
-  ordersContainer.get<ICalculateTotalProductPrices>(ORDER_TYPES.ICalculateTotalProductPrices)
-  encryptionContainer.get<IEncriptionServices>(ENCRYPTION_TYPES.IEncryptionServices)
-  encryptionContainer.get<IHashCode>(ENCRYPTION_TYPES.IHashCode)
-  encryptionContainer.get<ICompareHash>(ENCRYPTION_TYPES.ICompareHash)
-  authContainer.get<IAuthController>(AUTH_TYPES.IAuthController)
-  authContainer.get<ILocalLogin>(AUTH_TYPES.ILocalLogin)
-  authContainer.get<ILocalStrategyServices>(AUTH_TYPES.ILocalStrategyServices)
-  authContainer.get<IJwtServices>(AUTH_TYPES.IJwtServices)
-  authContainer.get<ISignToken>(AUTH_TYPES.ISignToken)
-  authContainer.get<IJwtStrategyServices>(AUTH_TYPES.IJwtStrategyServices)
+  authContainer.get<PassportConfig>(AUTH_TYPES.PassportConfig);
+  utilContainer.get<IIdGenerator>(UTIL_TYPES.IIdGenerator);
+  userContainer.get<ICreateUser>(USER_TYPES.ICreateUser);
+  userContainer.get<IUserRepository>(USER_TYPES.IUserRepository);
+  userContainer.get<IFindAllUsers>(USER_TYPES.IFindAll);
+  userContainer.get<IFindAllUsersNoPassword>(USER_TYPES.IFindAllNoPassword);
+  userContainer.get<IFindUserByIdNoPassword>(USER_TYPES.IFindUserByIdNoPassword);
+  userContainer.get<IFindUserByEmail>(USER_TYPES.IFindUserByEmail);
+  userContainer.get<IFindUserByEmailNoPassword>(USER_TYPES.IFindUserByEmailNoPassword);
+  userContainer.get<IChangePassword>(USER_TYPES.IChangePassword);
+  userContainer.get<IChangeRole>(USER_TYPES.IChangeRole);
+  userContainer.get<IDeleteUser>(USER_TYPES.IDeleteUser);
+  userContainer.get<IUserController>(USER_TYPES.IUserController);
+  productContainer.get<IProductRepository>(PRODUCT_TYPES.IProductRepository);
+  productContainer.get<IProductController>(PRODUCT_TYPES.IProductController);
+  productContainer.get<ICreateProduct>(PRODUCT_TYPES.ICreateProduct);
+  productContainer.get<IFindAllProductByCategory>(PRODUCT_TYPES.IFindAllProductByCategory);
+  productContainer.get<IFindAllProductsByUser>(PRODUCT_TYPES.IFindAllProductsByUser);
+  productContainer.get<IFindProductById>(PRODUCT_TYPES.IFindProductById);
+  productContainer.get<IFindProductByName>(PRODUCT_TYPES.IFindProductByName);
+  productContainer.get<IToggleProductPause>(PRODUCT_TYPES.IToggleProductPause);
+  productContainer.get<IUpdateProduct>(PRODUCT_TYPES.IUpdateProduct);
+  categoriesContainer.get<ICategoriesRepository>(CATEGORY_TYPES.ICategoriesRepository);
+  categoriesContainer.get<ICategoriesController>(CATEGORY_TYPES.ICategoriesController);
+  categoriesContainer.get<ICreateCategory>(CATEGORY_TYPES.ICreateCategory);
+  categoriesContainer.get<IDeleteCategory>(CATEGORY_TYPES.IDeleteCategory);
+  categoriesContainer.get<IGetAllCategories>(CATEGORY_TYPES.IGetAllCategories);
+  categoriesContainer.get<IGetCategoryById>(CATEGORY_TYPES.IGetCategoryById);
+  categoriesContainer.get<IUpdateCategory>(CATEGORY_TYPES.IUpdateCategory);
+  ordersContainer.get<IOrdersMapper>(ORDER_TYPES.IOrdersMapper);
+  ordersContainer.get<IFindOrderById>(ORDER_TYPES.IFindOrderById);
+  ordersContainer.get<ICreateOrder>(ORDER_TYPES.ICreateOrder);
+  ordersContainer.get<IAddProductsToOrder>(ORDER_TYPES.IAddProductsToOrders);
+  ordersContainer.get<IDeleteOrder>(ORDER_TYPES.IDeleteOrder);
+  ordersContainer.get<IUpdateOrder>(ORDER_TYPES.IUpdateOrder);
+  ordersContainer.get<IFindAllOrdersByUserId>(ORDER_TYPES.IFindAllOrdersByUserId);
+  ordersContainer.get<IUpdateStatus>(ORDER_TYPES.IUpdateStatus);
+  ordersContainer.get<IOrdersControllers>(ORDER_TYPES.IOrdersController);
+  ordersContainer.get<ITaxCalculator>(ORDER_TYPES.IvaCalculator);
+  ordersContainer.get<ITaxCalculator>(ORDER_TYPES.SaleTaxCalculator);
+  ordersContainer.get<ITaxCalculator>(ORDER_TYPES.SpecificProductTaxCalculator);
+  ordersContainer.get<ITaxCalculator>(ORDER_TYPES.CalculateAllTaxes);
+  ordersContainer.get<IAddTaxesObject>(ORDER_TYPES.IAddTaxesObject);
+  ordersContainer.get<ICalculateTotalProductPrices>(ORDER_TYPES.ICalculateTotalProductPrices);
+  encryptionContainer.get<IEncriptionServices>(ENCRYPTION_TYPES.IEncryptionServices);
+  encryptionContainer.get<IHashCode>(ENCRYPTION_TYPES.IHashCode);
+  encryptionContainer.get<ICompareHash>(ENCRYPTION_TYPES.ICompareHash);
+  authContainer.get<IAuthController>(AUTH_TYPES.IAuthController);
+  authContainer.get<ILocalLogin>(AUTH_TYPES.ILocalLogin);
+  authContainer.get<ILocalStrategyServices>(AUTH_TYPES.ILocalStrategyServices);
+  authContainer.get<IJwtServices>(AUTH_TYPES.IJwtServices);
+  authContainer.get<ISignToken>(AUTH_TYPES.ISignToken);
+  authContainer.get<IJwtStrategyServices>(AUTH_TYPES.IJwtStrategyServices);
+  emailContainer.get<INodeMailer>(MAIL_TYPES.INodeMailer);
+  emailContainer.get<INodeMailerServices>(MAIL_TYPES.INodeMailerServices);
+  emailContainer.get<ISendConfirmationEmail>(MAIL_TYPES.ISendConfirmationEmail)
+  emailContainer.get<ISendMail>(MAIL_TYPES.ISendMail)
 }

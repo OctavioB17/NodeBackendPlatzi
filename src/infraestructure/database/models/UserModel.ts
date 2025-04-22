@@ -1,7 +1,7 @@
-import { Table, Column, Model, DataType, ForeignKey, HasMany } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, AllowNull } from 'sequelize-typescript';
 import { IUserModel } from '../../../domain/interfaces/user/IUserModel';
-import ProductModel from './ProductsModel';
-import OrdersModel from './OrdersModel';
+import { USER_TYPES } from '../../../types';
+import { UserRolesEnum } from '../../../domain/interfaces/user/UserRoles';
 
 @Table({ tableName: 'users', timestamps: true })
 export default class UserModel extends Model<UserModel> implements IUserModel {
@@ -17,8 +17,11 @@ export default class UserModel extends Model<UserModel> implements IUserModel {
   @Column({ type: DataType.STRING, allowNull: false, unique: true })
   declare email: string;
 
-  @Column({ type: DataType.STRING, allowNull: false})
+  @Column({ type: DataType.STRING, allowNull: false, defaultValue: UserRolesEnum.USER})
   declare role: string
+
+  @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
+  declare authorized: boolean
 
   @Column({ type: DataType.STRING, allowNull: false })
   declare password: string;

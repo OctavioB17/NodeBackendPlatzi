@@ -1,4 +1,4 @@
-import { inject } from "inversify";
+import { inject, namedConstraint } from "inversify";
 import { ICreateUser } from "../../app/interfaces/users/post/ICreateUser";
 import { Response, Request, NextFunction } from "express";
 import { USER_TYPES } from "../../types";
@@ -15,6 +15,8 @@ import { ErrorType } from "../../domain/interfaces/Error";
 import IUserController from "./interfaces/IUserController";
 import { IFindUserByEmailNoPassword } from "../../app/interfaces/users/get/IFindUserByEmailNoPassword";
 import IUserMapper from "../../infraestructure/mappers/interfaces/IUserMapper";
+import IAuthorizeUser from "../../app/interfaces/users/patch/IAuthorizeUser";
+import IChangeRole from "../../app/interfaces/users/patch/IChangeRole";
 export default class UserController implements IUserController {
   constructor(
     @inject(USER_TYPES.ICreateUser) private createUser: ICreateUser,
@@ -26,8 +28,47 @@ export default class UserController implements IUserController {
     @inject(USER_TYPES.IFindUserByEmailNoPassword) private findUserByEmailNoPassword: IFindUserByEmailNoPassword,
     @inject(USER_TYPES.IDeleteUser) private deleteUser: IDeleteUser,
     @inject(USER_TYPES.IChangePassword) private changePassword: IChangePassword,
+    @inject(USER_TYPES.IChangeRole) private changeRole: IChangeRole,
+    @inject(USER_TYPES.IAuthorizeUser) private authorizeUser: IAuthorizeUser,
     @inject(USER_TYPES.IUserMapper) private userMapper: IUserMapper
   ) {}
+
+  async changeRoleController(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { id } = req.params
+    const role = req.body
+    try {
+      const userUpdate = await this.changeRole.execute(id, role.role)
+      if (userUpdate) {
+        res.status(200).json({ message: "User role changed" })
+      } else {
+        throw new BoomError({
+          message: 'Can not confirm user',
+          type: ErrorType.BAD_REQUEST,
+          statusCode: 400
+        });
+      }
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async authorizeUserController(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { id } = req.params
+    try {
+      const userUpdate = await this.authorizeUser.execute(id)
+      if (userUpdate) {
+        res.status(200).json({ message: "User authorized" })
+      } else {
+        throw new BoomError({
+          message: 'Can not confirm user',
+          type: ErrorType.BAD_REQUEST,
+          statusCode: 400
+        });
+      }
+    } catch (error) {
+      next(error)
+    }
+  }
 
   async register(req: Request, res: Response, next: NextFunction) {
     try {

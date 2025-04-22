@@ -4,5 +4,6 @@ export interface IUserModel {
   surname: string,
   email: string;
   role: string;
+  authorized: boolean
   password: string;
 }

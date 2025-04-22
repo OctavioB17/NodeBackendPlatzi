@@ -1,11 +1,10 @@
 import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../domain/repositories/IUsersRepository";
 import UserModel from "../database/models/UserModel";
-import UserMapper from "../mappers/UserMapper";
-import UserDTO from "../dtos/users/UserDTO";
 import IUserMapper from "../mappers/interfaces/IUserMapper";
 import { USER_TYPES } from "../../types";
 import User from "../../domain/entities/Users";
+import { UserRolesEnum } from "../../domain/interfaces/user/UserRoles";
 
 @injectable()
 export default class UserRepository implements IUserRepository {
@@ -15,7 +14,6 @@ export default class UserRepository implements IUserRepository {
   constructor(@inject(USER_TYPES.IUserMapper) userMapper: IUserMapper) {
     this.userMapper = userMapper
   }
-
   // Post - User creation
 
   async createUser(user: User): Promise<boolean> {
@@ -70,6 +68,20 @@ export default class UserRepository implements IUserRepository {
     }
   }
 
+  async findByIdSystem(id: string): Promise<UserModel | null> {
+    try {
+      const user = await UserModel.findByPk(id)
+      if (!user) {
+        throw new Error('User not found')
+      }
+
+      return user
+    } catch (error) {
+      throw new Error('Failed to find user')
+    }
+  }
+
+
   // Patch - Update user
   async changePassword(password: string, email: string): Promise<User | null> {
     try {
@@ -88,6 +100,43 @@ export default class UserRepository implements IUserRepository {
       throw new Error(`Error changing password: ${error}`)
     }
   }
+
+
+  async markUserAsAuthorized(id: string): Promise<User> {
+    try {
+      const user = await this.findByIdSystem(id)
+      if (!user) {
+        throw new Error('User not found')
+      }
+
+      const update = await user.update({
+        authorized: true
+      })
+
+      return this.userMapper.modelToUser(update.dataValues)
+    } catch (error) {
+      throw new Error('Failed to authorize')
+    }
+  }
+
+  async changeUserRole(id: string, newRole: keyof typeof UserRolesEnum): Promise<User> {
+    try {
+      const user = await this.findByIdSystem(id);
+
+      if (!user) {
+        throw new Error('User not found')
+      }
+
+      const userUpdate = await user.update({
+        role: newRole
+      })
+
+      return this.userMapper.modelToUser(userUpdate.dataValues)
+    } catch (error) {
+      throw new Error('Failed to change role')
+    }
+  }
+
 
   // Delete - Delete user
   async deleteUser(id: string): Promise<boolean> {

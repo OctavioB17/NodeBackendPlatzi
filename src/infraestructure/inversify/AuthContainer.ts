@@ -18,7 +18,7 @@ import EncryptionServices from "../services/encryption/EncryptionServices";
 import IEncriptionServices from "../services/interfaces/IEncryptionServices";
 import ICompareHash from "../../app/interfaces/encryption/ICompareHash";
 import CompareHash from "../../app/use-cases/encryption/CompareHash";
-import PassportConfig from "../config/passportConfig";
+import PassportConfig from "../config/PassportConfig";
 import ISignToken from "../../app/interfaces/auth/ISignToken";
 import SignToken from "../../app/use-cases/auth/SignToken";
 import IJwtServices from "../services/interfaces/IJwtServices";

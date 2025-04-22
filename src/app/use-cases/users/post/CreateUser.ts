@@ -1,13 +1,14 @@
 import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../../../domain/repositories/IUsersRepository";
 import { IIdGenerator } from "../../../../infraestructure/services/interfaces/IIdGenerator";
-import {ENCRYPTION_TYPES, USER_TYPES, UTIL_TYPES} from "../../../../types";
+import {ENCRYPTION_TYPES, MAIL_TYPES, USER_TYPES, UTIL_TYPES} from "../../../../types";
 import { ICreateUser } from "../../../interfaces/users/post/ICreateUser";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
 import UserDTO from "../../../../infraestructure/dtos/users/UserDTO";
 import IHashCode from "../../../interfaces/encryption/IHashCode";
+import ISendConfirmationEmail from "../../../interfaces/users/ISendConfirmationEmail";
 
 
 @injectable()
@@ -16,7 +17,8 @@ export default class CreateUser implements ICreateUser {
     @inject(USER_TYPES.IUserRepository) private userRepository: IUserRepository,
     @inject(UTIL_TYPES.IIdGenerator) private idGenerator: IIdGenerator,
     @inject(USER_TYPES.IUserMapper) private userMapper: IUserMapper,
-    @inject(ENCRYPTION_TYPES.IHashCode) private hashCode: IHashCode
+    @inject(ENCRYPTION_TYPES.IHashCode) private hashCode: IHashCode,
+    @inject(MAIL_TYPES.ISendConfirmationEmail) private sendConfirmationMail: ISendConfirmationEmail
   ) {}
 
   async execute(userDto: UserDTO): Promise<boolean> {
@@ -45,6 +47,11 @@ export default class CreateUser implements ICreateUser {
 
     const user = this.userMapper.dtoToUser(newUser)
     const userCreation = await this.userRepository.createUser(user);
+
+    if (userCreation) {
+      await this.sendConfirmationMail.execute(user)
+    }
+
     return !!userCreation
     } catch (error) {
         if (error instanceof BoomError) {

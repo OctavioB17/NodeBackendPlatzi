@@ -8,7 +8,6 @@ import { corsConfig } from './infraestructure/config/server/corsConfig';
 import { initContainers } from './containers';
 import passport from 'passport';
 
-
 const app = express()
 app.use(express.json())
 app.use(corsConfig)

@@ -17,5 +17,8 @@ export default class UserNoPasswordDTO {
   role!: string
 
   @Exclude()
+  authorized!: boolean
+
+  @Exclude()
   password!: string
 }

@@ -6,7 +6,6 @@ export const createUserSchema = Joi.object({
   surname: Joi.string().min(2).max(100).pattern(/^[^0-9]*$/).required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).pattern(/^(?=.*[A-Z]).*$/).pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).*$/).required(),
-  role: Joi.string().valid(...Object.values(UserRolesEnum)).default(UserRolesEnum.USER)
 })
 
 export const updateUserSchema = Joi.object({
@@ -15,6 +14,9 @@ export const updateUserSchema = Joi.object({
   surname: Joi.string().min(2).max(100).pattern(/^[^0-9]*$/).optional(),
   email: Joi.string().email().optional(),
   password: Joi.string().min(6).pattern(/^(?=.*[A-Z]).*$/).pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).*$/).optional(),
+})
+
+export const updateRoleSchema = Joi.object({
   role: Joi.string().valid(...Object.values(UserRolesEnum)).default(UserRolesEnum.USER).optional()
 })
 

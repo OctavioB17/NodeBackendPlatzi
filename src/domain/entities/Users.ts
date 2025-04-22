@@ -3,6 +3,7 @@ export default class User {
   private name: string;
   private surname: string;
   private password: string;
+  private authorized: boolean;
   private createdAt: Date
   private updatedAt: Date
   private email: string;
@@ -14,6 +15,7 @@ export default class User {
     surname: string,
     password: string,
     email: string,
+    authorized: boolean,
     role: string,
     createdAt: Date,
     updatedAt: Date
@@ -24,8 +26,9 @@ export default class User {
     this.email = email;
     this.password = password;
     this.role = role;
-    this.createdAt = createdAt,
-    this.updatedAt = updatedAt
+    this.authorized = authorized;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
   getEmail(): string {
@@ -50,6 +53,14 @@ export default class User {
 
   getRole(): string {
     return this.role
+  }
+
+  getAuthorized(): boolean {
+    return this.authorized
+  }
+
+  setAuthorized(authorized: boolean): void {
+    this.authorized = authorized
   }
 
   setEmail(email: string): void {

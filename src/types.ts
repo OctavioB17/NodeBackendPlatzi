@@ -15,6 +15,8 @@ export const USER_TYPES = {
   IFindUserByIdNoPassword: Symbol.for('IFindUserByIdNoPassword'),
   IDeleteUser: Symbol.for('IDeleteUser'),
   IChangePassword: Symbol.for('IChangePassword'),
+  IChangeRole: Symbol.for('IChangeRole'),
+  IAuthorizeUser: Symbol.for('IAuthorizeUser'),
   IUserMapper: Symbol.for('IUserMapper')
 };
 
@@ -81,4 +83,11 @@ export const AUTH_TYPES = {
   PassportConfig: Symbol.for('PassportConfig'),
   IJwtServices: Symbol.for('IJwtServices'),
   ISignToken: Symbol.for('ISignToken')
+}
+
+export const MAIL_TYPES = {
+  INodeMailer: Symbol.for('INodeMailer'),
+  INodeMailerServices: Symbol.for('INodeMailerServices'),
+  ISendConfirmationEmail: Symbol.for('ISendConfirmationEmail'),
+  ISendMail: Symbol.for('ISendMail')
 }

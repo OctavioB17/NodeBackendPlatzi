@@ -17,5 +17,8 @@ export default class UserDTO {
   role!: string
 
   @Expose()
+  authorized!: boolean
+
+  @Expose()
   password?: string
 }

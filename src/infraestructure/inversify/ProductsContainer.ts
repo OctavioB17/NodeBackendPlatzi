@@ -26,6 +26,7 @@ import { IIdGenerator } from "../services/interfaces/IIdGenerator";
 import IProductMapper from "../mappers/interfaces/IProductMapper";
 import ProductMapper from "../mappers/ProductMapper";
 import UuidGenerator from "../services/utils/UuidGenerator";
+import IChangeRole from "../../app/interfaces/users/patch/IChangeRole";
 
 const productContainer = new Container();
 

@@ -2,7 +2,7 @@ import { Container } from "inversify";
 import { IUserRepository } from "../../domain/repositories/IUsersRepository";
 import UserRepository from "../repositories/UserRepository";
 import { ICreateUser } from "../../app/interfaces/users/post/ICreateUser";
-import { ENCRYPTION_TYPES, USER_TYPES, UTIL_TYPES } from "../../types";
+import { ENCRYPTION_TYPES, MAIL_TYPES, USER_TYPES, UTIL_TYPES } from "../../types";
 import CreateUser from "../../app/use-cases/users/post/CreateUser";
 import { IFindAllUsersNoPassword } from "../../app/interfaces/users/get/IFindAllUsersNoPassword";
 import { IFindUserById } from "../../app/interfaces/users/get/IFindUserById";
@@ -32,6 +32,18 @@ import EncryptionServices from "../services/encryption/EncryptionServices";
 import IEncriptionServices from "../services/interfaces/IEncryptionServices";
 import ICompareHash from "../../app/interfaces/encryption/ICompareHash";
 import CompareHash from "../../app/use-cases/encryption/CompareHash";
+import IAuthorizeUser from "../../app/interfaces/users/patch/IAuthorizeUser";
+import AuthorizeUser from "../../app/use-cases/users/patch/AuthorizeUser";
+import ISendConfirmationEmail from "../../app/interfaces/users/ISendConfirmationEmail";
+import SendConfirmationEmail from "../../app/use-cases/users/SendConfirmationEmail";
+import ISendMail from "../../app/interfaces/mail/ISendMail";
+import SendMail from "../../app/use-cases/mail/SendMail";
+import INodeMailer from "../config/interfaces/INodeMailer";
+import NodeMailer from "../config/NodeMailer";
+import INodeMailerServices from "../services/interfaces/INodeMailerServices";
+import NodeMailerServices from "../services/mail/NodeMailerServices";
+import IChangeRole from "../../app/interfaces/users/patch/IChangeRole";
+import ChangeRole from "../../app/use-cases/users/patch/ChangeRole";
 
 const userContainer = new Container();
 
@@ -46,11 +58,16 @@ userContainer.bind<IFindUserByIdNoPassword>(USER_TYPES.IFindUserByIdNoPassword).
 userContainer.bind<IFindUserByEmail>(USER_TYPES.IFindUserByEmail).to(FindUserByMail)
 userContainer.bind<IFindUserByEmailNoPassword>(USER_TYPES.IFindUserByEmailNoPassword).to(FindUserByMailNoPassword)
 userContainer.bind<IChangePassword>(USER_TYPES.IChangePassword).to(ChangePassword)
+userContainer.bind<IChangeRole>(USER_TYPES.IChangeRole).to(ChangeRole)
 userContainer.bind<IDeleteUser>(USER_TYPES.IDeleteUser).to(DeleteUser)
 userContainer.bind<IUserController>(USER_TYPES.IUserController).to(UserController)
 userContainer.bind<IEncriptionServices>(ENCRYPTION_TYPES.IEncryptionServices).to(EncryptionServices)
 userContainer.bind<IHashCode>(ENCRYPTION_TYPES.IHashCode).to(HashCode)
 userContainer.bind<ICompareHash>(ENCRYPTION_TYPES.ICompareHash).to(CompareHash)
-
+userContainer.bind<IAuthorizeUser>(USER_TYPES.IAuthorizeUser).to(AuthorizeUser)
+userContainer.bind<ISendConfirmationEmail>(MAIL_TYPES.ISendConfirmationEmail).to(SendConfirmationEmail)
+userContainer.bind<ISendMail>(MAIL_TYPES.ISendMail).to(SendMail)
+userContainer.bind<INodeMailer>(MAIL_TYPES.INodeMailer).to(NodeMailer)
+userContainer.bind<INodeMailerServices>(MAIL_TYPES.INodeMailerServices).to(NodeMailerServices)
 
 export default userContainer

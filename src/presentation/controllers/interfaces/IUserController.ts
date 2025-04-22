@@ -9,5 +9,7 @@ export default interface IUserController {
   findUserByMailNoPassword(req: Request, res: Response, next: NextFunction): Promise<void>;
   getUserByIdNoPassword(req: Request, res: Response, next: NextFunction): Promise<void>;
   changeUserPassword(req: Request, res: Response, next: NextFunction): Promise<void>;
+  changeRoleController(req: Request, res: Response, next: NextFunction): Promise<void>;
   userDelete(req: Request, res: Response, next: NextFunction): Promise<void>;
+  authorizeUserController(req: Request, res: Response, next: NextFunction): Promise<void>;
 }
