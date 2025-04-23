@@ -7,12 +7,13 @@ import IUserMapper from "./interfaces/IUserMapper";
 import User from "../../domain/entities/Users";
 import { IPagination } from "../../domain/interfaces/IPagination";
 import UserJwtPayload from "../dtos/users/UserJwtPayloadDTO";
+import { UserRoles } from "../../domain/interfaces/user/UserRoles";
 export default class UserMapper implements IUserMapper {
 
   UserToUserJwtPayload(user: User): UserJwtPayload {
     return {
       id: user.getId(),
-      role: user.getRole()
+      role: user.getRole() as keyof UserRoles
     }
   }
 
