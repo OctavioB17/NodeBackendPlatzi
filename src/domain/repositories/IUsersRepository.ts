@@ -8,7 +8,7 @@ export interface IUserRepository {
   findByIdSystem(id: string): Promise<UserModel | null>
   findByEmail(email: string): Promise<User | null>;
   findAll(limit: number, offset: number): Promise<User[] | null>;
-  changePassword(password: string, email: string): Promise<User | null>
+  changePassword(newPassword: string, userId: string): Promise<User | null>
   deleteUser(id: string): Promise<boolean>
   markUserAsAuthorized(id: string): Promise<User>,
   changeUserRole(id: string, role: keyof typeof UserRolesEnum): Promise<User>

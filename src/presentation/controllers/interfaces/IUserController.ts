@@ -12,4 +12,5 @@ export default interface IUserController {
   changeRoleController(req: Request, res: Response, next: NextFunction): Promise<void>;
   userDelete(req: Request, res: Response, next: NextFunction): Promise<void>;
   authorizeUserController(req: Request, res: Response, next: NextFunction): Promise<void>;
+  sendPassResetRequestController(req: Request, res: Response, next: NextFunction): Promise<void>
 }

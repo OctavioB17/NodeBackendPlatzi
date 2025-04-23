@@ -8,7 +8,7 @@ import { ErrorType } from "../../../../domain/interfaces/Error";
 import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMapper";
 import UserDTO from "../../../../infraestructure/dtos/users/UserDTO";
 import IHashCode from "../../../interfaces/encryption/IHashCode";
-import ISendConfirmationEmail from "../../../interfaces/users/ISendConfirmationEmail";
+import ISendConfirmationEmail from "../../../interfaces/users/mail/ISendConfirmationEmail";
 
 
 @injectable()

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import container from "../../infraestructure/inversify/UsersContainer";
-import { createUserSchema, updateUserSchema, getUserSchema, updatePasswordUserSchema, getUserSchemaEmail, updateRoleSchema } from "../../infraestructure/validators/UserSchema"
+import { createUserSchema, updateUserSchema, getUserSchema, updatePasswordUserSchema, getUserSchemaEmail, updateRoleSchema, updatePasswordSchema } from "../../infraestructure/validators/UserSchema"
 import { validatorHandler } from "../../infraestructure/middlewares/validatorHandler";
 import IUserController from "../controllers/interfaces/IUserController";
 import { USER_TYPES } from "../../types";
@@ -19,9 +19,9 @@ router.get("/find/id/:id", passport.authenticate('jwt', { session: false }), che
 router.get("/find/no-password/id/:id", passport.authenticate('jwt', { session: false }), checkRoleMiddelware('MODERATOR'), validatorHandler(getUserSchema, 'params'), (req, res, next) => userController.getUserByIdNoPassword(req, res, next));
 router.get("/find/email/:email", validatorHandler(getUserSchemaEmail, 'params'), (req, res, next) => userController.findUserByMail(req, res, next));
 router.get("/find/email/no-password/:email", validatorHandler(getUserSchemaEmail, 'params'), (req, res, next) => userController.findUserByMailNoPassword(req, res, next));
-router.patch('/change/password', passport.authenticate('jwt', { session: false }), checkRoleMiddelware('USER'), validatorHandler(updatePasswordUserSchema, 'body'), (req, res, next) => userController.changeUserPassword(req, res, next))
+router.patch('/change/password', validatorHandler(updatePasswordUserSchema, 'query'), validatorHandler(updatePasswordSchema, 'body'), (req, res, next) => userController.changeUserPassword(req, res, next))
 router.delete('/delete/:id', passport.authenticate('jwt', { session: false }), checkRoleMiddelware('USER'), validatorHandler(updateUserSchema, 'params'), (req, res, next) => userController.userDelete(req, res, next))
 router.get('/authorize-user/:id', validatorHandler(getUserSchema, 'params'), (req, res, next) => userController.authorizeUserController(req, res, next))
 router.patch('/change/role/:id', passport.authenticate('jwt', { session: false }), checkRoleMiddelware('ADMIN'), validatorHandler(getUserSchema, 'params'), validatorHandler(updateRoleSchema, 'body'), (req, res, next) => userController.changeRoleController(req, res, next))
-
+router.post('/change/password-reset-request', validatorHandler(getUserSchemaEmail, 'body'), (req, res, next) => userController.sendPassResetRequestController(req, res, next))
 export default router;

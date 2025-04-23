@@ -1,14 +1,14 @@
 import { inject, injectable } from "inversify";
-import User from "../../../domain/entities/Users";
-import { MAIL_TYPES } from "../../../types";
-import ISendConfirmationEmail from "../../interfaces/users/ISendConfirmationEmail";
-import { BoomError } from "../../../domain/entities/DomainError";
-import { ErrorType } from "../../../domain/interfaces/Error";
+import User from "../../../../domain/entities/Users";
+import { MAIL_TYPES } from "../../../../types";
+import { BoomError } from "../../../../domain/entities/DomainError";
+import { ErrorType } from "../../../../domain/interfaces/Error";
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs'
 import Handlebars from "handlebars";
-import ISendMail from "../../interfaces/mail/ISendMail";
+import ISendMail from "../../../interfaces/mail/ISendMail";
+import ISendConfirmationEmail from "../../../interfaces/users/mail/ISendConfirmationEmail";
 
 @injectable()
 export default class SendConfirmationEmail implements ISendConfirmationEmail {
@@ -39,6 +39,10 @@ export default class SendConfirmationEmail implements ISendConfirmationEmail {
 
       return !!mailSend
     } catch (error) {
+      if (error instanceof BoomError) {
+        throw error;
+      }
+
       throw new BoomError({
         message: 'Failed to send confirmation mail',
         type: ErrorType.INTERNAL_ERROR,

@@ -83,15 +83,14 @@ export default class UserRepository implements IUserRepository {
 
 
   // Patch - Update user
-  async changePassword(password: string, email: string): Promise<User | null> {
+  async changePassword(newPassword: string, id: string): Promise<User | null> {
     try {
-      const userModel = await this.findByEmail(email)
+      const userModel = await this.findByIdSystem(id)
       if (userModel) {
-        const userToModel = this.userMapper.userToModel(userModel)
-        userToModel.update(
-          {password: password},
+        userModel.update(
+          {password: newPassword},
         )
-        const user = this.userMapper.modelToUser(userToModel);
+        const user = this.userMapper.modelToUser(userModel);
         return user
       } else {
         throw new Error("User not found")

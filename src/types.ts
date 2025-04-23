@@ -17,7 +17,8 @@ export const USER_TYPES = {
   IChangePassword: Symbol.for('IChangePassword'),
   IChangeRole: Symbol.for('IChangeRole'),
   IAuthorizeUser: Symbol.for('IAuthorizeUser'),
-  IUserMapper: Symbol.for('IUserMapper')
+  IUserMapper: Symbol.for('IUserMapper'),
+  ISendPasswordResetRequest: Symbol.for('ISendPasswordResetRequest')
 };
 
 export const PRODUCT_TYPES = {
@@ -89,5 +90,6 @@ export const MAIL_TYPES = {
   INodeMailer: Symbol.for('INodeMailer'),
   INodeMailerServices: Symbol.for('INodeMailerServices'),
   ISendConfirmationEmail: Symbol.for('ISendConfirmationEmail'),
-  ISendMail: Symbol.for('ISendMail')
+  ISendMail: Symbol.for('ISendMail'),
+  ISendPasswordResetMail: Symbol.for('ISendPasswordResetMail')
 }

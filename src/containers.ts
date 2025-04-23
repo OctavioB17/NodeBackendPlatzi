@@ -58,9 +58,11 @@ import IJwtStrategyServices from './infraestructure/services/interfaces/auth/IJw
 import emailContainer from './infraestructure/inversify/EmailContainer'
 import INodeMailer from './infraestructure/config/interfaces/INodeMailer'
 import INodeMailerServices from './infraestructure/services/interfaces/INodeMailerServices'
-import ISendConfirmationEmail from './app/interfaces/users/ISendConfirmationEmail'
 import ISendMail from './app/interfaces/mail/ISendMail'
 import IChangeRole from './app/interfaces/users/patch/IChangeRole'
+import ISendConfirmationEmail from './app/interfaces/users/mail/ISendConfirmationEmail'
+import ISendPasswordResetRequest from './app/interfaces/users/ISendPasswordResetRequest'
+import ISendPasswordResetMail from './app/interfaces/users/mail/ISendPasswordResetMail'
 
 export function initContainers() {
   authContainer.get<PassportConfig>(AUTH_TYPES.PassportConfig);
@@ -76,6 +78,7 @@ export function initContainers() {
   userContainer.get<IChangeRole>(USER_TYPES.IChangeRole);
   userContainer.get<IDeleteUser>(USER_TYPES.IDeleteUser);
   userContainer.get<IUserController>(USER_TYPES.IUserController);
+  userContainer.get<ISendPasswordResetRequest>(USER_TYPES.ISendPasswordResetRequest)
   productContainer.get<IProductRepository>(PRODUCT_TYPES.IProductRepository);
   productContainer.get<IProductController>(PRODUCT_TYPES.IProductController);
   productContainer.get<ICreateProduct>(PRODUCT_TYPES.ICreateProduct);
@@ -120,4 +123,5 @@ export function initContainers() {
   emailContainer.get<INodeMailerServices>(MAIL_TYPES.INodeMailerServices);
   emailContainer.get<ISendConfirmationEmail>(MAIL_TYPES.ISendConfirmationEmail)
   emailContainer.get<ISendMail>(MAIL_TYPES.ISendMail)
+  emailContainer.get<ISendPasswordResetMail>(MAIL_TYPES.ISendPasswordResetMail)
 }

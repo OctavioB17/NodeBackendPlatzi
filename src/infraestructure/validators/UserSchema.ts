@@ -21,8 +21,12 @@ export const updateRoleSchema = Joi.object({
 })
 
 export const updatePasswordUserSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).pattern(/^(?=.*[A-Z]).*$/).pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).*$/).required(),
+  userId: Joi.string().uuid().required(),
+  token: Joi.string().required()
+})
+
+export const updatePasswordSchema = Joi.object({
+  password: Joi.string().min(6).pattern(/^(?=.*[A-Z]).*$/).pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).*$/).required()
 })
 
 export const getUserSchema = Joi.object({

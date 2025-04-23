@@ -1,7 +1,7 @@
 import { UserRoles } from "../../../domain/interfaces/user/UserRoles";
 
 export default interface UserJwtPayload {
-  id: keyof UserRoles;
+  id: string;
 
-  role: string
+  role: keyof UserRoles
 }

@@ -2,7 +2,7 @@ import { Container } from "inversify";
 import { IUserRepository } from "../../domain/repositories/IUsersRepository";
 import UserRepository from "../repositories/UserRepository";
 import { ICreateUser } from "../../app/interfaces/users/post/ICreateUser";
-import { ENCRYPTION_TYPES, MAIL_TYPES, USER_TYPES, UTIL_TYPES } from "../../types";
+import { AUTH_TYPES, ENCRYPTION_TYPES, MAIL_TYPES, USER_TYPES, UTIL_TYPES } from "../../types";
 import CreateUser from "../../app/use-cases/users/post/CreateUser";
 import { IFindAllUsersNoPassword } from "../../app/interfaces/users/get/IFindAllUsersNoPassword";
 import { IFindUserById } from "../../app/interfaces/users/get/IFindUserById";
@@ -34,8 +34,7 @@ import ICompareHash from "../../app/interfaces/encryption/ICompareHash";
 import CompareHash from "../../app/use-cases/encryption/CompareHash";
 import IAuthorizeUser from "../../app/interfaces/users/patch/IAuthorizeUser";
 import AuthorizeUser from "../../app/use-cases/users/patch/AuthorizeUser";
-import ISendConfirmationEmail from "../../app/interfaces/users/ISendConfirmationEmail";
-import SendConfirmationEmail from "../../app/use-cases/users/SendConfirmationEmail";
+import SendConfirmationEmail from "../../app/use-cases/users/mail/SendConfirmationEmail";
 import ISendMail from "../../app/interfaces/mail/ISendMail";
 import SendMail from "../../app/use-cases/mail/SendMail";
 import INodeMailer from "../config/interfaces/INodeMailer";
@@ -44,6 +43,13 @@ import INodeMailerServices from "../services/interfaces/INodeMailerServices";
 import NodeMailerServices from "../services/mail/NodeMailerServices";
 import IChangeRole from "../../app/interfaces/users/patch/IChangeRole";
 import ChangeRole from "../../app/use-cases/users/patch/ChangeRole";
+import ISendConfirmationEmail from "../../app/interfaces/users/mail/ISendConfirmationEmail";
+import ISendPasswordResetRequest from "../../app/interfaces/users/ISendPasswordResetRequest";
+import SendPasswordResetRequest from "../../app/use-cases/users/mail/SendPasswordResetRequest";
+import IJwtServices from "../services/interfaces/IJwtServices";
+import JwtServices from "../services/auth/jwt/JwtServices";
+import ISendPasswordResetMail from "../../app/interfaces/users/mail/ISendPasswordResetMail";
+import SendPasswordResetMail from "../../app/use-cases/users/mail/SendPasswordResetMail";
 
 const userContainer = new Container();
 
@@ -69,5 +75,8 @@ userContainer.bind<ISendConfirmationEmail>(MAIL_TYPES.ISendConfirmationEmail).to
 userContainer.bind<ISendMail>(MAIL_TYPES.ISendMail).to(SendMail)
 userContainer.bind<INodeMailer>(MAIL_TYPES.INodeMailer).to(NodeMailer)
 userContainer.bind<INodeMailerServices>(MAIL_TYPES.INodeMailerServices).to(NodeMailerServices)
+userContainer.bind<ISendPasswordResetRequest>(USER_TYPES.ISendPasswordResetRequest).to(SendPasswordResetRequest)
+userContainer.bind<IJwtServices>(AUTH_TYPES.IJwtServices).to(JwtServices)
+userContainer.bind<ISendPasswordResetMail>(MAIL_TYPES.ISendPasswordResetMail).to(SendPasswordResetMail)
 
 export default userContainer

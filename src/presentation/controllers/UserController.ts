@@ -17,6 +17,7 @@ import { IFindUserByEmailNoPassword } from "../../app/interfaces/users/get/IFind
 import IUserMapper from "../../infraestructure/mappers/interfaces/IUserMapper";
 import IAuthorizeUser from "../../app/interfaces/users/patch/IAuthorizeUser";
 import IChangeRole from "../../app/interfaces/users/patch/IChangeRole";
+import ISendPasswordResetRequest from "../../app/interfaces/users/ISendPasswordResetRequest";
 export default class UserController implements IUserController {
   constructor(
     @inject(USER_TYPES.ICreateUser) private createUser: ICreateUser,
@@ -30,8 +31,27 @@ export default class UserController implements IUserController {
     @inject(USER_TYPES.IChangePassword) private changePassword: IChangePassword,
     @inject(USER_TYPES.IChangeRole) private changeRole: IChangeRole,
     @inject(USER_TYPES.IAuthorizeUser) private authorizeUser: IAuthorizeUser,
-    @inject(USER_TYPES.IUserMapper) private userMapper: IUserMapper
+    @inject(USER_TYPES.IUserMapper) private userMapper: IUserMapper,
+    @inject(USER_TYPES.ISendPasswordResetRequest) private sendPassResetRequest: ISendPasswordResetRequest
   ) {}
+
+  async sendPassResetRequestController(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const body = req.body
+    try {
+      const passRequest = await this.sendPassResetRequest.execute(body.email)
+      if (passRequest) {
+        res.status(200).json({ message: "Password request send" })
+      } else {
+        throw new BoomError({
+          message: 'Error to request a password reset',
+          type: ErrorType.BAD_REQUEST,
+          statusCode: 400
+        });
+      }
+    } catch (error) {
+      next(error)
+    }
+  }
 
   async changeRoleController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params
@@ -217,9 +237,18 @@ export default class UserController implements IUserController {
   }
 
   async changeUserPassword(req: Request, res: Response, next: NextFunction) {
-    const { password, email } = req.body
+    const { token, userId } = req.query
+    const body = req.body
     try {
-      const changePass = await this.changePassword.execute(password, email)
+      console.log(token, userId)
+      if (!token || !userId) {
+        throw new BoomError({
+          message: 'No token or user granted',
+          type: ErrorType.BAD_REQUEST,
+          statusCode: 404
+        });
+      }
+      const changePass = await this.changePassword.execute(body.password, token.toString(), userId.toString())
       if (changePass) {
         res.status(200).json('Password changed')
       } else {
