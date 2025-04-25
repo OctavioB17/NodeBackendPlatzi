@@ -63,6 +63,7 @@ import IChangeRole from './app/interfaces/users/patch/IChangeRole'
 import ISendConfirmationEmail from './app/interfaces/users/mail/ISendConfirmationEmail'
 import ISendPasswordResetRequest from './app/interfaces/users/ISendPasswordResetRequest'
 import ISendPasswordResetMail from './app/interfaces/users/mail/ISendPasswordResetMail'
+import IFindAllRandomized from './app/interfaces/products/get/IFindAllRandomized'
 
 export function initContainers() {
   authContainer.get<PassportConfig>(AUTH_TYPES.PassportConfig);
@@ -88,6 +89,7 @@ export function initContainers() {
   productContainer.get<IFindProductByName>(PRODUCT_TYPES.IFindProductByName);
   productContainer.get<IToggleProductPause>(PRODUCT_TYPES.IToggleProductPause);
   productContainer.get<IUpdateProduct>(PRODUCT_TYPES.IUpdateProduct);
+  productContainer.get<IFindAllRandomized>(PRODUCT_TYPES.IFindAllRandomized)
   categoriesContainer.get<ICategoriesRepository>(CATEGORY_TYPES.ICategoriesRepository);
   categoriesContainer.get<ICategoriesController>(CATEGORY_TYPES.ICategoriesController);
   categoriesContainer.get<ICreateCategory>(CATEGORY_TYPES.ICreateCategory);

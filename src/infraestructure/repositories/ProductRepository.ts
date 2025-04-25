@@ -1,6 +1,6 @@
 import IProductRepository from "../../domain/repositories/IProductsRepository";
 import ProductModel from "../database/models/ProductsModel";
-import { Op } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import UserModel from "../database/models/UserModel";
 import CategoriesModel from "../database/models/CategoriesModel";
 import { PRODUCT_TYPES } from "../../types";
@@ -122,6 +122,31 @@ export default class ProductRepository implements IProductRepository {
     } catch (error: any) {
       console.log(error)
       throw new Error(error)
+    }
+  }
+
+  async findAllRandomized(limit: number, offset: number, maxPrice: number, minPrice: number): Promise<Product[] | null> {
+    try {
+      const products: ProductModel[] = await ProductModel.findAll({
+        where: {
+          price: {
+            [Op.gte]: minPrice,
+            [Op.lte]: maxPrice
+          }
+        },
+        order: Sequelize.literal('RANDOM()'),
+        limit: limit,
+        offset: offset
+      });
+
+      if (products.length > 0) {
+        const modelDatavalues = products.map(product => product.dataValues)
+        return this.productMapper.modelToProductList(modelDatavalues);
+      } else {
+        return null;
+      }
+    } catch (error: any) {
+      throw new Error(error);
     }
   }
 

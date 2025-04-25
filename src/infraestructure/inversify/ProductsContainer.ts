@@ -27,6 +27,8 @@ import IProductMapper from "../mappers/interfaces/IProductMapper";
 import ProductMapper from "../mappers/ProductMapper";
 import UuidGenerator from "../services/utils/UuidGenerator";
 import IChangeRole from "../../app/interfaces/users/patch/IChangeRole";
+import IFindAllRandomized from "../../app/interfaces/products/get/IFindAllRandomized";
+import FindAllRandomized from "../../app/use-cases/products/get/FindAllRandomized";
 
 const productContainer = new Container();
 
@@ -43,5 +45,6 @@ productContainer.bind<IDeleteProduct>(PRODUCT_TYPES.IDeleteProduct).to(DeletePro
 productContainer.bind<IUpdateProduct>(PRODUCT_TYPES.IUpdateProduct).to(UpdateProduct)
 productContainer.bind<IUpdateStock>(PRODUCT_TYPES.IUpdateStock).to(UpdateStock);
 productContainer.bind<IToggleProductPause>(PRODUCT_TYPES.IToggleProductPause).to(ToggleProductPause)
+productContainer.bind<IFindAllRandomized>(PRODUCT_TYPES.IFindAllRandomized).to(FindAllRandomized)
 
 export default productContainer

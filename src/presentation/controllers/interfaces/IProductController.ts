@@ -10,4 +10,5 @@ export default interface IProductController {
   deleteProductController(req: Request, res: Response, next: NextFunction):  Promise<void>;
   updateStockController(req: Request, res: Response, next: NextFunction):  Promise<void>;
   toggleProductPauseController(req: Request, res: Response, next: NextFunction):  Promise<void>;
+  findAllRandomizedController(req: Request, res: Response, next: NextFunction):  Promise<void>;
 };

@@ -28,6 +28,7 @@ export const PRODUCT_TYPES = {
   IFindProductById: Symbol.for('IFindProductById'),
   IFindAllProductByCategory: Symbol.for('IFindAllProductByCategory'),
   IFindProductByName: Symbol.for('IFindProductByName'),
+  IFindAllRandomized: Symbol.for('IFindAllRandomized'),
   IDeleteProduct: Symbol.for('IDeleteProduct'),
   ICreateProduct: Symbol.for('ICreateProduct'),
   IUpdateProduct: Symbol.for('IUpdateProduct'),

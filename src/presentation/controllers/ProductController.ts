@@ -16,6 +16,7 @@ import ICreateProduct from "../../app/interfaces/products/post/ICreateProduct";
 import IProductMapper from "../../infraestructure/mappers/interfaces/IProductMapper";
 import Product from "../../domain/entities/Products";
 import UserJwtPayload from "../../infraestructure/dtos/users/UserJwtPayloadDTO";
+import IFindAllRandomized from "../../app/interfaces/products/get/IFindAllRandomized";
 
 export default class ProductController implements IProductController {
 
@@ -29,8 +30,28 @@ export default class ProductController implements IProductController {
     @inject(PRODUCT_TYPES.IUpdateStock) private updateStock: IUpdateStock,
     @inject(PRODUCT_TYPES.IDeleteProduct) private deleteProduct: IDeleteProduct,
     @inject(PRODUCT_TYPES.ICreateProduct) private createProduct: ICreateProduct,
-    @inject(PRODUCT_TYPES.IProductMapper) private productMapper: IProductMapper
+    @inject(PRODUCT_TYPES.IProductMapper) private productMapper: IProductMapper,
+    @inject(PRODUCT_TYPES.IFindAllRandomized) private findAllRandomized: IFindAllRandomized
   ) {}
+
+  async findAllRandomizedController(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { limit, offset, max_price, min_price } = req.query;
+
+    try {
+      const findRandomized = await this.findAllRandomized.execute(Number(limit), Number(offset), Number(max_price), Number(min_price))
+      if (findRandomized) {
+        res.status(200).json(findRandomized);
+      } else {
+        throw new BoomError({
+          message: 'Products not found',
+          type: ErrorType.NOT_FOUND,
+          statusCode: 404
+        });
+      }
+    } catch (error) {
+      next(error)
+    }
+  }
 
   async createProductController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const productData = req.body;
