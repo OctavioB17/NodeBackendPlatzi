@@ -43,6 +43,8 @@ import IvaCalculator from "../../app/use-cases/orders/IvaCalculator";
 import SaleTaxCalculator from "../../app/use-cases/orders/SaleTaxCalculator";
 import SpecificProductTaxCalculator from "../../app/use-cases/orders/SpecificProductTaxCalculator";
 import UuidGenerator from "../services/utils/UuidGenerator";
+import UpdateStock from "../../app/use-cases/products/patch/UpdateStock";
+import IUpdateStock from "../../app/interfaces/products/patch/IUpdateStock";
 
 const ordersContainer = new Container();
 
@@ -69,6 +71,6 @@ ordersContainer.bind<IAddTaxesObject>(ORDER_TYPES.IAddTaxesObject).to(AddTaxesOb
 ordersContainer.bind<ICalculateTotalProductPrices>(ORDER_TYPES.ICalculateTotalProductPrices).to(CalculateTotalProductPrices)
 ordersContainer.bind<IFindProductById>(PRODUCT_TYPES.IFindProductById).to(FindProductById)
 ordersContainer.bind<IProductRepository>(PRODUCT_TYPES.IProductRepository).to(ProductRepository)
-
+ordersContainer.bind<IUpdateStock>(PRODUCT_TYPES.IUpdateStock).to(UpdateStock)
 
 export default ordersContainer

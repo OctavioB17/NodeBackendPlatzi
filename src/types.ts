@@ -34,7 +34,9 @@ export const PRODUCT_TYPES = {
   IUpdateProduct: Symbol.for('IUpdateProduct'),
   IUpdateStock: Symbol.for('IUpdateStock'),
   IToggleProductPause: Symbol.for('IToggleProductPause'),
-  IProductMapper: Symbol.for('IProductMapper')
+  IProductMapper: Symbol.for('IProductMapper'),
+  IUploadProductPhoto: Symbol.for('IUploadProductPhoto'),
+  IDeleteProductPhoto: Symbol.for('IDeleteProductPhoto')
 }
 
 export const CATEGORY_TYPES = {
@@ -93,4 +95,12 @@ export const MAIL_TYPES = {
   ISendConfirmationEmail: Symbol.for('ISendConfirmationEmail'),
   ISendMail: Symbol.for('ISendMail'),
   ISendPasswordResetMail: Symbol.for('ISendPasswordResetMail')
+}
+
+export const AWS_TYPES = {
+  IAwsServices: Symbol.for('IAwsServices'),
+  IUploadFileToS3: Symbol.for('IUploadFileToS3'),
+  IDeleteFileInS3: Symbol.for('IDeleteFileInS3'),
+  ICreateUserFolder: Symbol.for('ICreateUserFolder'),
+  IDeleteUserFolder: Symbol.for('IDeleteUserFolder ')
 }

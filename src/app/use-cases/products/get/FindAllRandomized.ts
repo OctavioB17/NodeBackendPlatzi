@@ -20,7 +20,7 @@ export default class FindAllRandomized implements IFindAllRandomized {
     this.productMapper = productMapper
   }
 
-  async execute(limit: number, offset: number, maxPrice: number, minPrice: number): Promise<ProductDTO[] | null> {
+  async execute(limit?: number, offset?: number,  maxPrice?: number, minPrice?: number): Promise<ProductDTO[] | null> {
     try {
       const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
 

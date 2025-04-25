@@ -58,7 +58,9 @@ export interface OrderWithUserAndProducts {
     description: string
     imageUrl: string
     sku: string
-    dimensions: {length: string, width: string, heigth: string} | {length: string, width: string, heigth: string}[] | null
+    length: string
+    width: string
+    height: string
     weight: number
     price: number
     stock: number

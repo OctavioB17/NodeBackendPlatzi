@@ -120,7 +120,6 @@ export default class ProductRepository implements IProductRepository {
         return null
       }
     } catch (error: any) {
-      console.log(error)
       throw new Error(error)
     }
   }

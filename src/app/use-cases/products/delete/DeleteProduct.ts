@@ -4,14 +4,16 @@ import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import IProductRepository from "../../../../domain/repositories/IProductsRepository";
 import IDeleteProduct from "../../../interfaces/products/delete/IDeleteProduct";
+import IDeleteProductPhoto from "../../../interfaces/products/delete/IDeleteProductPhoto";
 
 @injectable()
 export default class DeleteProduct implements IDeleteProduct {
   constructor(
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
+    @inject(PRODUCT_TYPES.IDeleteProductPhoto) private deleteProductPhoto: IDeleteProductPhoto
   ) {}
 
-  async execute(productId: string): Promise<boolean | null> {
+  async execute(userId: string, productId: string): Promise<boolean | null> {
     try {
       const result = await this.iProductRepository.deleteProduct(productId);
 
@@ -22,6 +24,8 @@ export default class DeleteProduct implements IDeleteProduct {
           statusCode: 404
         });
       }
+
+      await this.deleteProductPhoto.execute(userId, productId)
 
       return true;
     } catch (error) {

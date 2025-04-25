@@ -6,11 +6,14 @@ import { validatorHandler } from "../../infraestructure/middlewares/validatorHan
 import { createProductSchema, getProductSchema, getProductSchemaByName, getProductWPaginationAndPriceOperators, updateStockSchema } from "../../infraestructure/validators/ProductSchema";
 import passport from "passport";
 import { checkRoleMiddelware } from "../../infraestructure/middlewares/authHandler";
+import multer from 'multer';
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 const router = Router();
 const productController = container.get<IProductController>(PRODUCT_TYPES.IProductController);
 
-router.post('/create', passport.authenticate('jwt', { session: false }), checkRoleMiddelware('USER'), validatorHandler(createProductSchema, 'body'), (req, res, next) => productController.createProductController(req, res, next));
+router.post('/create', passport.authenticate('jwt', { session: false }), checkRoleMiddelware('USER'), /*validatorHandler(createProductSchema, 'body'),*/ upload.single('image'), (req, res, next) => productController.createProductController(req, res, next));
 router.delete('/delete/:id', passport.authenticate('jwt', { session: false }), checkRoleMiddelware('USER'), validatorHandler(getProductSchema, 'params'), (req, res, next) => productController.deleteProductController(req, res, next))
 router.get('/get-all/category/:id', validatorHandler(getProductSchema, 'params'), validatorHandler(getProductWPaginationAndPriceOperators, 'query'), (req, res, next) => productController.findAllByCategoryController(req, res, next))
 router.get('/get-all/user/:id', validatorHandler(getProductSchema, 'params'), validatorHandler(getProductWPaginationAndPriceOperators, 'query'), (req, res, next) => productController.findAllByUserIdController(req, res, next))

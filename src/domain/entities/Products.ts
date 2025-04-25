@@ -6,7 +6,9 @@ export default class Product implements IProductEntity {
     private description: string | null;
     private imageUrl: string;
     private sku: string | null;
-    private dimensions: {length: string, width: string, heigth: string} | null;
+    private length: string;
+    private width: string;
+    private height: string;
     private weigth: number | null;
     private price: string;
     private stock: number;
@@ -21,7 +23,9 @@ export default class Product implements IProductEntity {
       description: string | null,
       imageUrl: string,
       sku: string | null,
-      dimensions: {length: string, width: string, heigth: string} | null,
+      length: string,
+      width: string,
+      height: string,
       weigth: number | null,
       price: string,
       stock: number,
@@ -35,7 +39,9 @@ export default class Product implements IProductEntity {
       this.description = description;
       this.imageUrl = imageUrl;
       this.sku = sku;
-      this.dimensions = dimensions;
+      this.length = length;
+      this.width = width;
+      this.height = height;
       this.weigth = weigth;
       this.price = price;
       this.stock = stock;
@@ -66,10 +72,6 @@ export default class Product implements IProductEntity {
           return this.sku;
       }
 
-      public getDimensions(): {length: string, width: string, heigth: string} | null {
-          return this.dimensions;
-      }
-
       public getWeigth(): number | null {
           return this.weigth;
       }
@@ -98,6 +100,19 @@ export default class Product implements IProductEntity {
         return this.userId;
       }
 
+      public getLength(): string {
+        return this.length
+      }
+
+      public getWidth(): string {
+        return this.width
+      }
+
+      public getHeight(): string {
+        return this.height
+      }
+
+
       // Setters
       public setName(name: string): void {
           this.name = name;
@@ -113,10 +128,6 @@ export default class Product implements IProductEntity {
 
       public setSku(sku: string | null): void {
           this.sku = sku;
-      }
-
-      public setDimensions(dimensions: {length: string, width: string, heigth: string} | null): void {
-          this.dimensions = dimensions;
       }
 
       public setWeigth(weigth: number | null): void {
@@ -141,5 +152,17 @@ export default class Product implements IProductEntity {
 
       public setPaused(isPaused: boolean): void {
           this.isPaused = isPaused;
+      }
+
+      public setLength(length: string): void {
+        this.length = length;
+      }
+
+      public setWidth(width: string): void {
+        this.width = width;
+      }
+
+      public setHeight(height: string): void {
+        this.height = height;
       }
 }

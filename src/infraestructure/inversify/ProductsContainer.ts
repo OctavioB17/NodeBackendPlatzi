@@ -1,5 +1,5 @@
 import { Container } from "inversify";
-import {PRODUCT_TYPES, UTIL_TYPES} from "../../types";
+import {AWS_TYPES, PRODUCT_TYPES, UTIL_TYPES} from "../../types";
 import IProductRepository from "../../domain/repositories/IProductsRepository";
 import ProductRepository from "../repositories/ProductRepository";
 import FindAllProductsByUser from "../../app/use-cases/products/get/FindAllProductsByUser";
@@ -29,6 +29,16 @@ import UuidGenerator from "../services/utils/UuidGenerator";
 import IChangeRole from "../../app/interfaces/users/patch/IChangeRole";
 import IFindAllRandomized from "../../app/interfaces/products/get/IFindAllRandomized";
 import FindAllRandomized from "../../app/use-cases/products/get/FindAllRandomized";
+import IUploadProductPhoto from "../../app/interfaces/products/post/IUploadPhoto";
+import UploadProductPhoto from "../../app/use-cases/products/post/UploadProductPhoto";
+import IDeleteProductPhoto from "../../app/interfaces/products/delete/IDeleteProductPhoto";
+import DeleteProductPhoto from "../../app/use-cases/products/delete/DeleteProductPhoto";
+import IDeleteFileInS3 from "../../app/interfaces/aws/IDeleteFileInS3";
+import DeleteFileInS3 from "../../app/use-cases/aws/DeleteFileInS3";
+import { IAwsServices } from "../services/interfaces/IAwsServices";
+import AwsServices from "../services/aws/AwsServices";
+import IUploadFileToS3 from "../../app/interfaces/aws/IUploadFileToS3";
+import UploadFileToS3 from "../../app/use-cases/aws/UploadFileToS3";
 
 const productContainer = new Container();
 
@@ -46,5 +56,10 @@ productContainer.bind<IUpdateProduct>(PRODUCT_TYPES.IUpdateProduct).to(UpdatePro
 productContainer.bind<IUpdateStock>(PRODUCT_TYPES.IUpdateStock).to(UpdateStock);
 productContainer.bind<IToggleProductPause>(PRODUCT_TYPES.IToggleProductPause).to(ToggleProductPause)
 productContainer.bind<IFindAllRandomized>(PRODUCT_TYPES.IFindAllRandomized).to(FindAllRandomized)
+productContainer.bind<IUploadProductPhoto>(PRODUCT_TYPES.IUploadProductPhoto).to(UploadProductPhoto)
+productContainer.bind<IDeleteProductPhoto>(PRODUCT_TYPES.IDeleteProductPhoto).to(DeleteProductPhoto)
+productContainer.bind<IDeleteFileInS3>(AWS_TYPES.IDeleteFileInS3).to(DeleteFileInS3)
+productContainer.bind<IUploadFileToS3>(AWS_TYPES.IUploadFileToS3).to(UploadFileToS3)
+productContainer.bind<IAwsServices>(AWS_TYPES.IAwsServices).to(AwsServices)
 
 export default productContainer

@@ -240,7 +240,6 @@ export default class UserController implements IUserController {
     const { token, userId } = req.query
     const body = req.body
     try {
-      console.log(token, userId)
       if (!token || !userId) {
         throw new BoomError({
           message: 'No token or user granted',

@@ -26,7 +26,6 @@ export default class NodeMailerServices implements INodeMailerServices {
         text: text,
         html: html,
       })
-      console.log(mail.response)
       return mail.response
     } catch (error) {
       throw new BoomError({

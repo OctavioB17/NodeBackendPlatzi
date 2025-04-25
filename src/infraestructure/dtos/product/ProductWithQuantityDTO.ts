@@ -24,7 +24,15 @@ export class ProductWithQuantityDTO {
 
   @IsOptional()
   @Expose()
-  dimensions!: {length: string, width: string, heigth: string} | {length: string, width: string, heigth: string}[] | null;
+  length!: string
+
+  @IsOptional()
+  @Expose()
+  width!: string;
+
+  @IsOptional()
+  @Expose()
+  height!: string;
 
   @IsNumber()
   @Expose()

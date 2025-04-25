@@ -24,7 +24,7 @@ export default class SendConfirmationEmail implements ISendConfirmationEmail {
       const __filename = fileURLToPath(import.meta.url);
       const __dirname = path.dirname(__filename);
 
-      const filePath = path.join(__dirname, "../../../presentation/templates/AuthorizeUserEmail.html");
+      const filePath = path.join(__dirname, "../../../../presentation/templates/AuthorizeUserEmail.html");
       const htmlTemplate = fs.readFileSync(filePath, "utf-8");
 
       const template = Handlebars.compile(htmlTemplate);

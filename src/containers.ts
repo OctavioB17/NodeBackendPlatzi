@@ -1,5 +1,5 @@
 import { ICreateUser } from './app/interfaces/users/post/ICreateUser'
-import {AUTH_TYPES, CATEGORY_TYPES, ENCRYPTION_TYPES, MAIL_TYPES, ORDER_TYPES, PRODUCT_TYPES, USER_TYPES, UTIL_TYPES} from './types'
+import {AUTH_TYPES, AWS_TYPES, CATEGORY_TYPES, ENCRYPTION_TYPES, MAIL_TYPES, ORDER_TYPES, PRODUCT_TYPES, USER_TYPES, UTIL_TYPES} from './types'
 import { IIdGenerator } from './infraestructure/services/interfaces/IIdGenerator'
 import { IUserRepository } from './domain/repositories/IUsersRepository'
 import { IFindAllUsers } from './app/interfaces/users/get/IFindAll'
@@ -64,6 +64,12 @@ import ISendConfirmationEmail from './app/interfaces/users/mail/ISendConfirmatio
 import ISendPasswordResetRequest from './app/interfaces/users/ISendPasswordResetRequest'
 import ISendPasswordResetMail from './app/interfaces/users/mail/ISendPasswordResetMail'
 import IFindAllRandomized from './app/interfaces/products/get/IFindAllRandomized'
+import { ICreateUserFolder } from './app/interfaces/aws/ICreateUserFolder'
+import IDeleteFileInS3 from './app/interfaces/aws/IDeleteFileInS3'
+import { IDeleteUserFolder } from './app/interfaces/aws/IDeleteUserFolder'
+import IUploadFileToS3 from './app/interfaces/aws/IUploadFileToS3'
+import awsContainer from './infraestructure/inversify/AwsContainer'
+import { IAwsServices } from './infraestructure/services/interfaces/IAwsServices'
 
 export function initContainers() {
   authContainer.get<PassportConfig>(AUTH_TYPES.PassportConfig);
@@ -126,4 +132,9 @@ export function initContainers() {
   emailContainer.get<ISendConfirmationEmail>(MAIL_TYPES.ISendConfirmationEmail)
   emailContainer.get<ISendMail>(MAIL_TYPES.ISendMail)
   emailContainer.get<ISendPasswordResetMail>(MAIL_TYPES.ISendPasswordResetMail)
+  awsContainer.get<IAwsServices>(AWS_TYPES.IAwsServices)
+  awsContainer.get<ICreateUserFolder>(AWS_TYPES.ICreateUserFolder)
+  awsContainer.get<IDeleteUserFolder>(AWS_TYPES.IDeleteUserFolder)
+  awsContainer.get<IUploadFileToS3>(AWS_TYPES.IUploadFileToS3)
+  awsContainer.get<IDeleteFileInS3>(AWS_TYPES.IDeleteFileInS3)
 }

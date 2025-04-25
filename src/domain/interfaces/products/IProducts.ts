@@ -4,7 +4,9 @@ export interface IProduct {
   description: string | null;
   imageUrl: string;
   sku: string | null;
-  dimensions: {length: string, width: string, heigth: string} | null;
+  length: string;
+  width: string;
+  height: string;
   weight: number | null;
   price: string;
   stock: number;
@@ -18,7 +20,6 @@ export interface IProduct {
   getDescription(): string | null;
   getImageUrl(): string;
   getSku(): string | null;
-  getDimensions(): {length: string, width: string, heigth: string} | null;
   getWeight(): number | null;
   getPrice(): string;
   getStock(): number;
@@ -26,16 +27,21 @@ export interface IProduct {
   getMaterial(): string[] | null;
   isProductPaused(): boolean;
   getUserId(): string;
+  getLength(): string
+  getWidth(): string
+  getHeight(): string
 
   setName(name: string): void;
   setDescription(description: string | null): void;
   setImageUrl(imageUrl: string): void;
   setSku(sku: string | null): void;
-  setDimensions(dimensions: {length: string, width: string, heigth: string} | null): void;
   setWeight(weigth: number | null): void;
   setPrice(price: string): void;
   setStock(stock: number): void;
   setCategory(category: string[]): void;
   setMaterial(material: string[] | null): void;
   setPaused(isPaused: boolean): void;
+  setLength(length: string): void
+  setWidth(width: string): void
+  setHeight(height: string): void
 }

@@ -16,7 +16,7 @@ export default class FindAllProductsByUser implements IFindAllProductsByUser {
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
   ) {}
 
-  async execute(userId: string, limit: number, offset: number,  maxPrice: number, minPrice: number): Promise<IPagination<ProductWithUserAndCategoryDTO[]>> {
+  async execute(userId: string, limit?: number, offset?: number,  maxPrice?: number, minPrice?: number): Promise<IPagination<ProductWithUserAndCategoryDTO[]>> {
 
     try {
       const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);

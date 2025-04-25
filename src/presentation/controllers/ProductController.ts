@@ -17,6 +17,7 @@ import IProductMapper from "../../infraestructure/mappers/interfaces/IProductMap
 import Product from "../../domain/entities/Products";
 import UserJwtPayload from "../../infraestructure/dtos/users/UserJwtPayloadDTO";
 import IFindAllRandomized from "../../app/interfaces/products/get/IFindAllRandomized";
+import ProductDTO from "../../infraestructure/dtos/product/ProductDTO";
 
 export default class ProductController implements IProductController {
 
@@ -56,8 +57,35 @@ export default class ProductController implements IProductController {
   async createProductController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const productData = req.body;
     const userData = req.user as UserJwtPayload
+    const file = req.file as Express.Multer.File;
+
+    const productDataParsed = {
+      name: req.body.name,
+      description: req.body.description,
+      price: parseFloat(req.body.price),
+      stock: parseInt(req.body.stock, 10),
+      sku: req.body.sku,
+      length: req.body.length,
+      width: req.body.width,
+      height: req.body.height,
+      weight: parseFloat(req.body.weight),
+      categoryId: req.body.categoryId,
+      isPaused: req.body.isPaused === "true",
+      material: (() => {
+        try {
+          return typeof req.body.material === "string" ? JSON.parse(req.body.material) : req.body.material;
+        } catch (error) {
+          console.error("Error parsing material:", error);
+          return [];
+        }
+      })()
+    } as ProductDTO
+
     try {
-      const createdProduct = await this.createProduct.execute(productData, userData.id);
+      if (!file) {
+        res.status(400).json({ message: 'File not uploaded' });
+      }
+      const createdProduct = await this.createProduct.execute(productDataParsed, userData.id, file);
       if (createdProduct) {
         res.status(201).json({ message: 'Product created' });
       } else {
@@ -227,8 +255,9 @@ export default class ProductController implements IProductController {
 
   async deleteProductController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params;
+    const user = req.user as UserJwtPayload
     try {
-      const isDeleted = await this.deleteProduct.execute(id);
+      const isDeleted = await this.deleteProduct.execute(user.id, id);
       if (isDeleted) {
         res.status(204).json('Product deleted');
       } else {

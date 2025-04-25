@@ -19,7 +19,13 @@ export default class ProductWithUserAndCategoryDTO {
   sku!: string | null;
 
   @Expose()
-  dimensions!: { length: string; width: string; heigth: string; } | null;
+  length!: string;
+
+  @Expose()
+  width!: string;
+
+  @Expose()
+  height!: string;
 
   @Expose()
   weight!: number | null;

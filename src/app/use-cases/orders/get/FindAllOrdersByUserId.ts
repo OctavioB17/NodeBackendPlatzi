@@ -16,7 +16,7 @@ export default class FindAllOrdersByUserId implements IFindAllOrdersByUserId {
     @inject(ORDER_TYPES.IOrdersRepository) private orderRepository: IOrdersRepository,
   ) {}
 
-  async execute(userId: string, limit: number, offset: number): Promise<IPagination<OrderWithUserAndProducts[]> | null> {
+  async execute(userId: string, limit?: number, offset?: number): Promise<IPagination<OrderWithUserAndProducts[]> | null> {
     try {
       const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
 

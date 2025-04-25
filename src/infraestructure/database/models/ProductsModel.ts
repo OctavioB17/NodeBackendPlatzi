@@ -21,13 +21,19 @@ export default class ProductModel extends Model<ProductModel> implements IProduc
   @Column({ type: DataType.STRING, allowNull: true })
   declare sku: string | null;
 
-  @Column({ type: DataType.JSON, allowNull: true })
-  declare dimensions: { length: string; width: string; heigth: string; } | null;
+  @Column({ type: DataType.STRING, allowNull: true })
+  declare length: string
+
+  @Column({ type: DataType.STRING, allowNull: true })
+  declare width: string;
+
+  @Column({ type: DataType.STRING, allowNull: true })
+  declare height: string;
 
   @Column({ type: DataType.FLOAT, allowNull: true })
   declare weight: number | null;
 
-  @Column({ type: DataType.INTEGER, allowNull: false })
+  @Column({ type: DataType.FLOAT, allowNull: false })
   declare price: number;
 
   @Column({ type: DataType.SMALLINT, allowNull: false })

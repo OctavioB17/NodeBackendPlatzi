@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { IUserRepository } from "../../../../domain/repositories/IUsersRepository";
 import { IIdGenerator } from "../../../../infraestructure/services/interfaces/IIdGenerator";
-import {ENCRYPTION_TYPES, MAIL_TYPES, USER_TYPES, UTIL_TYPES} from "../../../../types";
+import {AWS_TYPES, ENCRYPTION_TYPES, MAIL_TYPES, USER_TYPES, UTIL_TYPES} from "../../../../types";
 import { ICreateUser } from "../../../interfaces/users/post/ICreateUser";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
@@ -9,6 +9,7 @@ import IUserMapper from "../../../../infraestructure/mappers/interfaces/IUserMap
 import UserDTO from "../../../../infraestructure/dtos/users/UserDTO";
 import IHashCode from "../../../interfaces/encryption/IHashCode";
 import ISendConfirmationEmail from "../../../interfaces/users/mail/ISendConfirmationEmail";
+import { ICreateUserFolder } from "../../../interfaces/aws/ICreateUserFolder";
 
 
 @injectable()
@@ -18,7 +19,8 @@ export default class CreateUser implements ICreateUser {
     @inject(UTIL_TYPES.IIdGenerator) private idGenerator: IIdGenerator,
     @inject(USER_TYPES.IUserMapper) private userMapper: IUserMapper,
     @inject(ENCRYPTION_TYPES.IHashCode) private hashCode: IHashCode,
-    @inject(MAIL_TYPES.ISendConfirmationEmail) private sendConfirmationMail: ISendConfirmationEmail
+    @inject(MAIL_TYPES.ISendConfirmationEmail) private sendConfirmationMail: ISendConfirmationEmail,
+    @inject(AWS_TYPES.ICreateUserFolder) private createUserFolder: ICreateUserFolder
   ) {}
 
   async execute(userDto: UserDTO): Promise<boolean> {
@@ -48,9 +50,18 @@ export default class CreateUser implements ICreateUser {
     const user = this.userMapper.dtoToUser(newUser)
     const userCreation = await this.userRepository.createUser(user);
 
-    if (userCreation) {
-      await this.sendConfirmationMail.execute(user)
+    try {
+      await this.sendConfirmationMail.execute(user);
+    } catch (error) {
+      await this.userRepository.deleteUser(user.getId());
+      throw new BoomError({
+        message: `Error sending confirmation email. User creation rolled back.`,
+        type: ErrorType.INTERNAL_ERROR,
+        statusCode: 500
+      });
     }
+
+    await this.createUserFolder.execute(user.getId())
 
     return !!userCreation
     } catch (error) {

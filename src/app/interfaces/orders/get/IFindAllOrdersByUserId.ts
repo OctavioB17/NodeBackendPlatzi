@@ -3,5 +3,5 @@ import { OrderWithUserAndProducts } from "../../../../domain/interfaces/orders/I
 
 
 export default interface IFindAllOrdersByUserId {
-  execute(userId: string, limit: number, offset: number): Promise<IPagination<OrderWithUserAndProducts[]> | null>
+  execute(userId: string, limit?: number, offset?: number): Promise<IPagination<OrderWithUserAndProducts[]> | null>
 }

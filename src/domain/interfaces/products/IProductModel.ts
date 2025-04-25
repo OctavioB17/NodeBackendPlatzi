@@ -4,7 +4,9 @@ export interface IProductModel {
   description: string | null;
   imageUrl: string;
   sku: string | null;
-  dimensions: {length: string, width: string, heigth: string} | null;
+  length: string,
+  width: string,
+  height: string
   weight: number | null;
   price: number;
   stock: number;

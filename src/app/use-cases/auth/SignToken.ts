@@ -25,7 +25,6 @@ export default class SignToken implements ISignToken {
       const userToJwtDto = this.userMapper.UserToUserJwtPayload(user)
       return this.jwtServices.signToken(userToJwtDto)
     } catch (error) {
-      console.log(error)
       if (error instanceof BoomError) {
         throw error;
       }

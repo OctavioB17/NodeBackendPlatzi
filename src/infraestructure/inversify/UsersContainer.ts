@@ -2,7 +2,7 @@ import { Container } from "inversify";
 import { IUserRepository } from "../../domain/repositories/IUsersRepository";
 import UserRepository from "../repositories/UserRepository";
 import { ICreateUser } from "../../app/interfaces/users/post/ICreateUser";
-import { AUTH_TYPES, ENCRYPTION_TYPES, MAIL_TYPES, USER_TYPES, UTIL_TYPES } from "../../types";
+import { AUTH_TYPES, AWS_TYPES, ENCRYPTION_TYPES, MAIL_TYPES, ORDER_TYPES, PRODUCT_TYPES, USER_TYPES, UTIL_TYPES } from "../../types";
 import CreateUser from "../../app/use-cases/users/post/CreateUser";
 import { IFindAllUsersNoPassword } from "../../app/interfaces/users/get/IFindAllUsersNoPassword";
 import { IFindUserById } from "../../app/interfaces/users/get/IFindUserById";
@@ -50,6 +50,28 @@ import IJwtServices from "../services/interfaces/IJwtServices";
 import JwtServices from "../services/auth/jwt/JwtServices";
 import ISendPasswordResetMail from "../../app/interfaces/users/mail/ISendPasswordResetMail";
 import SendPasswordResetMail from "../../app/use-cases/users/mail/SendPasswordResetMail";
+import DeleteOrders from "../../app/use-cases/orders/delete/DeleteOrders";
+import IDeleteOrder from "../../app/interfaces/orders/delete/IDeleteOrder";
+import IOrdersRepository from "../../domain/repositories/IOrdersRepository";
+import OrderRepository from "../repositories/OrderRepository";
+import IOrdersMapper from "../mappers/interfaces/IOrdersMapper";
+import OrdersMapper from "../mappers/OrdersMapper";
+import IProductMapper from "../mappers/interfaces/IProductMapper";
+import ProductMapper from "../mappers/ProductMapper";
+import IDeleteProduct from "../../app/interfaces/products/delete/IDeleteProduct";
+import FindAllProductsByUser from "../../app/use-cases/products/get/FindAllProductsByUser";
+import IFindAllProductsByUser from "../../app/interfaces/products/get/IFindAllProductsByUser";
+import IProductRepository from "../../domain/repositories/IProductsRepository";
+import ProductRepository from "../repositories/ProductRepository";
+import IFindAllOrdersByUserId from "../../app/interfaces/orders/get/IFindAllOrdersByUserId";
+import FindAllOrdersByUserId from "../../app/use-cases/orders/get/FindAllOrdersByUserId";
+import { ICreateUserFolder } from "../../app/interfaces/aws/ICreateUserFolder";
+import CreateUserFolder from "../../app/use-cases/aws/CreateUserFolder";
+import AwsServices from "../services/aws/AwsServices";
+import { IAwsServices } from "../services/interfaces/IAwsServices";
+import { IDeleteUserFolder } from "../../app/interfaces/aws/IDeleteUserFolder";
+import DeleteUserFolder from "../../app/use-cases/aws/DeleteUserFolder";
+
 
 const userContainer = new Container();
 
@@ -78,5 +100,17 @@ userContainer.bind<INodeMailerServices>(MAIL_TYPES.INodeMailerServices).to(NodeM
 userContainer.bind<ISendPasswordResetRequest>(USER_TYPES.ISendPasswordResetRequest).to(SendPasswordResetRequest)
 userContainer.bind<IJwtServices>(AUTH_TYPES.IJwtServices).to(JwtServices)
 userContainer.bind<ISendPasswordResetMail>(MAIL_TYPES.ISendPasswordResetMail).to(SendPasswordResetMail)
+userContainer.bind<IDeleteOrder>(ORDER_TYPES.IDeleteOrder).to(DeleteOrders)
+userContainer.bind<IOrdersRepository>(ORDER_TYPES.IOrdersRepository).to(OrderRepository)
+userContainer.bind<IOrdersMapper>(ORDER_TYPES.IOrdersMapper).to(OrdersMapper)
+userContainer.bind<IProductMapper>(PRODUCT_TYPES.IProductMapper).to(ProductMapper)
+userContainer.bind<IDeleteProduct>(PRODUCT_TYPES.IDeleteProduct).to(DeleteOrders)
+userContainer.bind<IFindAllProductsByUser>(PRODUCT_TYPES.IFindAllProductsByUser).to(FindAllProductsByUser)
+userContainer.bind<IProductRepository>(PRODUCT_TYPES.IProductRepository).to(ProductRepository)
+userContainer.bind<IFindAllOrdersByUserId>(ORDER_TYPES.IFindAllOrdersByUserId).to(FindAllOrdersByUserId)
+userContainer.bind<ICreateUserFolder>(AWS_TYPES.ICreateUserFolder).to(CreateUserFolder)
+userContainer.bind<IAwsServices>(AWS_TYPES.IAwsServices).to(AwsServices);
+userContainer.bind<IDeleteUserFolder>(AWS_TYPES.IDeleteUserFolder).to(DeleteUserFolder)
+
 
 export default userContainer
