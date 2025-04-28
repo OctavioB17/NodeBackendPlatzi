@@ -4,13 +4,13 @@ import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import IProductRepository from "../../../../domain/repositories/IProductsRepository";
 import IDeleteProduct from "../../../interfaces/products/delete/IDeleteProduct";
-import IDeleteProductPhoto from "../../../interfaces/products/delete/IDeleteProductPhoto";
+import { IDeleteProductFolder } from "../../../interfaces/aws/IDeleteProductFolder";
 
 @injectable()
 export default class DeleteProduct implements IDeleteProduct {
   constructor(
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
-    @inject(PRODUCT_TYPES.IDeleteProductPhoto) private deleteProductPhoto: IDeleteProductPhoto
+    @inject(PRODUCT_TYPES.IDeleteProductFolder) private deleteProductFolder: IDeleteProductFolder
   ) {}
 
   async execute(userId: string, productId: string): Promise<boolean | null> {
@@ -25,7 +25,7 @@ export default class DeleteProduct implements IDeleteProduct {
         });
       }
 
-      await this.deleteProductPhoto.execute(userId, productId)
+      await this.deleteProductFolder.execute(userId, productId)
 
       return true;
     } catch (error) {

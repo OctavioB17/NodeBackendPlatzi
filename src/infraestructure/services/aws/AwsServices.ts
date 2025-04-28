@@ -53,7 +53,7 @@ export default class AwsServices implements IAwsServices {
     }
 
 
-    async deleteUserFolder(userId: string): Promise<void> {
+    async deleteFolder(userId: string): Promise<void> {
       try {
         const listCommand = new ListObjectsV2Command({
           Bucket: this.bucketName,
@@ -81,11 +81,11 @@ export default class AwsServices implements IAwsServices {
     }
 
 
-  async createUserFolder(userId: string): Promise<void> {
+  async createFolder(folderName: string): Promise<void> {
     try {
       const command = new PutObjectCommand({
         Bucket: this.bucketName,
-        Key: `${userId}/`
+        Key: `${folderName}/`
       })
 
       await s3Client.send(command)

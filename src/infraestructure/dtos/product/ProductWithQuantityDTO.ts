@@ -16,7 +16,11 @@ export class ProductWithQuantityDTO {
 
   @IsString()
   @Expose()
-  imageUrl!: string;
+  thumbnailUrl!: string;
+
+  @IsArray()
+  @Expose()
+  imageGallery!: string[]
 
   @IsString()
   @Expose()

@@ -1,6 +1,10 @@
 
 export const UTIL_TYPES = {
   IIdGenerator: Symbol.for('IIdGenerator'),
+  IImageManipulation: Symbol.for('IImageManipulation'),
+  IChangeImageDimensions: Symbol.for('IChangeImageDimensions'),
+  IChangeImageFormat: Symbol.for('IChangeImageFormat'),
+  IChangeDimensionsAndFormat: Symbol.for('IChangeDimensionsAndFormat')
 }
 
 export const USER_TYPES = {
@@ -36,7 +40,9 @@ export const PRODUCT_TYPES = {
   IToggleProductPause: Symbol.for('IToggleProductPause'),
   IProductMapper: Symbol.for('IProductMapper'),
   IUploadProductPhoto: Symbol.for('IUploadProductPhoto'),
-  IDeleteProductPhoto: Symbol.for('IDeleteProductPhoto')
+  IDeleteProductPhoto: Symbol.for('IDeleteProductPhoto'),
+  IDeleteProductFolder: Symbol.for('IDeleteProductFolder'),
+  IUpdatePhotos: Symbol.for('IUpdatePhotos')
 }
 
 export const CATEGORY_TYPES = {
@@ -102,5 +108,5 @@ export const AWS_TYPES = {
   IUploadFileToS3: Symbol.for('IUploadFileToS3'),
   IDeleteFileInS3: Symbol.for('IDeleteFileInS3'),
   ICreateUserFolder: Symbol.for('ICreateUserFolder'),
-  IDeleteUserFolder: Symbol.for('IDeleteUserFolder ')
+  IDeleteUserFolder: Symbol.for('IDeleteUserFolder '),
 }

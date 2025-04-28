@@ -51,6 +51,11 @@ export const getProductSchemaByName = Joi.object({
   name: Joi.string().required()
 })
 
+export const updatePhotosSchema = Joi.object({
+  id: Joi.string().uuid().required(),
+  photos: Joi.array().required()
+})
+
 export const getProductWPaginationAndPriceOperators = Joi.object({
   limit: limitQuery.optional(),
   offset: offsetQuery.optional(),

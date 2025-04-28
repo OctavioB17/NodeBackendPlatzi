@@ -12,6 +12,7 @@ export default interface IProductRepository {
   updateProduct(productId: string, productData: Partial<Product>): Promise<Product | null>;
   deleteProduct(id: string): Promise<boolean | null>;
   updateStock(id: string, stock: number): Promise<Product | null>;
+  updatePhotos(id: string, photos: string[]): Promise<Product | null>;
   toggleProductPause(id: string): Promise<Product | null>;
   findAllRandomized(limit: number, offset: number, maxPrice: number, minPrice: number): Promise<Product[] | null>
 }

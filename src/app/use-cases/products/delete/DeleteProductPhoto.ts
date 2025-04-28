@@ -6,16 +6,17 @@ import IDeleteProductPhoto from "../../../interfaces/products/delete/IDeleteProd
 import IDeleteFile from "../../../interfaces/aws/IDeleteFileInS3";
 
 @injectable()
-export default class DeleteProductPhotoUseCase implements IDeleteProductPhoto {
-  constructor(@inject(AWS_TYPES.IDeleteFileInS3) private deleteFile: IDeleteFile) {}
+export default class DeleteProductPhoto implements IDeleteProductPhoto {
+  constructor(
+  @inject(AWS_TYPES.IDeleteFileInS3) private deleteFile: IDeleteFile,
+  ) {}
 
-  async execute(userId: string, productId: string): Promise<void> {
+  async execute(userId: string, photoAndProductId: string): Promise<void> {
     try {
-      console.log(userId, productId)
-      await this.deleteFile.execute(userId, productId);
+      await this.deleteFile.execute(userId, photoAndProductId);
     } catch (error) {
       throw new BoomError({
-        message: `Error deleting product photo: ${productId}`,
+        message: `Error deleting product photo: ${photoAndProductId}`,
         type: ErrorType.INTERNAL_ERROR,
         statusCode: 500,
       });

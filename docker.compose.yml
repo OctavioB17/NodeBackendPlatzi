@@ -8,21 +8,23 @@ services:
   postgres:
     image: postgres:13
     environment:
-      - POSTGRES_DB=my_store
-      - POSTGRES_USER=octaviob17
-      - POSTGRES_PASSWORD=octavio44288476
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - 5432:5432
     volumes:
       - ~/postgres_data:/var/lib/postgresql/data
+      - ~/pgadmin-data:/var/lib/pgadmin
+      - ~/pgadmin-data/servers.json:/pgadmin4/servers.json
     networks:
       - my_network
 
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      - PGADMIN_DEFAULT_EMAIL=octaviobruza17@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=octavio44288476
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - 5050:80
     networks:

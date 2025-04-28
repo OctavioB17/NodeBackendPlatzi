@@ -29,6 +29,7 @@ export default class ProductRepository implements IProductRepository {
         return false
       }
     } catch (error) {
+      console.log(error)
       throw new Error('Failed to create product')
     }
   }
@@ -203,6 +204,23 @@ export default class ProductRepository implements IProductRepository {
     } catch (error: any) {
       throw new Error(error)
     }
+  }
+
+  async updatePhotos(id: string, photos: string[]): Promise<Product | null> {
+      try {
+        const product = await this.findByIdInSystem(id)
+        if (!product) {
+          return null
+        }
+
+        const update = await product.update({
+          imageGallery: photos
+        })
+
+        return this.productMapper.modelToProduct(update.dataValues)
+      } catch (error) {
+        return null
+      }
   }
 
   async updateStock(id: string, stock: number): Promise<Product | null> {

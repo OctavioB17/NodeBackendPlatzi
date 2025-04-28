@@ -30,7 +30,7 @@ import IChangeRole from "../../app/interfaces/users/patch/IChangeRole";
 import IFindAllRandomized from "../../app/interfaces/products/get/IFindAllRandomized";
 import FindAllRandomized from "../../app/use-cases/products/get/FindAllRandomized";
 import IUploadProductPhoto from "../../app/interfaces/products/post/IUploadPhoto";
-import UploadProductPhoto from "../../app/use-cases/products/post/UploadProductPhoto";
+import UploadProductPhoto from "../../app/use-cases/products/UploadProductPhoto";
 import IDeleteProductPhoto from "../../app/interfaces/products/delete/IDeleteProductPhoto";
 import DeleteProductPhoto from "../../app/use-cases/products/delete/DeleteProductPhoto";
 import IDeleteFileInS3 from "../../app/interfaces/aws/IDeleteFileInS3";
@@ -39,6 +39,14 @@ import { IAwsServices } from "../services/interfaces/IAwsServices";
 import AwsServices from "../services/aws/AwsServices";
 import IUploadFileToS3 from "../../app/interfaces/aws/IUploadFileToS3";
 import UploadFileToS3 from "../../app/use-cases/aws/UploadFileToS3";
+import { IDeleteProductFolder } from "../../app/interfaces/aws/IDeleteProductFolder";
+import DeleteProductFolder from "../../app/use-cases/aws/DeleteProductFolder";
+import IUpdatePhotos from "../../app/interfaces/products/patch/IUpdatePhotos";
+import UpdatePhotos from "../../app/use-cases/products/patch/UpdatePhotos";
+import ChangeDimensionsAndFormat from "../../app/use-cases/utils/images/ChangeDimensionsAndFormat";
+import IChangeDimensionsAndFormat from "../../app/interfaces/utils/images/IChangeDimensionsAndFormat";
+import IImageManipulation from "../services/interfaces/IImageManipulation";
+import ImageManipulation from "../services/utils/ImageManipulation";
 
 const productContainer = new Container();
 
@@ -54,6 +62,8 @@ productContainer.bind<ICreateProduct>(PRODUCT_TYPES.ICreateProduct).to(CreatePro
 productContainer.bind<IDeleteProduct>(PRODUCT_TYPES.IDeleteProduct).to(DeleteProduct);
 productContainer.bind<IUpdateProduct>(PRODUCT_TYPES.IUpdateProduct).to(UpdateProduct)
 productContainer.bind<IUpdateStock>(PRODUCT_TYPES.IUpdateStock).to(UpdateStock);
+productContainer.bind<IDeleteProductFolder>(PRODUCT_TYPES.IDeleteProductFolder).to(DeleteProductFolder)
+productContainer.bind<IUpdatePhotos>(PRODUCT_TYPES.IUpdatePhotos).to(UpdatePhotos)
 productContainer.bind<IToggleProductPause>(PRODUCT_TYPES.IToggleProductPause).to(ToggleProductPause)
 productContainer.bind<IFindAllRandomized>(PRODUCT_TYPES.IFindAllRandomized).to(FindAllRandomized)
 productContainer.bind<IUploadProductPhoto>(PRODUCT_TYPES.IUploadProductPhoto).to(UploadProductPhoto)
@@ -61,5 +71,7 @@ productContainer.bind<IDeleteProductPhoto>(PRODUCT_TYPES.IDeleteProductPhoto).to
 productContainer.bind<IDeleteFileInS3>(AWS_TYPES.IDeleteFileInS3).to(DeleteFileInS3)
 productContainer.bind<IUploadFileToS3>(AWS_TYPES.IUploadFileToS3).to(UploadFileToS3)
 productContainer.bind<IAwsServices>(AWS_TYPES.IAwsServices).to(AwsServices)
+productContainer.bind<IImageManipulation>(UTIL_TYPES.IImageManipulation).to(ImageManipulation)
+productContainer.bind<IChangeDimensionsAndFormat>(UTIL_TYPES.IChangeDimensionsAndFormat).to(ChangeDimensionsAndFormat)
 
 export default productContainer
