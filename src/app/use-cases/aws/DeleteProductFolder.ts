@@ -11,7 +11,7 @@ export default class DeleteProductFolder implements IDeleteProductFolder {
 
   async execute(userId: string, productId: string): Promise<void> {
     try {
-      await this.awsServices.deleteFolder(`${userId}/${productId}`);
+      await this.awsServices.deleteFolder(userId, productId);
     } catch (error) {
       throw new BoomError({
         message: `Failed to delete folder for user ${userId}`,
