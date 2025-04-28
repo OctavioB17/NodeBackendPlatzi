@@ -9,6 +9,7 @@ export default interface IProductController {
   updateProductController(req: Request, res: Response, next: NextFunction):  Promise<void>;
   deleteProductController(req: Request, res: Response, next: NextFunction):  Promise<void>;
   updateStockController(req: Request, res: Response, next: NextFunction):  Promise<void>;
+  updatePhotoController(req: Request, res: Response, next: NextFunction): Promise<void>;
   toggleProductPauseController(req: Request, res: Response, next: NextFunction):  Promise<void>;
   findAllRandomizedController(req: Request, res: Response, next: NextFunction):  Promise<void>;
 };

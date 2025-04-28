@@ -4,12 +4,13 @@ export default class Product implements IProductEntity {
     private id: string;
     private name: string;
     private description: string | null;
-    private imageUrl: string;
+    private thumbnailUrl: string;
+    private imageGallery: string[];
     private sku: string | null;
     private length: string;
     private width: string;
     private height: string;
-    private weigth: number | null;
+    private weight: number | null;
     private price: string;
     private stock: number;
     private categoryId: string;
@@ -21,12 +22,13 @@ export default class Product implements IProductEntity {
       id: string,
       name: string,
       description: string | null,
-      imageUrl: string,
+      thumbnailUrl: string,
+      imageGallery: string[],
       sku: string | null,
       length: string,
       width: string,
       height: string,
-      weigth: number | null,
+      weight: number | null,
       price: string,
       stock: number,
       categoryId: string,
@@ -37,12 +39,13 @@ export default class Product implements IProductEntity {
       this.id = id;
       this.name = name;
       this.description = description;
-      this.imageUrl = imageUrl;
+      this.thumbnailUrl = thumbnailUrl;
+      this.imageGallery = imageGallery;
       this.sku = sku;
       this.length = length;
       this.width = width;
       this.height = height;
-      this.weigth = weigth;
+      this.weight = weight;
       this.price = price;
       this.stock = stock;
       this.categoryId = categoryId;
@@ -52,7 +55,7 @@ export default class Product implements IProductEntity {
     }
 
         // Getters
-        public getId(): string {
+      public getId(): string {
           return this.id;
       }
 
@@ -64,16 +67,20 @@ export default class Product implements IProductEntity {
           return this.description;
       }
 
-      public getImageUrl(): string {
-          return this.imageUrl;
+      public getThumbnailUrl(): string {
+          return this.thumbnailUrl;
       }
+
+      public getImageGallery(): string[] {
+        return this.imageGallery;
+    }
 
       public getSku(): string | null {
           return this.sku;
       }
 
-      public getWeigth(): number | null {
-          return this.weigth;
+      public getWeight(): number | null {
+          return this.weight;
       }
 
       public getPrice(): string {
@@ -122,16 +129,20 @@ export default class Product implements IProductEntity {
           this.description = description;
       }
 
-      public setImageUrl(imageUrl: string): void {
-          this.imageUrl = imageUrl;
+      public setThumbnailUrl(thumbnailUrl: string): void {
+          this.thumbnailUrl = thumbnailUrl;
+      }
+
+      public setImageGallery(imageGallery: string[]): void {
+        this.imageGallery = imageGallery;
       }
 
       public setSku(sku: string | null): void {
           this.sku = sku;
       }
 
-      public setWeigth(weigth: number | null): void {
-          this.weigth = weigth;
+      public setWeight(weight: number | null): void {
+          this.weight = weight;
       }
 
       public setPrice(price: string): void {

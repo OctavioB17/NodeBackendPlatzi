@@ -1,3 +1,3 @@
 export default interface IDeleteProductPhoto {
-  execute(userId: string, productId: string): Promise<void>
+  execute(userId: string, photoAndProductId: string): Promise<void>
 }

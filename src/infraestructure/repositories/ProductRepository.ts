@@ -205,6 +205,23 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
+  async updatePhotos(id: string, photos: string[]): Promise<Product | null> {
+      try {
+        const product = await this.findByIdInSystem(id)
+        if (!product) {
+          return null
+        }
+
+        const update = await product.update({
+          imageGallery: photos
+        })
+
+        return this.productMapper.modelToProduct(update.dataValues)
+      } catch (error) {
+        return null
+      }
+  }
+
   async updateStock(id: string, stock: number): Promise<Product | null> {
     try {
       const product = await this.findByIdInSystem(id);

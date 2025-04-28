@@ -1,6 +1,6 @@
 
 import { IProductModel } from "../../../domain/interfaces/products/IProductModel";
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
 import UserModel from "./UserModel";
 import CategoriesModel from "./CategoriesModel";
 
@@ -16,7 +16,10 @@ export default class ProductModel extends Model<ProductModel> implements IProduc
   declare description: string | null;
 
   @Column({ type: DataType.STRING, allowNull: false })
-  declare imageUrl: string;
+  declare thumbnailUrl: string;
+
+  @Column({ type: DataType.ARRAY(DataType.STRING), allowNull: false })
+  declare imageGallery: string[]
 
   @Column({ type: DataType.STRING, allowNull: true })
   declare sku: string | null;

@@ -18,6 +18,7 @@ import Product from "../../domain/entities/Products";
 import UserJwtPayload from "../../infraestructure/dtos/users/UserJwtPayloadDTO";
 import IFindAllRandomized from "../../app/interfaces/products/get/IFindAllRandomized";
 import ProductDTO from "../../infraestructure/dtos/product/ProductDTO";
+import IUpdatePhotos from "../../app/interfaces/products/patch/IUpdatePhotos";
 
 export default class ProductController implements IProductController {
 
@@ -32,8 +33,24 @@ export default class ProductController implements IProductController {
     @inject(PRODUCT_TYPES.IDeleteProduct) private deleteProduct: IDeleteProduct,
     @inject(PRODUCT_TYPES.ICreateProduct) private createProduct: ICreateProduct,
     @inject(PRODUCT_TYPES.IProductMapper) private productMapper: IProductMapper,
-    @inject(PRODUCT_TYPES.IFindAllRandomized) private findAllRandomized: IFindAllRandomized
+    @inject(PRODUCT_TYPES.IFindAllRandomized) private findAllRandomized: IFindAllRandomized,
+    @inject(PRODUCT_TYPES.IUpdatePhotos) private updatePhotos: IUpdatePhotos
   ) {}
+
+  async updatePhotoController(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const product = req.body
+
+    try {
+      const update = await this.updatePhotos.execute(product.id, product.photos)
+      if(!update) {
+        res.status(500).json('Failed to update photos')
+      }
+
+      res.status(200).json(update)
+    } catch (error) {
+      next(error)
+    }
+  }
 
   async findAllRandomizedController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { limit, offset, max_price, min_price } = req.query;
@@ -55,9 +72,8 @@ export default class ProductController implements IProductController {
   }
 
   async createProductController(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const productData = req.body;
     const userData = req.user as UserJwtPayload
-    const file = req.file as Express.Multer.File;
+    const files = req.files as Express.Multer.File[];
 
     const productDataParsed = {
       name: req.body.name,
@@ -72,20 +88,15 @@ export default class ProductController implements IProductController {
       categoryId: req.body.categoryId,
       isPaused: req.body.isPaused === "true",
       material: (() => {
-        try {
           return typeof req.body.material === "string" ? JSON.parse(req.body.material) : req.body.material;
-        } catch (error) {
-          console.error("Error parsing material:", error);
-          return [];
-        }
       })()
     } as ProductDTO
 
     try {
-      if (!file) {
+      if (!files || files.length === 0) {
         res.status(400).json({ message: 'File not uploaded' });
       }
-      const createdProduct = await this.createProduct.execute(productDataParsed, userData.id, file);
+      const createdProduct = await this.createProduct.execute(productDataParsed, userData.id, files);
       if (createdProduct) {
         res.status(201).json({ message: 'Product created' });
       } else {
@@ -252,6 +263,7 @@ export default class ProductController implements IProductController {
       next(error);
     }
   }
+
 
   async deleteProductController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params;

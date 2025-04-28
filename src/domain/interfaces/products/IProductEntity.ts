@@ -2,9 +2,10 @@ export interface IProductEntity {
   getId(): string;
   getName(): string;
   getDescription(): string | null;
-  getImageUrl(): string;
+  getThumbnailUrl(): string;
+  getImageGallery(): string[]
   getSku(): string | null;
-  getWeigth(): number | null;
+  getWeight(): number | null;
   getPrice(): string;
   getStock(): number;
   getCategory(): string;
@@ -18,9 +19,10 @@ export interface IProductEntity {
 
   setName(name: string): void;
   setDescription(description: string | null): void;
-  setImageUrl(imageUrl: string): void;
+  setThumbnailUrl(thumbnailUrl: string): void;
+  setImageGallery(imageGallery: string[]): void;
   setSku(sku: string | null): void;
-  setWeigth(weigth: number | null): void;
+  setWeight(weigth: number | null): void;
   setPrice(price: string): void;
   setStock(stock: number): void;
   setCategory(category: string): void;

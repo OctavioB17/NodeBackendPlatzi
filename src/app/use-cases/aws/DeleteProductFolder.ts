@@ -3,15 +3,15 @@ import { BoomError } from "../../../domain/entities/DomainError";
 import { ErrorType } from "../../../domain/interfaces/Error";
 import { IAwsServices } from "../../../infraestructure/services/interfaces/IAwsServices";
 import { AWS_TYPES } from "../../../types";
-import { IDeleteUserFolder } from "../../interfaces/aws/IDeleteUserFolder";
+import { IDeleteProductFolder } from "../../interfaces/aws/IDeleteProductFolder";
 
 @injectable()
-export default class DeleteUserFolder implements IDeleteUserFolder {
+export default class DeleteProductFolder implements IDeleteProductFolder {
   constructor(@inject(AWS_TYPES.IAwsServices) private awsServices: IAwsServices) {}
 
-  async execute(userId: string): Promise<void> {
+  async execute(userId: string, productId: string): Promise<void> {
     try {
-      await this.awsServices.deleteFolder(userId);
+      await this.awsServices.deleteFolder(`${userId}/${productId}`);
     } catch (error) {
       throw new BoomError({
         message: `Failed to delete folder for user ${userId}`,

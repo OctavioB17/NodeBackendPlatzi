@@ -2,7 +2,8 @@ export interface IProductModel {
   id: string;
   name: string;
   description: string | null;
-  imageUrl: string;
+  thumbnailUrl: string;
+  imageGallery: string[]
   sku: string | null;
   length: string,
   width: string,

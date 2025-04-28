@@ -11,7 +11,10 @@ export default class ProductDTO {
   description!: string | null;
 
   @Expose()
-  imageUrl!: string;
+  thumbnailUrl!: string;
+
+  @Expose()
+  imageGallery!: string[]
 
   @Expose()
   sku!: string | null;

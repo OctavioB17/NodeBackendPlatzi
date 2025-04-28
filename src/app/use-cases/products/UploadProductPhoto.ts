@@ -1,9 +1,9 @@
 import { inject, injectable } from "inversify";
-import IUploadProductPhoto from "../../../interfaces/products/post/IUploadPhoto";
-import { AWS_TYPES } from "../../../../types";
-import IUploadFileToS3 from "../../../interfaces/aws/IUploadFileToS3";
-import { BoomError } from "../../../../domain/entities/DomainError";
-import { ErrorType } from "../../../../domain/interfaces/Error";
+import IUploadProductPhoto from "../../interfaces/products/post/IUploadPhoto";
+import { AWS_TYPES } from "../../../types";
+import IUploadFileToS3 from "../../interfaces/aws/IUploadFileToS3";
+import { BoomError } from "../../../domain/entities/DomainError";
+import { ErrorType } from "../../../domain/interfaces/Error";
 
 @injectable()
 export default class UploadProductPhoto implements IUploadProductPhoto {

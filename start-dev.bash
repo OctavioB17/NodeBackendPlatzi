@@ -24,7 +24,14 @@ else
 fi
 
 # --------------------------------------------
-# Step 3: Initialize Docker Compose
+# Step 3: Initialize servers.json
+# --------------------------------------------
+bash generate-servers-json.sh
+
+
+
+# --------------------------------------------
+# Step 4: Initialize Docker Compose
 # --------------------------------------------
 # English: Check if a container with 'postgres' in its name is running. If not, start Docker Compose.
 # Spanish: Verifica si existe un contenedor con 'postgres' en su nombre. Si no, inicia Docker Compose.
@@ -41,7 +48,7 @@ else
 fi
 
 # --------------------------------------------
-# Step 4: Wait until PostgreSQL is ready
+# Step 5: Wait until PostgreSQL is ready
 # --------------------------------------------
 # English: Display the loaded environment variables and wait for PostgreSQL to be ready using pg_isready.
 # Spanish: Muestra las variables de entorno cargadas y espera a que PostgreSQL esté listo usando pg_isready.
@@ -55,7 +62,7 @@ done
 echo "✅ PostgreSQL is ready. Starting the server... / PostgreSQL listo. Iniciando el servidor..."
 
 # --------------------------------------------
-# Step 5: Start the server
+# Step 6: Start the server
 # --------------------------------------------
 # English: Start the server using concurrently.
 # Spanish: Inicia el servidor usando concurrently.
