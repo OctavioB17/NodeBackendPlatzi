@@ -12,7 +12,7 @@ export default class ProductModel extends Model<ProductModel> implements IProduc
   @Column({ type: DataType.STRING, allowNull: false })
   declare name: string;
 
-  @Column({ type: DataType.STRING, allowNull: false })
+  @Column({ type: DataType.TEXT, allowNull: false })
   declare description: string | null;
 
   @Column({ type: DataType.STRING, allowNull: false })

@@ -76,6 +76,7 @@ export default class CreateProduct implements ICreateProduct {
 
       return true;
     } catch (error: any) {
+      console.log(error)
       if (error instanceof BoomError) {
         throw error;
       }
