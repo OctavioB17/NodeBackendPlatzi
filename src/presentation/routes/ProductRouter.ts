@@ -3,7 +3,7 @@ import container from "../../infraestructure/inversify/ProductsContainer";
 import IProductController from "../controllers/interfaces/IProductController";
 import { PRODUCT_TYPES } from "../../types";
 import { validatorHandler } from "../../infraestructure/middlewares/validatorHandler";
-import { createProductSchema, getProductSchema, getProductSchemaByName, getProductWPaginationAndPriceOperators, updateStockSchema } from "../../infraestructure/validators/ProductSchema";
+import { getProductSchema, getProductSchemaByName, getProductWPaginationAndPriceOperators, updateStockSchema } from "../../infraestructure/validators/ProductSchema";
 import passport from "passport";
 import { checkRoleMiddelware } from "../../infraestructure/middlewares/authHandler";
 import multer from 'multer';
