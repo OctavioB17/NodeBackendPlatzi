@@ -29,7 +29,6 @@ export default class ProductRepository implements IProductRepository {
         return false
       }
     } catch (error) {
-      console.log(error)
       throw new Error('Failed to create product')
     }
   }

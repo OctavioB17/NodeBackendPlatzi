@@ -32,8 +32,7 @@ export default class AwsServices implements IAwsServices {
         const fileUrl = `https://${this.bucketName}.s3.amazonaws.com/${fileKey}`;
         return fileUrl;
       } catch (error: any) {
-        Boom.internal(error)
-        throw new Error(error)
+        throw Boom.internal(error)
       }
     }
 
@@ -48,16 +47,16 @@ export default class AwsServices implements IAwsServices {
 
         await s3Client.send(command);
       } catch (error: any) {
-        Boom.internal(`Error to delete file`);
+        throw Boom.internal(`Error to delete file`);
       }
     }
 
 
-    async deleteFolder(userId: string): Promise<void> {
+    async deleteFolder(userId: string, folderName: string): Promise<void> {
       try {
         const listCommand = new ListObjectsV2Command({
           Bucket: this.bucketName,
-          Prefix: `${userId}/`,
+          Prefix: `${userId}/${folderName}`,
         });
 
         const listedObjects = await s3Client.send(listCommand);
@@ -76,7 +75,7 @@ export default class AwsServices implements IAwsServices {
 
         await s3Client.send(deleteCommand);
       } catch (error: any) {
-        Boom.internal(`Error to delete ${userId}/ files: ${error.message}`);
+        throw Boom.internal(`Error to delete ${userId}/ files: ${error.message}`);
       }
     }
 
@@ -90,7 +89,7 @@ export default class AwsServices implements IAwsServices {
 
       await s3Client.send(command)
     } catch (error: any) {
-      Boom.internal(error)
+      throw Boom.internal(error)
     }
   }
 }
