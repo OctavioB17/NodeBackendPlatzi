@@ -30,7 +30,7 @@ export default class CreateProduct implements ICreateProduct {
     let uploadedPhotos: string[] = []
     try {
       const productUuid = this.idGenerator.generate()
-      const photoThumbnail = await this.changeFormatAndDimensions.execute(file[0].buffer, 250, 250, 'webp')
+      const photoThumbnail = await this.changeFormatAndDimensions.execute(file[0].buffer, 230, 230, 'webp')
       if (!photoThumbnail) {
         throw new BoomError({
           message: `Failed to submit product photo`,
@@ -95,7 +95,6 @@ export default class CreateProduct implements ICreateProduct {
       }));
 
 
-      console.log(error)
       if (error instanceof BoomError) {
         throw error;
       }
