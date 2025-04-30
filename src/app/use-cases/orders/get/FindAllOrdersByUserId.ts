@@ -20,7 +20,7 @@ export default class FindAllOrdersByUserId implements IFindAllOrdersByUserId {
     try {
       const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
 
-      const ordersByUser = await this.orderRepository.findAllByUserId(userId, validatedLimit, validatedOffset);
+      const ordersByUser = await this.orderRepository.findAllByUserId(userId, validatedLimit, validatedOffset) || [];
       if (!ordersByUser) {
         throw new BoomError({
           message: `Orders not found`,

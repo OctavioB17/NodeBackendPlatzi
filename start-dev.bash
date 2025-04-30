@@ -26,7 +26,7 @@ fi
 # --------------------------------------------
 # Step 3: Initialize servers.json
 # --------------------------------------------
-bash generate-servers-json.sh
+# bash generate-servers-json.sh
 
 
 

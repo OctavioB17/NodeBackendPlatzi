@@ -8,7 +8,7 @@ export default class ImageManipulation implements IImageManipulation {
   async changeImageDimensions(image: Buffer, width: number, height: number): Promise<Buffer | null> {
     try {
       const processedBuffer = await sharp(image)
-      .resize({ width, height })
+      .resize({ width, height, fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } })
       .toBuffer()
 
       return processedBuffer
@@ -32,7 +32,7 @@ export default class ImageManipulation implements IImageManipulation {
   async changeDimensionsAndFormat(image: Buffer, width: number, height: number, format: "jpeg" | "png" | "webp" | "avif"): Promise<Buffer | null> {
     try {
       const processedBuffer = await sharp(image)
-      .resize({ width, height })
+      .resize({ width, height, fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 1 } })
       .toFormat(format)
       .toBuffer()
 

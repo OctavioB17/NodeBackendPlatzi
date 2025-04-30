@@ -71,6 +71,9 @@ import AwsServices from "../services/aws/AwsServices";
 import { IAwsServices } from "../services/interfaces/IAwsServices";
 import { IDeleteUserFolder } from "../../app/interfaces/aws/IDeleteUserFolder";
 import DeleteUserFolder from "../../app/use-cases/aws/DeleteUserFolder";
+import DeleteProduct from "../../app/use-cases/products/delete/DeleteProduct";
+import DeleteProductFolder from "../../app/use-cases/aws/DeleteProductFolder";
+import { IDeleteProductFolder } from "../../app/interfaces/aws/IDeleteProductFolder";
 
 
 const userContainer = new Container();
@@ -104,7 +107,8 @@ userContainer.bind<IDeleteOrder>(ORDER_TYPES.IDeleteOrder).to(DeleteOrders)
 userContainer.bind<IOrdersRepository>(ORDER_TYPES.IOrdersRepository).to(OrderRepository)
 userContainer.bind<IOrdersMapper>(ORDER_TYPES.IOrdersMapper).to(OrdersMapper)
 userContainer.bind<IProductMapper>(PRODUCT_TYPES.IProductMapper).to(ProductMapper)
-userContainer.bind<IDeleteProduct>(PRODUCT_TYPES.IDeleteProduct).to(DeleteOrders)
+userContainer.bind<IDeleteProduct>(PRODUCT_TYPES.IDeleteProduct).to(DeleteProduct)
+userContainer.bind<IDeleteProductFolder>(PRODUCT_TYPES.IDeleteProductFolder).to(DeleteProductFolder)
 userContainer.bind<IFindAllProductsByUser>(PRODUCT_TYPES.IFindAllProductsByUser).to(FindAllProductsByUser)
 userContainer.bind<IProductRepository>(PRODUCT_TYPES.IProductRepository).to(ProductRepository)
 userContainer.bind<IFindAllOrdersByUserId>(ORDER_TYPES.IFindAllOrdersByUserId).to(FindAllOrdersByUserId)

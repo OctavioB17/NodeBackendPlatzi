@@ -23,8 +23,8 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
-      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+      - PGADMIN_DEFAULT_EMAIL=octaviobruza17@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=octavio44288476
     ports:
       - 5050:80
     networks:
