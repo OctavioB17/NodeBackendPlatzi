@@ -10,7 +10,7 @@ const image = Joi.object({
 }).unknown()
 
 export const createProductSchema = Joi.object({
-  name: Joi.string().max(60).required(),
+  name: Joi.string().min(15).max(35).required(),
   description: Joi.string().max(3000).required(),
   price: Joi.number().positive().required(),
   stock: Joi.number().integer().min(0).required(),
@@ -20,14 +20,13 @@ export const createProductSchema = Joi.object({
   height: Joi.number().positive().min(0).allow(null),
   weight: Joi.number().positive().min(0).allow(null).optional(),
   categoryId: Joi.string().uuid().required(),
-  material: Joi.array().required().allow(null).optional(),
+  material: Joi.string().allow(null).optional(),
   isPaused: Joi.boolean().required(),
 })
 
 export const updateProductSchema = Joi.object({
   name: Joi.string().max(60).optional(),
   description: Joi.string().max(3000).optional(),
-  imageUrl: Joi.string().uri().optional(),
   price: Joi.number().positive().optional(),
   stock: Joi.number().integer().min(0).optional(),
   sku: Joi.string().allow(null).optional(),
