@@ -109,4 +109,6 @@ export const AWS_TYPES = {
   IDeleteFileInS3: Symbol.for('IDeleteFileInS3'),
   ICreateUserFolder: Symbol.for('ICreateUserFolder'),
   IDeleteUserFolder: Symbol.for('IDeleteUserFolder '),
+  ICreateFolderInS3: Symbol.for('ICreateFolderInS3'),
+  IDeleteFolderInS3: Symbol.for('IDeleteFolderInS3'),
 }

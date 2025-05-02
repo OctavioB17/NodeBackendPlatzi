@@ -16,9 +16,8 @@ export default class AwsServices implements IAwsServices {
     this.bucketName = process.env.AWS_ASSETS_BUCKET!
   }
 
-    async uploadFile(userId: string, file: Buffer, fileName: string, mimetype: string): Promise<string> {
+    async uploadFile(file: Buffer, fileKey: string, mimetype: string): Promise<string> {
       try {
-        const fileKey = `${userId}/${fileName}`
 
         const command = new PutObjectCommand({
           Bucket: this.bucketName,
@@ -36,9 +35,8 @@ export default class AwsServices implements IAwsServices {
       }
     }
 
-    async deleteFile(userId: string, fileName: string): Promise<void> {
+    async deleteFile(fileKey: string): Promise<void> {
       try {
-        const fileKey = `${userId}/${fileName}`;
 
         const command = new DeleteObjectCommand({
           Bucket: this.bucketName,
@@ -52,11 +50,11 @@ export default class AwsServices implements IAwsServices {
     }
 
 
-    async deleteFolder(userId: string, folderName: string): Promise<void> {
+    async deleteFolder(folderName: string): Promise<void> {
       try {
         const listCommand = new ListObjectsV2Command({
           Bucket: this.bucketName,
-          Prefix: `${userId}/${folderName}`,
+          Prefix: `${folderName}`,
         });
 
         const listedObjects = await s3Client.send(listCommand);
@@ -75,7 +73,7 @@ export default class AwsServices implements IAwsServices {
 
         await s3Client.send(deleteCommand);
       } catch (error: any) {
-        throw Boom.internal(`Error to delete ${userId}/ files: ${error.message}`);
+        throw Boom.internal(`Error to delete files: ${error.message}`);
       }
     }
 

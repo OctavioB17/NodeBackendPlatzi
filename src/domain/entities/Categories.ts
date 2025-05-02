@@ -4,11 +4,13 @@ export default class Category implements ICategoriesEntity {
   private id: string;
   private name: string;
   private description: string;
+  private imageUrl: string;
 
-  constructor(id: string, name: string, description: string) {
+  constructor(id: string, name: string, description: string, imageUrl: string) {
     this.id = id;
     this.name = name;
     this.description = description;
+    this.imageUrl = imageUrl;
   }
 
   // Getters
@@ -24,6 +26,10 @@ export default class Category implements ICategoriesEntity {
   getName(): string {
     return this.name;
   }
+  
+  getImageUrl(): string {
+    return this.imageUrl;
+  }
 
   // Setters
 
@@ -37,6 +43,10 @@ export default class Category implements ICategoriesEntity {
 
   setDescription(description: string): void {
     this.description = description;
+  }
+
+  setImageUrl(imageUrl: string): void {
+    this.imageUrl = imageUrl;
   }
 
 }

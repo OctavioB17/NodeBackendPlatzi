@@ -11,4 +11,7 @@ export default class CategoriesModel extends Model<CategoriesModel> implements I
 
   @Column({ type: DataType.STRING, allowNull: false })
   declare description: string;
+
+  @Column({ type: DataType.STRING, allowNull: false })
+  declare imageUrl: string;
 }

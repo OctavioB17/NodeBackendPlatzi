@@ -1,24 +1,29 @@
 import { inject, injectable } from "inversify";
 import CategoryDTO from "../../../../infraestructure/dtos/category/CategoryDTO";
 import ICreateCategory from "../../../interfaces/categories/post/ICreateCategory";
-import { CATEGORY_TYPES, UTIL_TYPES } from "../../../../types";
+import { AWS_TYPES, CATEGORY_TYPES, UTIL_TYPES } from "../../../../types";
 import { ICategoriesRepository } from "../../../../domain/repositories/ICategoryRepository";
 import CategoryMapper from "../../../../infraestructure/mappers/CategoriesMapper";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import { IIdGenerator } from "../../../../infraestructure/services/interfaces/IIdGenerator";
 import ICategoryMapper from "../../../../infraestructure/mappers/interfaces/ICategoriesMapper";
+import IUploadFileToS3 from "../../../interfaces/aws/IUploadFileToS3";
+import ICreateFolderInS3 from "../../../interfaces/aws/ICreateFolderInS3";
 
 @injectable()
 export default class CreateCategory implements ICreateCategory {
   constructor(
     @inject(CATEGORY_TYPES.ICategoriesRepository) private categoryRepository: ICategoriesRepository,
     @inject(UTIL_TYPES.IIdGenerator) private idGenerator: IIdGenerator,
-    @inject(CATEGORY_TYPES.ICategoryMapper) private categoryMapper: ICategoryMapper
+    @inject(CATEGORY_TYPES.ICategoryMapper) private categoryMapper: ICategoryMapper,
+    @inject(AWS_TYPES.IUploadFileToS3) private uploadFileToS3: IUploadFileToS3,
+    @inject(AWS_TYPES.ICreateFolderInS3) private createFolderInS3: ICreateFolderInS3
   ) {}
 
-  async execute(categoryDto: CategoryDTO): Promise<boolean | null> {
+  async execute(categoryDto: CategoryDTO, file: Express.Multer.File): Promise<boolean | null> {
     try {
+      const categoryId = this.idGenerator.generate()
       const category = await this.categoryRepository.getCategoryByName(categoryDto.name)
       if (category) {
         throw new BoomError({
@@ -27,9 +32,12 @@ export default class CreateCategory implements ICreateCategory {
           statusCode: 400
         });
       }
+      await this.createFolderInS3.execute(categoryId)
+      const imageUrl = await this.uploadFileToS3.execute(this.idGenerator.generate(), file.buffer, file.mimetype)
       const newCategory = {
         ...categoryDto,
-        id: this.idGenerator.generate(),
+        id: categoryId,
+        imageUrl: imageUrl
       };
       const categoryMap = this.categoryMapper.dtoToCategory(newCategory)
       const categoryCreation = await this.categoryRepository.createCategory(categoryMap)

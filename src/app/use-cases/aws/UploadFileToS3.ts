@@ -14,9 +14,9 @@ export default class UploadFileToS3 implements IUploadFileToS3 {
     this.awsServices = awsServices
   }
 
-  execute(userId: string, file: Buffer, fileName: string, mimeType: string): Promise<string> {
+  execute(fileKey: string, file: Buffer, mimeType: string): Promise<string> {
     try {
-      const uploadFile = this.awsServices.uploadFile(userId, file, fileName, mimeType)
+      const uploadFile = this.awsServices.uploadFile( file, fileKey, mimeType)
       if (!uploadFile) {
         throw new BoomError({
           message: 'Failed to upload file to s3 bucket',

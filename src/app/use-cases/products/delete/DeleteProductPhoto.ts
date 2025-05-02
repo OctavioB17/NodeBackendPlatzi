@@ -13,7 +13,7 @@ export default class DeleteProductPhoto implements IDeleteProductPhoto {
 
   async execute(userId: string, photoAndProductId: string): Promise<void> {
     try {
-      await this.deleteFile.execute(userId, photoAndProductId);
+      await this.deleteFile.execute(`${userId}/${photoAndProductId}`);
     } catch (error) {
       throw new BoomError({
         message: `Error deleting product photo: ${photoAndProductId}`,

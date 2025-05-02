@@ -1,3 +1,3 @@
 export default interface IUploadFileToS3 {
-  execute(userId: string, file: Buffer, fileName: string, mimeType: string): Promise<string>
+  execute(fileKey: string, file: Buffer, mimeType: string): Promise<string>
 }

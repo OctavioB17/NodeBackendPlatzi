@@ -74,6 +74,10 @@ import DeleteUserFolder from "../../app/use-cases/aws/DeleteUserFolder";
 import DeleteProduct from "../../app/use-cases/products/delete/DeleteProduct";
 import DeleteProductFolder from "../../app/use-cases/aws/DeleteProductFolder";
 import { IDeleteProductFolder } from "../../app/interfaces/aws/IDeleteProductFolder";
+import ICreateFolderInS3 from "../../app/interfaces/aws/ICreateFolderInS3";
+import IDeleteFolderInS3 from "../../app/interfaces/aws/IDeleteFolderInS3";
+import CreateFolderInS3 from "../../app/use-cases/aws/CreateFolderInS3";
+import DeleteFolderInS3 from "../../app/use-cases/aws/DeleteFolderInS3";
 
 
 const userContainer = new Container();
@@ -108,6 +112,8 @@ userContainer.bind<IOrdersRepository>(ORDER_TYPES.IOrdersRepository).to(OrderRep
 userContainer.bind<IOrdersMapper>(ORDER_TYPES.IOrdersMapper).to(OrdersMapper)
 userContainer.bind<IProductMapper>(PRODUCT_TYPES.IProductMapper).to(ProductMapper)
 userContainer.bind<IDeleteProduct>(PRODUCT_TYPES.IDeleteProduct).to(DeleteProduct)
+userContainer.bind<IDeleteFolderInS3>(AWS_TYPES.IDeleteFolderInS3).to(DeleteFolderInS3)
+userContainer.bind<ICreateFolderInS3>(AWS_TYPES.ICreateFolderInS3).to(CreateFolderInS3)
 userContainer.bind<IDeleteProductFolder>(PRODUCT_TYPES.IDeleteProductFolder).to(DeleteProductFolder)
 userContainer.bind<IFindAllProductsByUser>(PRODUCT_TYPES.IFindAllProductsByUser).to(FindAllProductsByUser)
 userContainer.bind<IProductRepository>(PRODUCT_TYPES.IProductRepository).to(ProductRepository)
@@ -115,6 +121,5 @@ userContainer.bind<IFindAllOrdersByUserId>(ORDER_TYPES.IFindAllOrdersByUserId).t
 userContainer.bind<ICreateUserFolder>(AWS_TYPES.ICreateUserFolder).to(CreateUserFolder)
 userContainer.bind<IAwsServices>(AWS_TYPES.IAwsServices).to(AwsServices);
 userContainer.bind<IDeleteUserFolder>(AWS_TYPES.IDeleteUserFolder).to(DeleteUserFolder)
-
 
 export default userContainer

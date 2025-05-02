@@ -9,13 +9,13 @@ import { IDeleteProductFolder } from "../../../interfaces/aws/IDeleteProductFold
 @injectable()
 export default class DeleteProduct implements IDeleteProduct {
   constructor(
-    @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
+    @inject(PRODUCT_TYPES.IProductRepository) private productRepository: IProductRepository,
     @inject(PRODUCT_TYPES.IDeleteProductFolder) private deleteProductFolder: IDeleteProductFolder
   ) {}
 
   async execute(userId: string, productId: string): Promise<boolean | null> {
     try {
-      const result = await this.iProductRepository.deleteProduct(productId);
+      const result = await this.productRepository.deleteProduct(productId);
 
       if (!result) {
         throw new BoomError({

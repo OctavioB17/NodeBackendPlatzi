@@ -26,7 +26,6 @@ import { IIdGenerator } from "../services/interfaces/IIdGenerator";
 import IProductMapper from "../mappers/interfaces/IProductMapper";
 import ProductMapper from "../mappers/ProductMapper";
 import UuidGenerator from "../services/utils/UuidGenerator";
-import IChangeRole from "../../app/interfaces/users/patch/IChangeRole";
 import IFindAllRandomized from "../../app/interfaces/products/get/IFindAllRandomized";
 import FindAllRandomized from "../../app/use-cases/products/get/FindAllRandomized";
 import IUploadProductPhoto from "../../app/interfaces/products/post/IUploadPhoto";
@@ -47,6 +46,10 @@ import ChangeDimensionsAndFormat from "../../app/use-cases/utils/images/ChangeDi
 import IChangeDimensionsAndFormat from "../../app/interfaces/utils/images/IChangeDimensionsAndFormat";
 import IImageManipulation from "../services/interfaces/IImageManipulation";
 import ImageManipulation from "../services/utils/ImageManipulation";
+import ICreateFolderInS3 from "../../app/interfaces/aws/ICreateFolderInS3";
+import IDeleteFolderInS3 from "../../app/interfaces/aws/IDeleteFolderInS3";
+import CreateFolderInS3 from "../../app/use-cases/aws/CreateFolderInS3";
+import DeleteFolderInS3 from "../../app/use-cases/aws/DeleteFolderInS3";
 
 const productContainer = new Container();
 

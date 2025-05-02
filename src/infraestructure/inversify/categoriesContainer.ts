@@ -1,5 +1,5 @@
 import { Container } from "inversify";
-import { CATEGORY_TYPES, UTIL_TYPES } from "../../types";
+import { AWS_TYPES, CATEGORY_TYPES, PRODUCT_TYPES, UTIL_TYPES } from "../../types";
 import { ICategoriesRepository } from "../../domain/repositories/ICategoryRepository";
 import CategoriesRepository from "../repositories/CategoriesRepository";
 import ICategoriesController from "../../presentation/controllers/interfaces/ICategoriesController";
@@ -20,6 +20,18 @@ import GetCategoryByName from "../../app/use-cases/categories/get/GetCategoryByN
 import ICategoryMapper from "../mappers/interfaces/ICategoriesMapper";
 import CategoryMapper from "../mappers/CategoriesMapper";
 import UuidGenerator from "../services/utils/UuidGenerator";
+import IFindAllProductByCategory from "../../app/interfaces/products/get/IFindAllProductByCategory";
+import FindAllProductsByCategory from "../../app/use-cases/products/get/FindAllProductsByCategory";
+import IDeleteProduct from "../../app/interfaces/products/delete/IDeleteProduct";
+import IProductRepository from "../../domain/repositories/IProductsRepository";
+import ProductRepository from "../repositories/ProductRepository";
+import IProductMapper from "../mappers/interfaces/IProductMapper";
+import ProductMapper from "../mappers/ProductMapper";
+import DeleteProduct from "../../app/use-cases/products/delete/DeleteProduct";
+import DeleteProductFolder from "../../app/use-cases/aws/DeleteProductFolder";
+import { IDeleteProductFolder } from "../../app/interfaces/aws/IDeleteProductFolder";
+import { IAwsServices } from "../services/interfaces/IAwsServices";
+import AwsServices from "../services/aws/AwsServices";
 
 const categoriesContainer = new Container();
 
@@ -33,6 +45,11 @@ categoriesContainer.bind<IGetAllCategories>(CATEGORY_TYPES.IGetAllCategories).to
 categoriesContainer.bind<IGetCategoryById>(CATEGORY_TYPES.IGetCategoryById).to(GetCategoryById);
 categoriesContainer.bind<IUpdateCategory>(CATEGORY_TYPES.IUpdateCategory).to(UpdateCategory);
 categoriesContainer.bind<IGetCategoryByName>(CATEGORY_TYPES.IGetCategoryByName).to(GetCategoryByName);
-
+categoriesContainer.bind<IFindAllProductByCategory>(PRODUCT_TYPES.IFindAllProductByCategory).to(FindAllProductsByCategory);
+categoriesContainer.bind<IProductRepository>(PRODUCT_TYPES.IProductRepository).to(ProductRepository);
+categoriesContainer.bind<IProductMapper>(PRODUCT_TYPES.IProductMapper).to(ProductMapper);
+categoriesContainer.bind<IDeleteProduct>(PRODUCT_TYPES.IDeleteProduct).to(DeleteProduct);
+categoriesContainer.bind<IDeleteProductFolder>(PRODUCT_TYPES.IDeleteProductFolder).to(DeleteProductFolder);
+categoriesContainer.bind<IAwsServices>(AWS_TYPES.IAwsServices).to(AwsServices);
 
 export default categoriesContainer

@@ -15,7 +15,7 @@ export default class UploadProductPhoto implements IUploadProductPhoto {
 
   async execute(userId: string, file: Buffer, productId: string, mimetype: string): Promise<string> {
       try {
-        const uploadFile = this.uploadFileToS3.execute(userId, file, productId, mimetype)
+        const uploadFile = this.uploadFileToS3.execute(`${userId}/${productId}`, file, mimetype)
 
         if (!uploadFile) {
           throw new BoomError({
