@@ -1,7 +1,6 @@
 import { inject, injectable } from "inversify";
 import { BoomError } from "../../../domain/entities/DomainError";
 import { ErrorType } from "../../../domain/interfaces/Error";
-import { IAwsServices } from "../../../infraestructure/services/interfaces/IAwsServices";
 import { AWS_TYPES } from "../../../types";
 import { IDeleteProductFolder } from "../../interfaces/aws/IDeleteProductFolder";
 import IDeleteFolderInS3 from "../../interfaces/aws/IDeleteFolderInS3";
@@ -11,7 +10,7 @@ export default class DeleteProductFolder implements IDeleteProductFolder {
   constructor(@inject(AWS_TYPES.IDeleteFolderInS3) private deleteFolderInS3: IDeleteFolderInS3) {}
 
   async execute(userId: string, productId: string): Promise<void> {
-    try { 
+    try {
         await this.deleteFolderInS3.execute(`${userId}/${productId}`);
     } catch (error) {
       throw new BoomError({

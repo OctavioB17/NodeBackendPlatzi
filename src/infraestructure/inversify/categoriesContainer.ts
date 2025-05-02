@@ -32,6 +32,12 @@ import DeleteProductFolder from "../../app/use-cases/aws/DeleteProductFolder";
 import { IDeleteProductFolder } from "../../app/interfaces/aws/IDeleteProductFolder";
 import { IAwsServices } from "../services/interfaces/IAwsServices";
 import AwsServices from "../services/aws/AwsServices";
+import DeleteFolderInS3 from "../../app/use-cases/aws/DeleteFolderInS3";
+import IDeleteFolderInS3 from "../../app/interfaces/aws/IDeleteFolderInS3";
+import IUploadFileToS3 from "../../app/interfaces/aws/IUploadFileToS3";
+import UploadFileToS3 from "../../app/use-cases/aws/UploadFileToS3";
+import ICreateFolderInS3 from "../../app/interfaces/aws/ICreateFolderInS3";
+import CreateFolderInS3 from "../../app/use-cases/aws/CreateFolderInS3";
 
 const categoriesContainer = new Container();
 
@@ -47,6 +53,9 @@ categoriesContainer.bind<IUpdateCategory>(CATEGORY_TYPES.IUpdateCategory).to(Upd
 categoriesContainer.bind<IGetCategoryByName>(CATEGORY_TYPES.IGetCategoryByName).to(GetCategoryByName);
 categoriesContainer.bind<IFindAllProductByCategory>(PRODUCT_TYPES.IFindAllProductByCategory).to(FindAllProductsByCategory);
 categoriesContainer.bind<IProductRepository>(PRODUCT_TYPES.IProductRepository).to(ProductRepository);
+categoriesContainer.bind<IDeleteFolderInS3>(AWS_TYPES.IDeleteFolderInS3).to(DeleteFolderInS3)
+categoriesContainer.bind<ICreateFolderInS3>(AWS_TYPES.ICreateFolderInS3).to(CreateFolderInS3)
+categoriesContainer.bind<IUploadFileToS3>(AWS_TYPES.IUploadFileToS3).to(UploadFileToS3)
 categoriesContainer.bind<IProductMapper>(PRODUCT_TYPES.IProductMapper).to(ProductMapper);
 categoriesContainer.bind<IDeleteProduct>(PRODUCT_TYPES.IDeleteProduct).to(DeleteProduct);
 categoriesContainer.bind<IDeleteProductFolder>(PRODUCT_TYPES.IDeleteProductFolder).to(DeleteProductFolder);

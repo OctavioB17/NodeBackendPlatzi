@@ -72,6 +72,7 @@ import awsContainer from './infraestructure/inversify/AwsContainer'
 import { IAwsServices } from './infraestructure/services/interfaces/IAwsServices'
 import IDeleteFolderInS3 from './app/interfaces/aws/IDeleteFolderInS3'
 import ICreateFolderInS3 from './app/interfaces/aws/ICreateFolderInS3'
+import { IDeleteProductFolder } from './app/interfaces/aws/IDeleteProductFolder'
 
 export function initContainers() {
   authContainer.get<PassportConfig>(AUTH_TYPES.PassportConfig);
@@ -141,4 +142,5 @@ export function initContainers() {
   awsContainer.get<IDeleteFileInS3>(AWS_TYPES.IDeleteFileInS3)
   awsContainer.get<IDeleteFolderInS3>(AWS_TYPES.IDeleteFolderInS3)
   awsContainer.get<ICreateFolderInS3>(AWS_TYPES.ICreateFolderInS3)
+  productContainer.get<IDeleteProductFolder>(PRODUCT_TYPES.IDeleteProductFolder)
 }

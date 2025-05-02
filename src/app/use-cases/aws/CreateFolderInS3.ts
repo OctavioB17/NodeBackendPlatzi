@@ -1,10 +1,11 @@
-import { inject } from "inversify";
+import { inject, injectable } from "inversify";
 import { AWS_TYPES } from "../../../types";
 import ICreateFolderInS3 from "../../interfaces/aws/ICreateFolderInS3";
 import { IAwsServices } from "../../../infraestructure/services/interfaces/IAwsServices";
 import { BoomError } from "../../../domain/entities/DomainError";
 import { ErrorType } from "../../../domain/interfaces/Error";
 
+@injectable()
 export default class CreateFolderInS3 implements ICreateFolderInS3 {
   constructor(
     @inject(AWS_TYPES.IAwsServices) private awsServices: IAwsServices

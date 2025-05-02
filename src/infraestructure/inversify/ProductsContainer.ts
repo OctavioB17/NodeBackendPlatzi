@@ -46,9 +46,7 @@ import ChangeDimensionsAndFormat from "../../app/use-cases/utils/images/ChangeDi
 import IChangeDimensionsAndFormat from "../../app/interfaces/utils/images/IChangeDimensionsAndFormat";
 import IImageManipulation from "../services/interfaces/IImageManipulation";
 import ImageManipulation from "../services/utils/ImageManipulation";
-import ICreateFolderInS3 from "../../app/interfaces/aws/ICreateFolderInS3";
 import IDeleteFolderInS3 from "../../app/interfaces/aws/IDeleteFolderInS3";
-import CreateFolderInS3 from "../../app/use-cases/aws/CreateFolderInS3";
 import DeleteFolderInS3 from "../../app/use-cases/aws/DeleteFolderInS3";
 
 const productContainer = new Container();
@@ -65,6 +63,7 @@ productContainer.bind<ICreateProduct>(PRODUCT_TYPES.ICreateProduct).to(CreatePro
 productContainer.bind<IDeleteProduct>(PRODUCT_TYPES.IDeleteProduct).to(DeleteProduct);
 productContainer.bind<IUpdateProduct>(PRODUCT_TYPES.IUpdateProduct).to(UpdateProduct)
 productContainer.bind<IUpdateStock>(PRODUCT_TYPES.IUpdateStock).to(UpdateStock);
+productContainer.bind<IDeleteFolderInS3>(AWS_TYPES.IDeleteFolderInS3).to(DeleteFolderInS3)
 productContainer.bind<IDeleteProductFolder>(PRODUCT_TYPES.IDeleteProductFolder).to(DeleteProductFolder)
 productContainer.bind<IUpdatePhotos>(PRODUCT_TYPES.IUpdatePhotos).to(UpdatePhotos)
 productContainer.bind<IToggleProductPause>(PRODUCT_TYPES.IToggleProductPause).to(ToggleProductPause)
