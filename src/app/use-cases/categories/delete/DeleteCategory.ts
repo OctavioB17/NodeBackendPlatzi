@@ -20,8 +20,8 @@ export default class DeleteCategory implements IDeleteCategory {
   async execute(categoryId: string): Promise<boolean | null> {
     try {
       const products = await this.findProductBycategory.execute(categoryId, 1000, 0, Number.MAX_VALUE, 0);
-
-      if (products) {
+      console.log(products)
+      if (products && products.data && products.data.length > 0) {
         for (const product of products.data) {
           await this.deleteProduct.execute(product.userId, product.id);
         }

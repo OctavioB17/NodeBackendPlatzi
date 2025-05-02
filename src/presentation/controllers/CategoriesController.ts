@@ -27,9 +27,9 @@ export default class CategoriesController implements ICategoriesController {
 
   async createCategoryController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const category = req.body
-
+    const file = req.file as Express.Multer.File
     try {
-      const newCategory = await this.createCategory.execute(category)
+      const newCategory = await this.createCategory.execute(category, file)
       if (!newCategory) {
         throw new BoomError({
           message: 'Failed to create category',

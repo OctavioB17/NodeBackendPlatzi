@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { CATEGORY_TYPES } from "../../types";
 import ICategoriesController from "../controllers/interfaces/ICategoriesController";
-import container from "../../infraestructure/inversify/CategoriesContainer";
+import container from "../../infraestructure/inversify/categoriesContainer";
 import { validatorHandler } from "../../infraestructure/middlewares/validatorHandler";
 import { createCategorySchema, getCategorySchema, getCategorySchemaByName, updateCategorySchema } from "../../infraestructure/validators/CategorySchema";
 import { paginationSchema } from "../../infraestructure/validators/QuerySchema";
@@ -11,7 +11,7 @@ import { checkRoleMiddelware } from "../../infraestructure/middlewares/authHandl
 const categoriesRouter = Router();
 const categoriesController = container.get<ICategoriesController>(CATEGORY_TYPES.ICategoriesController);
 
-categoriesRouter.delete('/delete/:id', passport.authenticate('jwt', { session: false }), checkRoleMiddelware('MODERATOR'), validatorHandler(getCategorySchema , 'params'), (req, res, next) => categoriesController.deleteCategoryController(req, res, next))
+categoriesRouter.delete('/delete/:id', passport.authenticate('jwt', { session: false }), checkRoleMiddelware('ADMIN'),  validatorHandler(getCategorySchema , 'params'), (req, res, next) => categoriesController.deleteCategoryController(req, res, next))
 categoriesRouter.get('/get/all', validatorHandler(paginationSchema, 'query'), (req, res, next) => categoriesController.findAllController(req, res, next))
 categoriesRouter.get('/get/id/:id', validatorHandler(getCategorySchema, 'params'), (req, res, next) => categoriesController.findByIdController(req, res, next))
 categoriesRouter.get('/get/by-name/:name', validatorHandler(getCategorySchemaByName, 'params'), (req, res, next) => categoriesController.findByNameController(req, res, next))

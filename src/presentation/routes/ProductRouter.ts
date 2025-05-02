@@ -6,10 +6,8 @@ import { validatorHandler } from "../../infraestructure/middlewares/validatorHan
 import { createProductSchema, getProductSchema, getProductSchemaByName, getProductWPaginationAndPriceOperators, updatePhotosSchema, updateStockSchema } from "../../infraestructure/validators/ProductSchema";
 import passport from "passport";
 import { checkRoleMiddelware } from "../../infraestructure/middlewares/authHandler";
-import multer from 'multer';
+import { upload } from "../../infraestructure/config/multer/multerConfig";
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
 const router = Router();
 const productController = container.get<IProductController>(PRODUCT_TYPES.IProductController);
 
