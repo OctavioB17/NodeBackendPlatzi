@@ -38,6 +38,10 @@ import IUploadFileToS3 from "../../app/interfaces/aws/IUploadFileToS3";
 import UploadFileToS3 from "../../app/use-cases/aws/UploadFileToS3";
 import ICreateFolderInS3 from "../../app/interfaces/aws/ICreateFolderInS3";
 import CreateFolderInS3 from "../../app/use-cases/aws/CreateFolderInS3";
+import IChangeImageFormat from "../../app/interfaces/utils/images/IChangeImageFormat";
+import ChangeImageFormat from "../../app/use-cases/utils/images/ChangeImageFormat";
+import IImageManipulation from "../services/interfaces/IImageManipulation";
+import ImageManipulation from "../services/utils/ImageManipulation";
 
 const categoriesContainer = new Container();
 
@@ -60,5 +64,8 @@ categoriesContainer.bind<IProductMapper>(PRODUCT_TYPES.IProductMapper).to(Produc
 categoriesContainer.bind<IDeleteProduct>(PRODUCT_TYPES.IDeleteProduct).to(DeleteProduct);
 categoriesContainer.bind<IDeleteProductFolder>(PRODUCT_TYPES.IDeleteProductFolder).to(DeleteProductFolder);
 categoriesContainer.bind<IAwsServices>(AWS_TYPES.IAwsServices).to(AwsServices);
+categoriesContainer.bind<IImageManipulation>(UTIL_TYPES.IImageManipulation).to(ImageManipulation);
+categoriesContainer.bind<IChangeImageFormat>(UTIL_TYPES.IChangeImageFormat).to(ChangeImageFormat);
+
 
 export default categoriesContainer

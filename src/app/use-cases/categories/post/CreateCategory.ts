@@ -10,6 +10,8 @@ import { IIdGenerator } from "../../../../infraestructure/services/interfaces/II
 import ICategoryMapper from "../../../../infraestructure/mappers/interfaces/ICategoriesMapper";
 import IUploadFileToS3 from "../../../interfaces/aws/IUploadFileToS3";
 import ICreateFolderInS3 from "../../../interfaces/aws/ICreateFolderInS3";
+import IChangeImageDimensions from "../../../interfaces/utils/images/IChangeImageDimensions";
+import IChangeImageFormat from "../../../interfaces/utils/images/IChangeImageFormat";
 
 @injectable()
 export default class CreateCategory implements ICreateCategory {
@@ -18,7 +20,8 @@ export default class CreateCategory implements ICreateCategory {
     @inject(UTIL_TYPES.IIdGenerator) private idGenerator: IIdGenerator,
     @inject(CATEGORY_TYPES.ICategoryMapper) private categoryMapper: ICategoryMapper,
     @inject(AWS_TYPES.IUploadFileToS3) private uploadFileToS3: IUploadFileToS3,
-    @inject(AWS_TYPES.ICreateFolderInS3) private createFolderInS3: ICreateFolderInS3
+    @inject(AWS_TYPES.ICreateFolderInS3) private createFolderInS3: ICreateFolderInS3,
+    @inject(UTIL_TYPES.IChangeImageFormat) private changeFormat: IChangeImageFormat
   ) {}
 
   async execute(categoryDto: CategoryDTO, file: Express.Multer.File): Promise<boolean | null> {
@@ -33,7 +36,15 @@ export default class CreateCategory implements ICreateCategory {
         });
       }
       await this.createFolderInS3.execute(categoryId)
-      const imageUrl = await this.uploadFileToS3.execute(this.idGenerator.generate(), file.buffer, file.mimetype)
+      const imageWebp = await this.changeFormat.execute(file.buffer, 'webp')
+      if (!imageWebp) {
+        throw new BoomError({
+          message: `Failed to change photo format`,
+          type: ErrorType.VALIDATION_ERROR,
+          statusCode: 400
+        });
+      }
+      const imageUrl = await this.uploadFileToS3.execute(`${categoryId}/${this.idGenerator.generate()}`, imageWebp, 'webp')
       const newCategory = {
         ...categoryDto,
         id: categoryId,

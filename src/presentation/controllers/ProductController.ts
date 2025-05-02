@@ -91,7 +91,6 @@ export default class ProductController implements IProductController {
           return typeof req.body.material === "string" ? JSON.parse(req.body.material) : req.body.material;
       })()
     } as ProductDTO
-
     try {
       if (!files || files.length === 0) {
         res.status(400).json({ message: 'File not uploaded' });

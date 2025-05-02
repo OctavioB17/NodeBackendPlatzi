@@ -52,7 +52,7 @@ export default class CreateProduct implements ICreateProduct {
             });
           }
           const photoLocation = `${productUuid}/${this.idGenerator.generate()}`
-          const uploadPhotos = this.uploadProductPhoto.execute(userId, photosModified, photoLocation, photos.mimetype);
+          const uploadPhotos = this.uploadProductPhoto.execute(userId, photosModified, photoLocation, 'webp');
           uploadedPhotos.push(photoLocation);
           return uploadPhotos
         })
@@ -88,7 +88,6 @@ export default class CreateProduct implements ICreateProduct {
 
       return true;
     } catch (error: any) {
-
       await Promise.all(uploadedPhotos.map(photoUrl => {
         const photoKey = photoUrl
         return this.deleteProductPhoto.execute(userId, photoKey);

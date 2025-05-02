@@ -28,8 +28,8 @@ export default class ProductRepository implements IProductRepository {
       } else {
         return false
       }
-    } catch (error) {
-      throw new Error('Failed to create product')
+    } catch (error: any) {
+      throw new Error('Failed to create product:', error)
     }
   }
 
