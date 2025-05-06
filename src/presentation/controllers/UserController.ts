@@ -18,6 +18,7 @@ import IUserMapper from "../../infraestructure/mappers/interfaces/IUserMapper";
 import IAuthorizeUser from "../../app/interfaces/users/patch/IAuthorizeUser";
 import IChangeRole from "../../app/interfaces/users/patch/IChangeRole";
 import ISendPasswordResetRequest from "../../app/interfaces/users/ISendPasswordResetRequest";
+import UserJwtPayload from "../../infraestructure/dtos/users/UserJwtPayloadDTO";
 export default class UserController implements IUserController {
   constructor(
     @inject(USER_TYPES.ICreateUser) private createUser: ICreateUser,
@@ -237,7 +238,9 @@ export default class UserController implements IUserController {
   }
 
   async changeUserPassword(req: Request, res: Response, next: NextFunction) {
-    const { token, userId } = req.query
+    const userData = req.user as UserJwtPayload
+    const userId = userData.id
+    const { token } = req.query
     const body = req.body
     try {
       if (!token || !userId) {
