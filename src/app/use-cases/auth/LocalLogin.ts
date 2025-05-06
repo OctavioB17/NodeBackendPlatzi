@@ -34,6 +34,13 @@ export default class LocalLogin implements ILocalLogin {
           statusCode: 404,
         })
       }
+      if (user.getAuthorized() !== true) {
+        throw new BoomError({
+          message: 'User not authorized',
+          type: ErrorType.UNAUTHORIZED,
+          statusCode: 401,
+        })
+      }
       const comparePassword = await this.hashCompare.compare(password, user.getPassword())
       if (!comparePassword) {
         throw new BoomError({
