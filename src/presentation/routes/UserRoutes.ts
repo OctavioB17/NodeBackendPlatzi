@@ -16,6 +16,7 @@ router.post("/register", validatorHandler(createUserSchema, 'body'), (req, res, 
 router.get("/find", passport.authenticate('jwt', { session: false }), checkRoleMiddelware('ADMIN'), validatorHandler(paginationSchema, 'query'), (req, res, next) => userController.findAllUsers(req, res, next));
 router.get("/find/no-password", passport.authenticate('jwt', { session: false }), checkRoleMiddelware('MODERATOR'), validatorHandler(paginationSchema, 'query'), (req, res, next) => userController.findAllUsersNoPassword(req, res, next));
 router.get("/find/id/:id", passport.authenticate('jwt', { session: false }), checkRoleMiddelware('ADMIN'), validatorHandler(getUserSchema, 'params'), (req, res, next) => userController.getUserById(req, res, next));
+router.get("/find/no-password/me", passport.authenticate('jwt', { session: false }), (req, res, next) => userController.getUserFromToken(req, res, next))
 router.get("/find/no-password/id/:id", passport.authenticate('jwt', { session: false }), checkRoleMiddelware('MODERATOR'), validatorHandler(getUserSchema, 'params'), (req, res, next) => userController.getUserByIdNoPassword(req, res, next));
 router.get("/find/email/:email", validatorHandler(getUserSchemaEmail, 'params'), (req, res, next) => userController.findUserByMail(req, res, next));
 router.get("/find/email/no-password/:email", validatorHandler(getUserSchemaEmail, 'params'), (req, res, next) => userController.findUserByMailNoPassword(req, res, next));

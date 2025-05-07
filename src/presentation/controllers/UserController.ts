@@ -36,6 +36,24 @@ export default class UserController implements IUserController {
     @inject(USER_TYPES.ISendPasswordResetRequest) private sendPassResetRequest: ISendPasswordResetRequest
   ) {}
 
+  async getUserFromToken(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const userPayload = req.user as UserJwtPayload
+    try {
+      const user = await this.findUserByIdNoPassword.execute(userPayload.id)
+      if (user) {
+        res.status(200).json(user)
+      } else {
+        throw new BoomError({
+          message: 'No users found',
+          type: ErrorType.NOT_FOUND,
+          statusCode: 404
+        });
+      }
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async sendPassResetRequestController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const body = req.body
     try {
