@@ -1,6 +1,5 @@
 import { Table, Column, Model, DataType, AllowNull } from 'sequelize-typescript';
 import { IUserModel } from '../../../domain/interfaces/user/IUserModel';
-import { USER_TYPES } from '../../../types';
 import { UserRolesEnum } from '../../../domain/interfaces/user/UserRoles';
 
 @Table({ tableName: 'users', timestamps: true })
@@ -21,7 +20,10 @@ export default class UserModel extends Model<UserModel> implements IUserModel {
   declare role: string
 
   @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
-  declare authorized: boolean
+  declare authorized: boolean;
+
+  @Column({ type: DataType.STRING, allowNull: true })
+  declare refreshToken: string | null;
 
   @Column({ type: DataType.STRING, allowNull: false })
   declare password: string;

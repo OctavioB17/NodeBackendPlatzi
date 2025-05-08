@@ -8,6 +8,7 @@ export default class User {
   private updatedAt: Date
   private email: string;
   private role: string;
+  private refreshToken: string
 
   constructor(
     id: string,
@@ -18,7 +19,8 @@ export default class User {
     authorized: boolean,
     role: string,
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
+    refreshToken: string
   ) {
     this.id = id;
     this.name = name;
@@ -29,6 +31,7 @@ export default class User {
     this.authorized = authorized;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.refreshToken = refreshToken;
   }
 
   getEmail(): string {
@@ -57,6 +60,10 @@ export default class User {
 
   getAuthorized(): boolean {
     return this.authorized
+  }
+
+  getRefreshToken(): string {
+    return this.refreshToken
   }
 
   setAuthorized(authorized: boolean): void {
@@ -93,5 +100,9 @@ export default class User {
 
   setUpdatedAt(date: Date): void {
     this.updatedAt = date;
+  }
+
+  setRefreshToken(refreshToken: string): void {
+    this.refreshToken = refreshToken
   }
 }

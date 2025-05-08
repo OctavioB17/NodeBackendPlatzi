@@ -92,7 +92,8 @@ export const AUTH_TYPES = {
   IAuthController: Symbol.for('IAuthController'),
   PassportConfig: Symbol.for('PassportConfig'),
   IJwtServices: Symbol.for('IJwtServices'),
-  ISignToken: Symbol.for('ISignToken')
+  ISignToken: Symbol.for('ISignToken'),
+  IRenewAccessToken: Symbol.for('IRenewAccessToken')
 }
 
 export const MAIL_TYPES = {

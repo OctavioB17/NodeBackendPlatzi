@@ -25,6 +25,8 @@ import IJwtServices from "../services/interfaces/IJwtServices";
 import JwtServices from "../services/auth/jwt/JwtServices";
 import JwtStrategyServices from "../services/auth/strategies/JwtStrategyServices";
 import IJwtStrategyServices from "../services/interfaces/auth/IJwtStrategyServices";
+import IRenewAccessToken from "../../app/interfaces/auth/IRenewAccessToken";
+import RenewAccessToken from "../../app/use-cases/auth/RenewAccessToken";
 
 const authContainer = new Container();
 
@@ -41,5 +43,6 @@ authContainer.bind<IFindUserByEmail>(USER_TYPES.IFindUserByEmail).to(FindUserByM
 authContainer.bind<IJwtServices>(AUTH_TYPES.IJwtServices).to(JwtServices)
 authContainer.bind<ISignToken>(AUTH_TYPES.ISignToken).to(SignToken)
 authContainer.bind<IJwtStrategyServices>(AUTH_TYPES.IJwtStrategyServices).to(JwtStrategyServices)
+authContainer.bind<IRenewAccessToken>(AUTH_TYPES.IRenewAccessToken).to(RenewAccessToken)
 
 export default authContainer

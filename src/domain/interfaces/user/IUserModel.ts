@@ -5,5 +5,6 @@ export interface IUserModel {
   email: string;
   role: string;
   authorized: boolean
+  refreshToken: string | null
   password: string;
 }

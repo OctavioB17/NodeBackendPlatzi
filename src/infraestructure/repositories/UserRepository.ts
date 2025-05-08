@@ -81,6 +81,11 @@ export default class UserRepository implements IUserRepository {
     }
   }
 
+  async getRefreshToken(userId: string): Promise<string | null> {
+    const user = await UserModel.findOne({ where: { id: userId } });
+    return user ? user.refreshToken : null;
+  }
+
 
   // Patch - Update user
   async changePassword(newPassword: string, id: string): Promise<User | null> {
@@ -136,6 +141,9 @@ export default class UserRepository implements IUserRepository {
     }
   }
 
+  async saveRefreshToken(userId: string, refreshToken: string): Promise<void> {
+    await UserModel.update({ refreshToken }, { where: { id: userId } });
+  }
 
   // Delete - Delete user
   async deleteUser(id: string): Promise<boolean> {
@@ -149,5 +157,9 @@ export default class UserRepository implements IUserRepository {
     } catch (error) {
       throw new Error(`Error deleting user: ${error}`)
     }
+  }
+
+  async removeRefreshToken(userId: string): Promise<void> {
+    await UserModel.update({ refreshToken: null }, { where: { id: userId } });
   }
 }

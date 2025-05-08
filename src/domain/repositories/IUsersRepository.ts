@@ -12,4 +12,7 @@ export interface IUserRepository {
   deleteUser(id: string): Promise<boolean>
   markUserAsAuthorized(id: string): Promise<User>,
   changeUserRole(id: string, role: keyof typeof UserRolesEnum): Promise<User>
+  saveRefreshToken(userId: string, refreshToken: string): Promise<void>
+  getRefreshToken(userId: string): Promise<string | null>
+  removeRefreshToken(userId: string): Promise<void>
 }

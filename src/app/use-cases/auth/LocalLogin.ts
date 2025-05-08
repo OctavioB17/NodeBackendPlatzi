@@ -6,25 +6,29 @@ import { ErrorType } from "../../../domain/interfaces/Error";
 import ILocalLogin from "../../interfaces/auth/strategies/ILocalLogin";
 import ISignToken from "../../interfaces/auth/ISignToken";
 import ICompareHash from "../../interfaces/encryption/ICompareHash";
+import { IUserRepository } from "../../../domain/repositories/IUsersRepository";
 
 @injectable()
 export default class LocalLogin implements ILocalLogin {
   private findUserByMail: IFindUserByEmail;
   private hashCompare: ICompareHash;
   private signToken: ISignToken;
+  private userRepository: IUserRepository
 
   constructor(
     @inject(USER_TYPES.IFindUserByEmail) findUserByMail: IFindUserByEmail,
     @inject(ENCRYPTION_TYPES.ICompareHash) hashCompare: ICompareHash,
-    @inject(AUTH_TYPES.ISignToken) signToken: ISignToken
+    @inject(AUTH_TYPES.ISignToken) signToken: ISignToken,
+    @inject(USER_TYPES.IUserRepository) userRepository: IUserRepository
   ) {
     this.findUserByMail = findUserByMail,
-    this.hashCompare = hashCompare
-    this.signToken = signToken
+    this.hashCompare = hashCompare,
+    this.signToken = signToken,
+    this.userRepository = userRepository
   }
 
 
-  async login(email: string, password: string): Promise<string> {
+  async login(email: string, password: string): Promise<{ accessToken: string; refreshToken: string }> {
     try {
       const user = await this.findUserByMail.execute(email)
       if (!user) {
@@ -50,7 +54,12 @@ export default class LocalLogin implements ILocalLogin {
         })
       }
 
-      return this.signToken.sign(user);
+      const accessToken = this.signToken.sign(user, '15m');
+      const refreshToken = this.signToken.sign(user, '7d');
+
+      await this.userRepository.saveRefreshToken(user.getId(), refreshToken)
+
+      return { accessToken, refreshToken }
     } catch (error: any) {
       if (error instanceof BoomError) {
         throw error;

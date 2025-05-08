@@ -20,10 +20,10 @@ export default class SignToken implements ISignToken {
     this.userMapper = userMapper
   }
 
-  sign(user: User): string {
+  sign(user: User, expirationTime: string): string {
     try {
       const userToJwtDto = this.userMapper.UserToUserJwtPayload(user)
-      return this.jwtServices.signToken(userToJwtDto)
+      return this.jwtServices.signToken(userToJwtDto, expirationTime)
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;
