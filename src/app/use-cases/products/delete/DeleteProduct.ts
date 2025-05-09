@@ -13,19 +13,21 @@ export default class DeleteProduct implements IDeleteProduct {
     @inject(PRODUCT_TYPES.IDeleteProductFolder) private deleteProductFolder: IDeleteProductFolder
   ) {}
 
-  async execute(userId: string, productId: string): Promise<boolean | null> {
+  async execute(userId: string, productIds: string[]): Promise<boolean> {
     try {
-      const result = await this.productRepository.deleteProduct(productId);
+      for (const productId of productIds) {
+        const result = await this.productRepository.deleteProduct(productId);
 
-      if (!result) {
-        throw new BoomError({
-          message: `Product not found or could not be deleted`,
-          type: ErrorType.NOT_FOUND,
-          statusCode: 404
-        });
+        if (!result) {
+          throw new BoomError({
+            message: `Product with ID ${productId} not found or could not be deleted`,
+            type: ErrorType.NOT_FOUND,
+            statusCode: 404
+          });
+        }
+
+        await this.deleteProductFolder.execute(userId, productId);
       }
-
-      await this.deleteProductFolder.execute(userId, productId)
 
       return true;
     } catch (error) {
@@ -34,7 +36,7 @@ export default class DeleteProduct implements IDeleteProduct {
       }
 
       throw new BoomError({
-        message: `Error deleting product`,
+        message: `Error deleting products`,
         type: ErrorType.INTERNAL_ERROR,
         statusCode: 500
       });

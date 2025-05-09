@@ -42,6 +42,10 @@ export const getProductSchema = Joi.object({
   id: Joi.string().uuid().required()
 })
 
+export const getMultipleProductSchema = Joi.object({
+  ids: Joi.array().items(Joi.string().uuid()).required()
+})
+
 export const updateStockSchema = Joi.object({
   stock: Joi.number().positive().required()
 })

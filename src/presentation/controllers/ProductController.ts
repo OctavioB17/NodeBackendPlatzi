@@ -207,14 +207,14 @@ export default class ProductController implements IProductController {
   }
 
   async toggleProductPauseController(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { id } = req.params;
-        try {
-      const isToggled = await this.toggleProductPause.execute(id);
-      if (isToggled) {
-        res.status(200).json('Product status toggled');
+    const { ids } = req.body;
+    try {
+      const toggledProducts = await this.toggleProductPause.execute(ids);
+      if (toggledProducts.length > 0) {
+        res.status(200).json(toggledProducts);
       } else {
         throw new BoomError({
-          message: 'Failed to toggle product status',
+          message: 'Failed to toggle product statuses',
           type: ErrorType.INTERNAL_ERROR,
           statusCode: 500
         });
@@ -265,15 +265,15 @@ export default class ProductController implements IProductController {
 
 
   async deleteProductController(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { id } = req.params;
-    const user = req.user as UserJwtPayload
+    const { ids } = req.body;
+    const user = req.user as UserJwtPayload;
     try {
-      const isDeleted = await this.deleteProduct.execute(user.id, id);
+      const isDeleted = await this.deleteProduct.execute(user.id, ids);
       if (isDeleted) {
-        res.status(204).json('Product deleted');
+        res.status(204).json('Products deleted');
       } else {
         throw new BoomError({
-          message: 'Failed to delete product',
+          message: 'Failed to delete products',
           type: ErrorType.INTERNAL_ERROR,
           statusCode: 500
         });

@@ -11,25 +11,28 @@ export default class ToggleProductPause implements IToggleProductPause {
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
   ) {}
 
-  execute(productId: string): Promise<Product | null> {
+  async execute(productIds: string[]): Promise<Product[]> {
     try {
-      const productPause = this.iProductRepository.toggleProductPause(productId)
-      if (!productPause) {
-        throw new BoomError({
-          message: `Product not found or can not be updated`,
-          type: ErrorType.NOT_FOUND,
-          statusCode: 404
-        });
+      const pausedProducts: Product[] = [];
+      for (const productId of productIds) {
+        const productPause = await this.iProductRepository.toggleProductPause(productId);
+        if (!productPause) {
+          throw new BoomError({
+            message: `Product with ID ${productId} not found or cannot be updated`,
+            type: ErrorType.NOT_FOUND,
+            statusCode: 404
+          });
+        }
+        pausedProducts.push(productPause);
       }
-
-      return productPause
+      return pausedProducts;
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;
       }
 
       throw new BoomError({
-        message: `Error updating product`,
+        message: `Error updating products`,
         type: ErrorType.INTERNAL_ERROR,
         statusCode: 500
       });
