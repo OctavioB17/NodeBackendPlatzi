@@ -19,6 +19,7 @@ import UserJwtPayload from "../../infraestructure/dtos/users/UserJwtPayloadDTO";
 import IFindAllRandomized from "../../app/interfaces/products/get/IFindAllRandomized";
 import ProductDTO from "../../infraestructure/dtos/product/ProductDTO";
 import IUpdatePhotos from "../../app/interfaces/products/patch/IUpdatePhotos";
+import IDeleteProductPhoto from "../../app/interfaces/products/delete/IDeleteProductPhoto";
 
 export default class ProductController implements IProductController {
 
@@ -34,7 +35,8 @@ export default class ProductController implements IProductController {
     @inject(PRODUCT_TYPES.ICreateProduct) private createProduct: ICreateProduct,
     @inject(PRODUCT_TYPES.IProductMapper) private productMapper: IProductMapper,
     @inject(PRODUCT_TYPES.IFindAllRandomized) private findAllRandomized: IFindAllRandomized,
-    @inject(PRODUCT_TYPES.IUpdatePhotos) private updatePhotos: IUpdatePhotos
+    @inject(PRODUCT_TYPES.IUpdatePhotos) private updatePhotos: IUpdatePhotos,
+    @inject(PRODUCT_TYPES.IDeleteProductPhoto) private deleteProductPhoto: IDeleteProductPhoto
   ) {}
 
   async updatePhotoController(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -112,10 +114,27 @@ export default class ProductController implements IProductController {
 
   async updateProductController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params;
-    const productData = req.body;
+    const files = req.files as Express.Multer.File[];
+
+    const productDataParsed = {
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price ? parseFloat(req.body.price) : undefined,
+      stock: req.body.stock ? parseInt(req.body.stock, 10) : undefined,
+      sku: req.body.sku,
+      length: req.body.length,
+      width: req.body.width,
+      height: req.body.height,
+      weight: req.body.weight ? parseFloat(req.body.weight) : undefined,
+      categoryId: req.body.categoryId,
+      isPaused: req.body.isPaused === "true",
+      material: (() => {
+          return typeof req.body.material === "string" ? JSON.parse(req.body.material) : req.body.material;
+      })()
+    } as ProductDTO
 
     try {
-      const updatedProduct = await this.updateProduct.execute(id, productData);
+      const updatedProduct = await this.updateProduct.execute(id, productDataParsed, files);
       if (updatedProduct) {
         const productDto = this.productMapper.productToDTO(updatedProduct as Product)
         res.status(200).json(productDto);
@@ -278,6 +297,18 @@ export default class ProductController implements IProductController {
           statusCode: 500
         });
       }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteProductPhotoController(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { productId, photoId } = req.params;
+    const user = req.user as UserJwtPayload;
+
+    try {
+      await this.deleteProductPhoto.execute(user.id, `${productId}/${photoId}`);
+      res.status(200).json({ message: 'Foto eliminada correctamente' });
     } catch (error) {
       next(error);
     }

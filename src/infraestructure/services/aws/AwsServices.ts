@@ -37,15 +37,34 @@ export default class AwsServices implements IAwsServices {
 
     async deleteFile(fileKey: string): Promise<void> {
       try {
+        console.log(`Intentando eliminar archivo con key: ${fileKey}`);
 
         const command = new DeleteObjectCommand({
           Bucket: this.bucketName,
           Key: fileKey,
         });
 
-        await s3Client.send(command);
+        const response = await s3Client.send(command);
+
+        if (response.$metadata.httpStatusCode !== 204) {
+          console.error(`Error al eliminar archivo. Status code: ${response.$metadata.httpStatusCode}`);
+          throw Boom.internal(`Error al eliminar archivo. Status code: ${response.$metadata.httpStatusCode}`);
+        }
+
+        console.log(`Archivo eliminado exitosamente: ${fileKey}`);
       } catch (error: any) {
-        throw Boom.internal(`Error to delete file`);
+        console.error('Error detallado al eliminar archivo:', {
+          message: error.message,
+          code: error.code,
+          requestId: error.$metadata?.requestId,
+          fileKey
+        });
+
+        if (error.code === 'NoSuchKey') {
+          throw Boom.notFound(`El archivo no existe en S3: ${fileKey}`);
+        }
+
+        throw Boom.internal(`Error al eliminar archivo: ${error.message}`);
       }
     }
 
