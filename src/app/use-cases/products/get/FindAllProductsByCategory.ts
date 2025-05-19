@@ -17,21 +17,20 @@ export default class FindAllProductsByCategory implements IFindAllProductByCateg
   ) {}
 
   async execute(categoryId: string, limit?: number, offset?: number,  maxPrice?: number, minPrice?: number): Promise<IPagination<ProductWithUserAndCategoryDTO[]> | null> {
-    /*try {*/
+    try {
       const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
 
       const maxPriceValue = maxPrice === undefined || maxPrice === null || isNaN(maxPrice) ? 999999999 : maxPrice;
       const minPriceValue = minPrice === undefined || minPrice === null || isNaN(minPrice) ? 0 : minPrice;
 
       const products = await this.iProductRepository.findAllByCategory(categoryId, validatedLimit, validatedOffset, maxPriceValue, minPriceValue)
-      console.log(products)
       if (!products || products.length === 0) {
         return { data: [], limit: validatedLimit, offset: validatedOffset };
       }
 
       const dataWPagination = PaginationMapper.paginationResponseMapper(products, validatedLimit, validatedOffset)
       return dataWPagination
-    /*} catch (error) {
+    } catch (error) {
       if (error instanceof BoomError) {
         throw error;
       }
@@ -40,6 +39,6 @@ export default class FindAllProductsByCategory implements IFindAllProductByCateg
         type: ErrorType.INTERNAL_ERROR,
         statusCode: 500
       })
-    }*/
+    }
   }
 }

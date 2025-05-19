@@ -201,6 +201,7 @@ export default class ProductRepository implements IProductRepository {
         return false
       }
     } catch (error: any) {
+      console.log(id)
       throw new Error(error)
     }
   }

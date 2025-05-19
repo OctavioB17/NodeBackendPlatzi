@@ -13,10 +13,9 @@ export default class DeleteProduct implements IDeleteProduct {
     @inject(PRODUCT_TYPES.IDeleteProductFolder) private deleteProductFolder: IDeleteProductFolder
   ) {}
 
-  async execute(userId: string, productIds: string[]): Promise<boolean> {
+  async execute(userId: string, productId: string): Promise<boolean> {
     try {
-      for (const productId of productIds) {
-        const result = await this.productRepository.deleteProduct(productId);
+      const result = await this.productRepository.deleteProduct(productId);
 
         if (!result) {
           throw new BoomError({
@@ -26,8 +25,7 @@ export default class DeleteProduct implements IDeleteProduct {
           });
         }
 
-        await this.deleteProductFolder.execute(userId, productId);
-      }
+      await this.deleteProductFolder.execute(userId, productId);
 
       return true;
     } catch (error) {

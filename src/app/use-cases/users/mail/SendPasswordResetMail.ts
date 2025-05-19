@@ -39,7 +39,6 @@
 
         return !!mailSend
       } catch (error) {
-        console.log(error)
         if (error instanceof BoomError) {
           throw error;
         }
