@@ -6,7 +6,6 @@ import IProductRepository from "../../../../domain/repositories/IProductsReposit
 import { validatePaginationParams } from "../../../../infraestructure/services/utils/ValidatePaginationParams";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import Product from "../../../../domain/entities/Products";
 import ProductDTO from "../../../../infraestructure/dtos/product/ProductDTO";
 import IProductMapper from "../../../../infraestructure/mappers/interfaces/IProductMapper";
 

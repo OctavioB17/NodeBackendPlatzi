@@ -159,10 +159,10 @@ export default class ProductController implements IProductController {
   async findAllByUserIdController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { limit, offset, max_price, min_price } = req.query;
     const { id } = req.params;
-    const user = req.user as UserJwtPayload;
+    const user = req.user as UserJwtPayload | undefined;
 
     try {
-      const showPaused = user && user.id === id;
+      const showPaused = user?.id === id;
 
       const products = await this.findAllProductsByUser.execute(
         id,
