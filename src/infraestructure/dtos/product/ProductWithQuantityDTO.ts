@@ -14,10 +14,6 @@ export class ProductWithQuantityDTO {
   @Expose()
   description!: string;
 
-  @IsString()
-  @Expose()
-  thumbnailUrl!: string;
-
   @IsArray()
   @Expose()
   imageGallery!: string[]

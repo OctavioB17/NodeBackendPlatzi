@@ -4,7 +4,6 @@ export default class Product implements IProductEntity {
     private id: string;
     private name: string;
     private description: string | null;
-    private thumbnailUrl: string;
     private imageGallery: string[];
     private sku: string | null;
     private length: string;
@@ -22,7 +21,6 @@ export default class Product implements IProductEntity {
       id: string,
       name: string,
       description: string | null,
-      thumbnailUrl: string,
       imageGallery: string[],
       sku: string | null,
       length: string,
@@ -39,7 +37,6 @@ export default class Product implements IProductEntity {
       this.id = id;
       this.name = name;
       this.description = description;
-      this.thumbnailUrl = thumbnailUrl;
       this.imageGallery = imageGallery;
       this.sku = sku;
       this.length = length;
@@ -65,10 +62,6 @@ export default class Product implements IProductEntity {
 
       public getDescription(): string | null {
           return this.description;
-      }
-
-      public getThumbnailUrl(): string {
-          return this.thumbnailUrl;
       }
 
       public getImageGallery(): string[] {
@@ -127,10 +120,6 @@ export default class Product implements IProductEntity {
 
       public setDescription(description: string | null): void {
           this.description = description;
-      }
-
-      public setThumbnailUrl(thumbnailUrl: string): void {
-          this.thumbnailUrl = thumbnailUrl;
       }
 
       public setImageGallery(imageGallery: string[]): void {

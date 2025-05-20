@@ -15,9 +15,6 @@ export default class ProductModel extends Model<ProductModel> implements IProduc
   @Column({ type: DataType.TEXT, allowNull: false })
   declare description: string | null;
 
-  @Column({ type: DataType.STRING, allowNull: false })
-  declare thumbnailUrl: string;
-
   @Column({ type: DataType.ARRAY(DataType.STRING), allowNull: false })
   declare imageGallery: string[]
 
