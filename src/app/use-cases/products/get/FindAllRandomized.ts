@@ -20,14 +20,14 @@ export default class FindAllRandomized implements IFindAllRandomized {
     this.productMapper = productMapper
   }
 
-  async execute(limit?: number, offset?: number,  maxPrice?: number, minPrice?: number): Promise<ProductDTO[] | null> {
+  async execute(limit?: number, offset?: number, maxPrice?: number, minPrice?: number, showPaused?: boolean): Promise<ProductDTO[] | null> {
     try {
       const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
 
       const maxPriceValue = maxPrice === undefined || maxPrice === null || isNaN(maxPrice) ? 999999999 : maxPrice;
       const minPriceValue = minPrice === undefined || minPrice === null || isNaN(minPrice) ? 0 : minPrice;
 
-      const productsRandomized = await this.productRepository.findAllRandomized(validatedLimit, validatedOffset, maxPriceValue, minPriceValue)
+      const productsRandomized = await this.productRepository.findAllRandomized(validatedLimit, validatedOffset, maxPriceValue, minPriceValue, showPaused)
       if (!productsRandomized) {
         throw new BoomError({
           message: `Products not Found`,
@@ -35,7 +35,6 @@ export default class FindAllRandomized implements IFindAllRandomized {
           statusCode: 404
         })
       }
-
 
       return this.productMapper.productToDTOList(productsRandomized)
     } catch (error) {
@@ -49,5 +48,4 @@ export default class FindAllRandomized implements IFindAllRandomized {
       })
     }
   }
-
 }

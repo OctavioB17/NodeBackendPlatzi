@@ -58,7 +58,13 @@ export default class ProductController implements IProductController {
     const { limit, offset, max_price, min_price } = req.query;
 
     try {
-      const findRandomized = await this.findAllRandomized.execute(Number(limit), Number(offset), Number(max_price), Number(min_price))
+      const findRandomized = await this.findAllRandomized.execute(
+        Number(limit),
+        Number(offset),
+        Number(max_price),
+        Number(min_price),
+        false
+      )
       if (findRandomized) {
         res.status(200).json(findRandomized);
       } else {
@@ -151,15 +157,26 @@ export default class ProductController implements IProductController {
   }
 
   async findAllByUserIdController(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { id } = req.params;
     const { limit, offset, max_price, min_price } = req.query;
+    const { id } = req.params;
+    const user = req.user as UserJwtPayload;
+
     try {
-      const products = await this.findAllProductsByUser.execute(id, Number(limit), Number(offset), Number(max_price), Number(min_price));
-      if (products && products.data.length > 0) {
+      const showPaused = user && user.id === id;
+
+      const products = await this.findAllProductsByUser.execute(
+        id,
+        Number(limit),
+        Number(offset),
+        Number(max_price),
+        Number(min_price),
+        showPaused
+      );
+      if (products) {
         res.status(200).json(products);
       } else {
         throw new BoomError({
-          message: 'No products found for this user',
+          message: 'Products not found',
           type: ErrorType.NOT_FOUND,
           statusCode: 404
         });
@@ -284,7 +301,7 @@ export default class ProductController implements IProductController {
 
 
   async deleteProductController(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { ids } = req.body;
+    const { ids } = req.body as { ids: string[] };
     const user = req.user as UserJwtPayload;
     try {
       const isDeleted = await this.deleteProduct.execute(user.id, ids);

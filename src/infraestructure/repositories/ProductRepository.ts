@@ -96,7 +96,7 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async findAllByUserId(userId: string, limit: number, offset: number, maxPrice: number, minPrice: number): Promise<ProductWithUserAndCategoryDTO[] | null> {
+  async findAllByUserId(userId: string, limit: number, offset: number, maxPrice: number, minPrice: number, showPaused: boolean = false): Promise<ProductWithUserAndCategoryDTO[] | null> {
     try {
       const products = await ProductModel.findAll({
         where: {
@@ -104,7 +104,8 @@ export default class ProductRepository implements IProductRepository {
           price: {
             [Op.gte]: minPrice,
             [Op.lte]: maxPrice
-          }
+          },
+          ...(showPaused ? {} : { isPaused: false })
         },
         include: [
           { model: UserModel, as: 'user' },
@@ -124,14 +125,15 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async findAllRandomized(limit: number, offset: number, maxPrice: number, minPrice: number): Promise<Product[] | null> {
+  async findAllRandomized(limit: number, offset: number, maxPrice: number, minPrice: number, showPaused: boolean = false): Promise<Product[] | null> {
     try {
       const products: ProductModel[] = await ProductModel.findAll({
         where: {
           price: {
             [Op.gte]: minPrice,
             [Op.lte]: maxPrice
-          }
+          },
+          ...(showPaused ? {} : { isPaused: false })
         },
         order: Sequelize.literal('RANDOM()'),
         limit: limit,

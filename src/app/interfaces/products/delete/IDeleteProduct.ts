@@ -1,3 +1,3 @@
 export default interface IDeleteProduct {
-  execute(userId: string, productId: string): Promise<boolean>;
+  execute(userId: string, ids: string[]): Promise<boolean>;
 }
