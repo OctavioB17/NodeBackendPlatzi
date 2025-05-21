@@ -6,13 +6,13 @@ export default interface IProductRepository {
   createProduct(product: Product): Promise<boolean | null>
   findById(id: string): Promise<ProductWithUserAndCategoryDTO | null>
   findByIdInSystem(id: string): Promise<ProductModel | null>
-  findByName(email: string, limit: number, offset: number, maxPrice: number, minPrice: number): Promise<ProductWithUserAndCategoryDTO[] | null>;
-  findAllByUserId(userId: string, limit: number, offset: number, maxPrice: number, minPrice: number, showPaused?: boolean): Promise<ProductWithUserAndCategoryDTO[] | null>;
+  findByName(email: string, limit: number, offset: number, maxPrice: number, minPrice: number, categoryId?: string): Promise<ProductWithUserAndCategoryDTO[] | null>;
+  findAllByUserId(userId: string, limit: number, offset: number, maxPrice: number, minPrice: number, showPaused?: boolean, categoryId?: string): Promise<ProductWithUserAndCategoryDTO[] | null>;
   findAllByCategory(categoryId: string, limit: number, offset: number, maxPrice: number, minPrice: number): Promise<ProductWithUserAndCategoryDTO[] | null>;
   updateProduct(productId: string, productData: Partial<Product>): Promise<Product | null>;
   deleteProduct(id: string): Promise<boolean | null>;
   updateStock(id: string, stock: number): Promise<Product | null>;
   updatePhotos(id: string, photos: string[]): Promise<Product | null>;
   toggleProductPause(id: string): Promise<Product | null>;
-  findAllRandomized(limit: number, offset: number, maxPrice: number, minPrice: number, showPaused?: boolean): Promise<Product[] | null>
+  findAllRandomized(limit: number, offset: number, maxPrice: number, minPrice: number, showPaused?: boolean, categoryId?: string): Promise<Product[] | null>
 }

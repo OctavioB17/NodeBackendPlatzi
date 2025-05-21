@@ -55,7 +55,7 @@ export default class ProductController implements IProductController {
   }
 
   async findAllRandomizedController(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { limit, offset, max_price, min_price } = req.query;
+    const { limit, offset, max_price, min_price, categoryId } = req.query;
 
     try {
       const findRandomized = await this.findAllRandomized.execute(
@@ -63,7 +63,8 @@ export default class ProductController implements IProductController {
         Number(offset),
         Number(max_price),
         Number(min_price),
-        false
+        false,
+        categoryId as string
       )
       if (findRandomized) {
         res.status(200).json(findRandomized);
@@ -157,7 +158,7 @@ export default class ProductController implements IProductController {
   }
 
   async findAllByUserIdController(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { limit, offset, max_price, min_price } = req.query;
+    const { limit, offset, max_price, min_price, categoryId } = req.query;
     const { id } = req.params;
     const user = req.user as UserJwtPayload | undefined;
 
@@ -170,7 +171,8 @@ export default class ProductController implements IProductController {
         Number(offset),
         Number(max_price),
         Number(min_price),
-        showPaused
+        showPaused,
+        categoryId as string
       );
       if (products) {
         res.status(200).json(products);
@@ -206,9 +208,16 @@ export default class ProductController implements IProductController {
 
   async findByNameController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { name } = req.params;
-    const { limit, offset, max_price, min_price } = req.query
+    const { limit, offset, max_price, min_price, categoryId } = req.query
     try {
-      const product = await this.findProductByName.execute(name, Number(limit), Number(offset), Number(max_price), Number(min_price));
+      const product = await this.findProductByName.execute(
+        name,
+        Number(limit),
+        Number(offset),
+        Number(max_price),
+        Number(min_price),
+        categoryId as string
+      );
       if (product) {
         res.status(200).json(product);
       } else {

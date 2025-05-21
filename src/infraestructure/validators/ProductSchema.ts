@@ -3,6 +3,7 @@ import { limitQuery, offsetQuery } from "./QuerySchema";
 
 const maxPrice = Joi.number().positive().max(999999999).min(1).default(999999999)
 const minPrice = Joi.number().positive().min(0).default(0)
+const categoryId = Joi.string().uuid()
 
 const image = Joi.object({
   mimetype: Joi.string().valid('image/png', 'image/jpeg', 'image/jpg', 'image/webp').required(),
@@ -63,5 +64,6 @@ export const getProductWPaginationAndPriceOperators = Joi.object({
   limit: limitQuery.optional(),
   offset: offsetQuery.optional(),
   max_price: maxPrice.optional(),
-  min_price: minPrice.optional()
+  min_price: minPrice.optional(),
+  categoryId: categoryId.optional()
 })

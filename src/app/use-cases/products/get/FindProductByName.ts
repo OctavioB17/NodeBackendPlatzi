@@ -1,30 +1,28 @@
 import { inject, injectable } from "inversify";
-import {PRODUCT_TYPES} from "../../../../types";
+import { PRODUCT_TYPES } from "../../../../types";
+import IProductRepository from "../../../../domain/repositories/IProductsRepository";
+import IFindProductByName from "../../../interfaces/products/get/IFindProductByName";
+import { IPagination } from "../../../../domain/interfaces/IPagination";
+import ProductWithUserAndCategoryDTO from "../../../../infraestructure/dtos/product/ProductWithUserAndCategoryDTO";
+import { validatePaginationParams } from "../../../../infraestructure/services/utils/ValidatePaginationParams";
 import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
-import IProductRepository from "../../../../domain/repositories/IProductsRepository";
-import IFindAllProductsByUser from "../../../interfaces/products/get/IFindAllProductsByUser";
-import ProductWithUserAndCategoryDTO from "../../../../infraestructure/dtos/product/ProductWithUserAndCategoryDTO";
-import { IPagination } from "../../../../domain/interfaces/IPagination";
 import PaginationMapper from "../../../../infraestructure/mappers/PaginationMapper";
-import { validatePaginationParams } from "../../../../infraestructure/services/utils/ValidatePaginationParams";
-
 
 @injectable()
-export default class FindAllProductsByUser implements IFindAllProductsByUser {
+export default class FindProductByName implements IFindProductByName {
   constructor(
-    @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
+    @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository
   ) {}
 
-  async execute(userId: string, limit?: number, offset?: number,  maxPrice?: number, minPrice?: number, showPaused?: boolean, categoryId?: string): Promise<IPagination<ProductWithUserAndCategoryDTO[]>> {
-
+  async execute(name: string, limit?: number, offset?: number, maxPrice?: number, minPrice?: number, categoryId?: string): Promise<IPagination<ProductWithUserAndCategoryDTO[]>> {
     try {
       const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
 
       const maxPriceValue = maxPrice === undefined || maxPrice === null || isNaN(maxPrice) ? 999999999 : maxPrice;
       const minPriceValue = minPrice === undefined || minPrice === null || isNaN(minPrice) ? 0 : minPrice;
 
-      const products = await this.iProductRepository.findAllByUserId(userId, validatedLimit, validatedOffset, maxPriceValue, minPriceValue, showPaused, categoryId) || []
+      const products = await this.iProductRepository.findByName(name, validatedLimit, validatedOffset, maxPriceValue, minPriceValue, categoryId) || []
       if (!products) {
         throw new BoomError({
           message: `Products not found`,
@@ -40,7 +38,7 @@ export default class FindAllProductsByUser implements IFindAllProductsByUser {
         throw error;
       }
       throw new BoomError({
-        message: `Error finding user`,
+        message: `Error finding product`,
         type: ErrorType.INTERNAL_ERROR,
         statusCode: 500
       })
