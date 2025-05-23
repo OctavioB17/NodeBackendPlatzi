@@ -8,6 +8,8 @@ import { BoomError } from "../../../../domain/entities/DomainError";
 import { ErrorType } from "../../../../domain/interfaces/Error";
 import ProductDTO from "../../../../infraestructure/dtos/product/ProductDTO";
 import IProductMapper from "../../../../infraestructure/mappers/interfaces/IProductMapper";
+import PaginationMapper from "../../../../infraestructure/mappers/PaginationMapper";
+import { IPagination } from "../../../../domain/interfaces/IPagination";
 
 @injectable()
 export default class FindAllRandomized implements IFindAllRandomized {
@@ -19,14 +21,14 @@ export default class FindAllRandomized implements IFindAllRandomized {
     this.productMapper = productMapper
   }
 
-  async execute(limit?: number, offset?: number, maxPrice?: number, minPrice?: number, showPaused?: boolean, categoryId?: string): Promise<ProductDTO[] | null> {
+  async execute(limit?: number, offset?: number, maxPrice?: number, minPrice?: number, showPaused?: boolean, categoryId?: string, nameOrder?: string, priceOrder?: string): Promise<IPagination<ProductDTO[]> | null> {
     try {
       const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
 
       const maxPriceValue = maxPrice === undefined || maxPrice === null || isNaN(maxPrice) ? 999999999 : maxPrice;
       const minPriceValue = minPrice === undefined || minPrice === null || isNaN(minPrice) ? 0 : minPrice;
 
-      const productsRandomized = await this.productRepository.findAllRandomized(validatedLimit, validatedOffset, maxPriceValue, minPriceValue, showPaused, categoryId)
+      const productsRandomized = await this.productRepository.findAllRandomized(validatedLimit, validatedOffset, maxPriceValue, minPriceValue, showPaused, categoryId, nameOrder, priceOrder)
       if (!productsRandomized) {
         throw new BoomError({
           message: `Products not Found`,
@@ -35,7 +37,9 @@ export default class FindAllRandomized implements IFindAllRandomized {
         })
       }
 
-      return this.productMapper.productToDTOList(productsRandomized)
+      const products = this.productMapper.productToDTOList(productsRandomized)
+      const dataWPagination = PaginationMapper.paginationResponseMapper(products, validatedLimit, validatedOffset)
+      return dataWPagination
     } catch (error) {
       if (error instanceof BoomError) {
         throw error;

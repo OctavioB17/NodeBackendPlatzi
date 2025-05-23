@@ -1,14 +1,9 @@
 import Joi from "joi";
 import { limitQuery, offsetQuery } from "./QuerySchema";
 
-const maxPrice = Joi.number().positive().max(999999999).min(1).default(999999999)
-const minPrice = Joi.number().positive().min(0).default(0)
+const maxPrice = Joi.number().max(999999999).min(0).default(999999999)
+const minPrice = Joi.number().min(0).default(0)
 const categoryId = Joi.string().uuid()
-
-const image = Joi.object({
-  mimetype: Joi.string().valid('image/png', 'image/jpeg', 'image/jpg', 'image/webp').required(),
-  size: Joi.number().max(30000000).required(),
-}).unknown()
 
 export const createProductSchema = Joi.object({
   name: Joi.string().min(15).max(35).required(),
@@ -63,7 +58,11 @@ export const updatePhotosSchema = Joi.object({
 export const getProductWPaginationAndPriceOperators = Joi.object({
   limit: limitQuery.optional(),
   offset: offsetQuery.optional(),
-  max_price: maxPrice.optional(),
-  min_price: minPrice.optional(),
-  categoryId: categoryId.optional()
+  maxPrice: maxPrice.optional(),
+  minPrice: minPrice.optional(),
+  categoryId: categoryId.optional(),
+  createdAt: Joi.string().optional(),
+  updatedAt: Joi.string().optional(),
+  nameOrder: Joi.string().optional(),
+  priceOrder: Joi.string().optional(),
 })

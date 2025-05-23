@@ -8,6 +8,7 @@ import ProductWithUserAndCategoryDTO from "../../../../infraestructure/dtos/prod
 import { IPagination } from "../../../../domain/interfaces/IPagination";
 import PaginationMapper from "../../../../infraestructure/mappers/PaginationMapper";
 import { validatePaginationParams } from "../../../../infraestructure/services/utils/ValidatePaginationParams";
+import { OrderType } from "../../../../domain/interfaces/OrderType";
 
 
 @injectable()
@@ -16,34 +17,46 @@ export default class FindAllProductsByUser implements IFindAllProductsByUser {
     @inject(PRODUCT_TYPES.IProductRepository) private iProductRepository: IProductRepository,
   ) {}
 
-  async execute(userId: string, limit?: number, offset?: number,  maxPrice?: number, minPrice?: number, showPaused?: boolean, categoryId?: string): Promise<IPagination<ProductWithUserAndCategoryDTO[]>> {
-
+  async execute(userId: string, limit: number, offset: number, maxPrice: number, minPrice: number, showPaused: boolean, categoryId?: string, createdAt?: string, nameOrder?: string, priceOrder?: string): Promise<IPagination<ProductWithUserAndCategoryDTO[]> | null> {
     try {
+
       const { limit: validatedLimit, offset: validatedOffset } = validatePaginationParams(limit, offset);
 
-      const maxPriceValue = maxPrice === undefined || maxPrice === null || isNaN(maxPrice) ? 999999999 : maxPrice;
-      const minPriceValue = minPrice === undefined || minPrice === null || isNaN(minPrice) ? 0 : minPrice;
+      const maxPriceValue = maxPrice && !isNaN(maxPrice) ? maxPrice : 999999999;
+      const minPriceValue = minPrice && !isNaN(minPrice) ? minPrice : 0;
 
-      const products = await this.iProductRepository.findAllByUserId(userId, validatedLimit, validatedOffset, maxPriceValue, minPriceValue, showPaused, categoryId) || []
+      const products = await this.iProductRepository.findAllByUserId(
+        userId,
+        validatedLimit,
+        validatedOffset,
+        maxPriceValue,
+        minPriceValue,
+        showPaused,
+        categoryId,
+        createdAt as OrderType,
+        nameOrder as OrderType,
+        priceOrder as OrderType
+      );
+
       if (!products) {
         throw new BoomError({
-          message: `Products not found`,
+          message: 'Products not found',
           type: ErrorType.NOT_FOUND,
           statusCode: 404
-        })
+        });
       }
 
-      const dataWPagination = PaginationMapper.paginationResponseMapper(products, validatedLimit, validatedOffset)
-      return dataWPagination
+      return PaginationMapper.paginationResponseMapper(products, validatedLimit, validatedOffset);
     } catch (error) {
+      console.log('Use Case - Error:', error);
       if (error instanceof BoomError) {
         throw error;
       }
       throw new BoomError({
-        message: `Error finding user`,
+        message: 'Error finding products',
         type: ErrorType.INTERNAL_ERROR,
         statusCode: 500
-      })
+      });
     }
   }
 }

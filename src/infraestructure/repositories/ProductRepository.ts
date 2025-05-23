@@ -8,6 +8,7 @@ import IProductMapper from "../mappers/interfaces/IProductMapper";
 import { inject, injectable } from "inversify";
 import Product from "../../domain/entities/Products";
 import ProductWithUserAndCategoryDTO from "../dtos/product/ProductWithUserAndCategoryDTO";
+import { OrderType } from "../../domain/interfaces/OrderType";
 
 @injectable()
 export default class ProductRepository implements IProductRepository {
@@ -18,6 +19,24 @@ export default class ProductRepository implements IProductRepository {
     this.productMapper = productMapper
   }
 
+  private getOrderClause(orderType?: string): any[] {
+    switch (orderType) {
+      case OrderType.PRICE_ASC:
+        return [['price', 'ASC']];
+      case OrderType.PRICE_DESC:
+        return [['price', 'DESC']];
+      case OrderType.NEWEST:
+        return [['createdAt', 'DESC']];
+      case OrderType.OLDEST:
+        return [['createdAt', 'ASC']];
+      case OrderType.ALPHABETICAL_ASC:
+        return [['name', 'ASC']];
+      case OrderType.ALPHABETICAL_DESC:
+        return [['name', 'DESC']];
+      default:
+        return [['createdAt', 'DESC']];
+    }
+  }
 
   async createProduct(product: Product): Promise<boolean> {
     try {
@@ -66,120 +85,155 @@ export default class ProductRepository implements IProductRepository {
   }
 
 
-  async findByName(name: string, limit: number, offset: number, maxPrice?: number, minPrice?: number, categoryId?: string): Promise<ProductWithUserAndCategoryDTO[] | null> {
+  async findByName(name: string, limit: number, offset: number, maxPrice?: number, minPrice?: number, categoryId?: string, nameOrder?: string, priceOrder?: string, createdAt?: string): Promise<ProductWithUserAndCategoryDTO[] | null> {
     try {
-      const products = await ProductModel.findAll({
-        where: {
-          name: {
-            [Op.iLike]: `%${name}%`,
-          },
-          price: {
-            [Op.gte]: minPrice,
-            [Op.lte]: maxPrice
-          },
-          ...(categoryId ? { categoryId } : {})
+      const whereClause: any = {
+        name: {
+          [Op.iLike]: `%${name}%`,
         },
+        price: {
+          [Op.between]: [minPrice || 0, maxPrice || 999999999]
+        }
+      };
+
+      if (categoryId) {
+        whereClause.categoryId = categoryId;
+      }
+
+      const orderClause = this.getOrderClause(nameOrder || createdAt || priceOrder);
+
+      const products = await ProductModel.findAll({
+        where: whereClause,
         include: [
           { model: UserModel, as: 'user' },
           { model: CategoriesModel, as: 'categories' }
         ],
-        limit: limit,
-        offset: offset
-      })
-      if (products && products.length > 0) {
-        const productWithUserAndCategoryDTO = this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products)
-        return productWithUserAndCategoryDTO
-      } else {
-        return null
-      }
-    } catch (error: any) {
-      throw new Error(error)
-    }
-  }
-
-  async findAllByUserId(userId: string, limit: number, offset: number, maxPrice: number, minPrice: number, showPaused: boolean = false, categoryId?: string): Promise<ProductWithUserAndCategoryDTO[] | null> {
-    try {
-      const products = await ProductModel.findAll({
-        where: {
-          userId: userId,
-          price: {
-            [Op.gte]: minPrice,
-            [Op.lte]: maxPrice
-          },
-          ...(showPaused ? {} : { isPaused: false }),
-          ...(categoryId ? { categoryId } : {})
-        },
-        include: [
-          { model: UserModel, as: 'user' },
-          { model: CategoriesModel, as: 'categories' }
-        ],
-        limit: limit,
-        offset: offset
-      })
-      if (products && products.length > 0) {
-        const productWithUserAndCategoryDTO = this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products)
-        return productWithUserAndCategoryDTO
-      } else {
-        return null
-      }
-    } catch (error: any) {
-      throw new Error(error)
-    }
-  }
-
-  async findAllRandomized(limit: number, offset: number, maxPrice: number, minPrice: number, showPaused: boolean = false, categoryId?: string): Promise<Product[] | null> {
-    try {
-      const products: ProductModel[] = await ProductModel.findAll({
-        where: {
-          price: {
-            [Op.gte]: minPrice,
-            [Op.lte]: maxPrice
-          },
-          ...(showPaused ? {} : { isPaused: false }),
-          ...(categoryId ? { categoryId } : {})
-        },
-        order: Sequelize.literal('RANDOM()'),
-        limit: limit,
-        offset: offset
+        limit,
+        offset,
+        order: orderClause
       });
 
-      if (products.length > 0) {
-        const modelDatavalues = products.map(product => product.dataValues)
-        return this.productMapper.modelToProductList(modelDatavalues);
-      } else {
+      if (!products || products.length === 0) {
         return null;
       }
+
+      return this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products);
     } catch (error: any) {
       throw new Error(error);
     }
   }
 
-  async findAllByCategory(categoryId: string, limit: number, offset: number, maxPrice: number, minPrice: number): Promise<ProductWithUserAndCategoryDTO[] | null> {
+  async findAllByUserId(userId: string, limit: number, offset: number, maxPrice: number, minPrice: number, showPaused: boolean, categoryId?: string, createdAt?: string, nameOrder?: string, priceOrder?: string): Promise<ProductWithUserAndCategoryDTO[]> {
+    const whereClause: any = {
+      userId,
+      price: {
+        [Op.between]: [minPrice, maxPrice]
+      }
+    };
+
+    if (!showPaused) {
+      whereClause.isPaused = false;
+    }
+
+    if (categoryId) {
+      whereClause.categoryId = categoryId;
+    }
+
+    const orderClause = this.getOrderClause(nameOrder || createdAt || priceOrder);
+
+    const products = await ProductModel.findAll({
+      where: whereClause,
+      limit,
+      offset,
+      order: orderClause,
+      include: [
+        {
+          model: UserModel,
+          as: 'user',
+          attributes: { exclude: ['password'] }
+        },
+        {
+          model: CategoriesModel,
+          as: 'categories',
+          attributes: { exclude: ['createdAt', 'updatedAt'] }
+        }
+      ]
+    });
+
+    if (!products || products.length === 0) {
+      return [];
+    }
+
+    return this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products);
+  }
+
+  async findAllRandomized(limit: number, offset: number, maxPrice: number, minPrice: number, showPaused: boolean = false, categoryId?: string, nameOrder?: string, priceOrder?: string, createdAt?: string): Promise<Product[] | null> {
     try {
+      const whereClause: any = {
+        price: {
+          [Op.between]: [minPrice, maxPrice]
+        }
+      };
+
+      if (!showPaused) {
+        whereClause.isPaused = false;
+      }
+
+      if (categoryId) {
+        whereClause.categoryId = categoryId;
+      }
+
+      const orderClause = nameOrder || createdAt || priceOrder
+        ? this.getOrderClause(nameOrder || createdAt || priceOrder)
+        : Sequelize.literal('RANDOM()');
 
       const products = await ProductModel.findAll({
-        where: {
-          categoryId: categoryId,
-          price: {
-            [Op.gte]: minPrice,
-            [Op.lte]: maxPrice
-          }
-        },
+        where: whereClause,
+        limit,
+        offset,
+        order: orderClause
+      });
+
+      if (!products || products.length === 0) {
+        return null;
+      }
+
+      const modelDatavalues = products.map(product => product.dataValues);
+      return this.productMapper.modelToProductList(modelDatavalues);
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+
+  async findAllByCategory(categoryId: string, limit: number, offset: number, maxPrice: number, minPrice: number, nameOrder?: string, priceOrder?: string, createdAt?: string): Promise<ProductWithUserAndCategoryDTO[] | null> {
+    try {
+      const whereClause: any = {
+        categoryId,
+        price: {
+          [Op.between]: [minPrice, maxPrice]
+        }
+      };
+
+      const orderClause = this.getOrderClause(nameOrder || createdAt || priceOrder);
+
+      const products = await ProductModel.findAll({
+        where: whereClause,
         include: [
           { model: UserModel, as: 'user' },
           { model: CategoriesModel, as: 'categories' }
         ],
-        limit: limit,
-        offset: offset
-      })
-      if (products.length > 0) {
-        const productWithUserAndCategoryDTO = this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products)
-        return productWithUserAndCategoryDTO
-      } else {
-        return null
+        limit,
+        offset,
+        order: orderClause
+      });
+
+      if (!products || products.length === 0) {
+        return null;
       }
+
+      return this.productMapper.iProductWithUserAndCategoryToProductWithUserAndCategoryDTOList(products);
     } catch (error: any) {
-      throw new Error(error)
+      throw new Error(error);
     }
   }
 

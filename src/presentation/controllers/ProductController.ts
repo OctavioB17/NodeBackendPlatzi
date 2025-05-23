@@ -20,6 +20,7 @@ import IFindAllRandomized from "../../app/interfaces/products/get/IFindAllRandom
 import ProductDTO from "../../infraestructure/dtos/product/ProductDTO";
 import IUpdatePhotos from "../../app/interfaces/products/patch/IUpdatePhotos";
 import IDeleteProductPhoto from "../../app/interfaces/products/delete/IDeleteProductPhoto";
+import { OrderType } from "../../domain/interfaces/OrderType";
 
 export default class ProductController implements IProductController {
 
@@ -55,16 +56,19 @@ export default class ProductController implements IProductController {
   }
 
   async findAllRandomizedController(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { limit, offset, max_price, min_price, categoryId } = req.query;
+    const { limit, offset, maxPrice, minPrice, categoryId, nameOrder, priceOrder, createdAt } = req.query;
 
     try {
       const findRandomized = await this.findAllRandomized.execute(
         Number(limit),
         Number(offset),
-        Number(max_price),
-        Number(min_price),
+        Number(maxPrice),
+        Number(minPrice),
         false,
-        categoryId as string
+        categoryId as string,
+        nameOrder as OrderType,
+        priceOrder as OrderType,
+        createdAt as OrderType
       )
       if (findRandomized) {
         res.status(200).json(findRandomized);
@@ -158,7 +162,7 @@ export default class ProductController implements IProductController {
   }
 
   async findAllByUserIdController(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { limit, offset, max_price, min_price, categoryId } = req.query;
+    const { limit, offset, maxPrice, minPrice, categoryId, createdAt, nameOrder, priceOrder } = req.query;
     const { id } = req.params;
     const user = req.user as UserJwtPayload | undefined;
 
@@ -169,10 +173,13 @@ export default class ProductController implements IProductController {
         id,
         Number(limit),
         Number(offset),
-        Number(max_price),
-        Number(min_price),
-        showPaused,
-        categoryId as string
+        Number(maxPrice) || 999999999,
+        Number(minPrice) || 0,
+        showPaused || false,
+        categoryId as string,
+        createdAt as OrderType,
+        nameOrder as OrderType,
+        priceOrder as OrderType
       );
       if (products) {
         res.status(200).json(products);
@@ -208,15 +215,18 @@ export default class ProductController implements IProductController {
 
   async findByNameController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { name } = req.params;
-    const { limit, offset, max_price, min_price, categoryId } = req.query
+    const { limit, offset, maxPrice, minPrice, categoryId, nameOrder, priceOrder, createdAt } = req.query
     try {
       const product = await this.findProductByName.execute(
         name,
         Number(limit),
         Number(offset),
-        Number(max_price),
-        Number(min_price),
-        categoryId as string
+        Number(maxPrice),
+        Number(minPrice),
+        categoryId as string,
+        nameOrder as OrderType,
+        priceOrder as OrderType,
+        createdAt as OrderType
       );
       if (product) {
         res.status(200).json(product);
@@ -234,9 +244,18 @@ export default class ProductController implements IProductController {
 
   async findAllByCategoryController(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { id } = req.params;
-    const { limit, offset, max_price, min_price } = req.query
+    const { limit, offset, maxPrice, minPrice, nameOrder, priceOrder, createdAt } = req.query
     try {
-      const products = await this.findAllProductByCategory.execute(id, Number(limit), Number(offset), Number(max_price), Number(min_price));
+      const products = await this.findAllProductByCategory.execute(
+        id,
+        Number(limit),
+        Number(offset),
+        Number(maxPrice),
+        Number(minPrice),
+        nameOrder as OrderType,
+        priceOrder as OrderType,
+        createdAt as OrderType
+      );
       if (products && products.data.length > 0) {
         res.status(200).json(products);
       } else {
@@ -334,7 +353,7 @@ export default class ProductController implements IProductController {
 
     try {
       await this.deleteProductPhoto.execute(user.id, `${productId}/${photoId}`);
-      res.status(200).json({ message: 'Foto eliminada correctamente' });
+      res.status(200).json({ message: 'Photo deleted successfully' });
     } catch (error) {
       next(error);
     }
