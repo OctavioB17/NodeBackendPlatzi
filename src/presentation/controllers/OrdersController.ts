@@ -12,6 +12,7 @@ import { BoomError } from "../../domain/entities/DomainError";
 import { ErrorType } from "../../domain/interfaces/Error";
 import IAddProductsToOrder from "../../app/interfaces/orders/post/IAddProductsToOrder";
 import UserJwtPayload from "../../infraestructure/dtos/users/UserJwtPayloadDTO";
+import IFindAllOrders from "../../app/interfaces/orders/get/IFindAllOrders";
 
 export default class OrdersController implements IOrdersControllers {
 
@@ -22,7 +23,8 @@ export default class OrdersController implements IOrdersControllers {
     @inject(ORDER_TYPES.IFindOrderById) private findById: IFindOrderById,
     @inject(ORDER_TYPES.IUpdateOrder) private updateOrder: IUpdateOrder,
     @inject(ORDER_TYPES.IUpdateStatus) private updateStatus: IUpdateStatus,
-    @inject(ORDER_TYPES.IAddProductsToOrders) private addProductsToOrders: IAddProductsToOrder
+    @inject(ORDER_TYPES.IAddProductsToOrders) private addProductsToOrders: IAddProductsToOrder,
+    @inject(ORDER_TYPES.IFindAllOrders) private findAllOrders: IFindAllOrders
   ) {}
 
   async findUserOrdersController(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -41,6 +43,28 @@ export default class OrdersController implements IOrdersControllers {
       res.status(200).json(orders)
     } catch (error) {
       next(error)
+    }
+  }
+
+  async findAllOrdersController(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { limit = 10, offset = 0 } = req.query;
+      const orders = await this.findAllOrders.execute(Number(limit), Number(offset));
+
+      if (!orders) {
+        res.status(404).json({
+          status: 'error',
+          message: 'No se encontraron órdenes'
+        });
+        return;
+      }
+
+      res.status(200).json({
+        status: 'success',
+        data: orders
+      });
+    } catch (error) {
+      next(error);
     }
   }
 

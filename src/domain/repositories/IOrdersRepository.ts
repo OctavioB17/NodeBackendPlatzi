@@ -1,4 +1,3 @@
-import { Order } from "sequelize";
 import OrdersModel from "../../infraestructure/database/models/OrdersModel";
 import OrderHasProducts from "../entities/OrderHasProducts";
 import Orders from "../entities/Orders";
@@ -17,4 +16,5 @@ export default interface IOrdersRepository {
   updateStatus(orderId: string, status: statusTypes): Promise<string | null>
   deleteOrder(id: string): Promise<boolean | null>;
   findProductInOrder(orderId: string, productId: string): Promise<OrderHasProducts | null>
+  findAll(limit: number, offset: number): Promise<OrderWithUserAndProducts[] | null>;
 }

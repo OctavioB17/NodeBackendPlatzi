@@ -205,4 +205,36 @@ export default class OrderRepository implements IOrdersRepository {
       return null
     }
   }
+
+  async findAll(limit: number, offset: number): Promise<OrderWithUserAndProducts[] | null> {
+    try {
+      const orders = await OrdersModel.findAll({
+        include: [
+          { model: UserModel, as: 'user' },
+          { model: ProductModel, as: 'products' }
+        ],
+        limit,
+        offset,
+        order: [['createdAt', 'DESC']]
+      });
+
+      if (!orders || orders.length === 0) {
+        return null;
+      }
+
+      return this.ordersMapper.orderModelToEntityWithRelationsList(orders.map(order => order.dataValues) as OrderWithUserAndProductsModel[])
+    } catch (error) {
+      console.error('[OrderRepository] Error al obtener todas las órdenes:', error);
+      return null;
+    }
+  }
+
+  async count(): Promise<number> {
+    try {
+      return await OrdersModel.count();
+    } catch (error) {
+      console.error('[OrderRepository] Error al contar órdenes:', error);
+      return 0;
+    }
+  }
 }

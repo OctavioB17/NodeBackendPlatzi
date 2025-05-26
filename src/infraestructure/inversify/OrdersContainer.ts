@@ -45,6 +45,8 @@ import SpecificProductTaxCalculator from "../../app/use-cases/orders/SpecificPro
 import UuidGenerator from "../services/utils/UuidGenerator";
 import UpdateStock from "../../app/use-cases/products/patch/UpdateStock";
 import IUpdateStock from "../../app/interfaces/products/patch/IUpdateStock";
+import FindAllOrders from "../../app/use-cases/orders/get/FindAllOrders";
+import IFindAllOrders from "../../app/interfaces/orders/get/IFindAllOrders";
 
 const ordersContainer = new Container();
 
@@ -72,5 +74,6 @@ ordersContainer.bind<ICalculateTotalProductPrices>(ORDER_TYPES.ICalculateTotalPr
 ordersContainer.bind<IFindProductById>(PRODUCT_TYPES.IFindProductById).to(FindProductById)
 ordersContainer.bind<IProductRepository>(PRODUCT_TYPES.IProductRepository).to(ProductRepository)
 ordersContainer.bind<IUpdateStock>(PRODUCT_TYPES.IUpdateStock).to(UpdateStock)
+ordersContainer.bind<IFindAllOrders>(ORDER_TYPES.IFindAllOrders).to(FindAllOrders)
 
 export default ordersContainer

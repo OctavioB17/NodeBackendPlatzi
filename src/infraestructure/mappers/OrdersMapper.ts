@@ -10,10 +10,6 @@ import IUserMapper from "./interfaces/IUserMapper";
 import IProductMapper from "./interfaces/IProductMapper";
 import { inject } from "inversify";
 import { PRODUCT_TYPES, USER_TYPES } from "../../types";
-import ProductModel from "../database/models/ProductsModel";
-import UserModel from "../database/models/UserModel";
-import User from "../../domain/entities/Users";
-import Product from "../../domain/entities/Products";
 import { UserNoPassword } from "../../domain/interfaces/user/IUser";
 import { IProductWithQuantityDTO } from "../../domain/interfaces/products/IProductWithQuantityDTO";
 import { OrderWithUserAndProducts, OrderWithUserAndProductsModel } from "../../domain/interfaces/orders/IOrders";
@@ -45,9 +41,11 @@ export default class OrdersMapper implements IOrdersMapper {
       id: product.id,
       name: product.name,
       description: product.description ?? '',
-      imageUrl: product.imageUrl ?? '',
+      imageGallery: product.imageGallery ?? [],
       sku: product.sku ?? '',
-      dimensions: product.dimensions ?? null,
+      length: product.length ?? '',
+      width: product.width ?? '',
+      height: product.height ?? '',
       weight: product.weight ?? 0,
       price: product.price,
       stock: product.stock,

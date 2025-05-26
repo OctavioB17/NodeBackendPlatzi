@@ -20,5 +20,6 @@ router.post('/add-item/:id', passport.authenticate('jwt', { session: false }), c
 router.delete('/delete/:id', passport.authenticate('jwt', { session: false }), checkRoleMiddelware('USER'), validatorHandler(getOrderSchema, 'params'), (req, res, next) => ordersController.deleteOrderController(req, res, next));
 router.patch('/update/id/:id', passport.authenticate('jwt', { session: false }), checkRoleMiddelware('USER'), validatorHandler(updateOrderSchema, 'body'), (req, res, next) => ordersController.updateOrderController(req, res, next));
 router.patch('/update/status/:id', passport.authenticate('jwt', { session: false }), checkRoleMiddelware('USER'), validatorHandler(updateStatusOrderSchema, 'body'), (req, res, next) => ordersController.updateStatusController(req, res, next));
+router.get('/find/all', passport.authenticate('jwt', { session: false }), checkRoleMiddelware('MODERATOR'), validatorHandler(paginationSchema, 'query'), (req, res, next) => ordersController.findAllOrdersController(req, res, next));
 
 export default router;

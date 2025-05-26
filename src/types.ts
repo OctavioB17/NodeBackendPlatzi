@@ -1,4 +1,3 @@
-
 export const UTIL_TYPES = {
   IIdGenerator: Symbol.for('IIdGenerator'),
   IImageManipulation: Symbol.for('IImageManipulation'),
@@ -58,7 +57,7 @@ export const CATEGORY_TYPES = {
 }
 
 export const ORDER_TYPES = {
-  IOrdersMapper: Symbol.for('IOrderMapper'),
+  IOrdersMapper: Symbol.for('IOrdersMapper'),
   IOrdersRepository: Symbol.for('IOrdersRepository'),
   ICreateOrder: Symbol.for('ICreateOrder'),
   IFindOrderById: Symbol.for('IFindOrderById'),
@@ -75,7 +74,8 @@ export const ORDER_TYPES = {
   SpecificProductTaxCalculator: Symbol.for('SpecificProductTaxCalculator'),
   CalculateAllTaxes: Symbol.for('CalculateAllTaxes'),
   IAddTaxesObject: Symbol.for('IAddTaxesObject'),
-  ICalculateTotalProductPrices: Symbol.for('ICalculateTotalProductPrices')
+  ICalculateTotalProductPrices: Symbol.for('ICalculateTotalProductPrices'),
+  IFindAllOrders: Symbol.for('IFindAllOrders')
 }
 
 export const ENCRYPTION_TYPES = {

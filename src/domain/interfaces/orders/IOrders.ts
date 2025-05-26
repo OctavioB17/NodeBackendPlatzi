@@ -56,7 +56,7 @@ export interface OrderWithUserAndProducts {
     id: string
     name: string
     description: string
-    imageUrl: string
+    imageGallery: string[]
     sku: string
     length: string
     width: string

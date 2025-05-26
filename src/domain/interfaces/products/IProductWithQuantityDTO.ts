@@ -4,7 +4,7 @@ export interface IProductWithQuantityDTO {
   id: string;
   name: string;
   description: string;
-  imageUrl: string;
+  imageGallery: string[];
   sku: string;
   length: string
   width: string
