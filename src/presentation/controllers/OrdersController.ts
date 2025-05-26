@@ -54,15 +54,12 @@ export default class OrdersController implements IOrdersControllers {
       if (!orders) {
         res.status(404).json({
           status: 'error',
-          message: 'No se encontraron órdenes'
+          message: 'Orders not found'
         });
         return;
       }
 
-      res.status(200).json({
-        status: 'success',
-        data: orders
-      });
+      res.status(200).json(orders);
     } catch (error) {
       next(error);
     }
