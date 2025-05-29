@@ -22,8 +22,7 @@ export default class DeleteCategory implements IDeleteCategory {
       const products = await this.findProductBycategory.execute(categoryId, 1000, 0, Number.MAX_VALUE, 0);
       if (products && products.data && products.data.length > 0) {
         for (const product of products.data) {
-          console.log(product.id)
-          await this.deleteProduct.execute(product.userId, product.id);
+          await this.deleteProduct.execute(product.userId, [product.id]);
         }
       }
 

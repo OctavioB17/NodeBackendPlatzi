@@ -1,7 +1,7 @@
 import cors from 'cors';
 
 const corsOption = {
-  origin: 'http://localhost:5173',
+  origin: 'http://maria-pinina-front.s3-website-us-east-1.amazonaws.com',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: false,
 }

@@ -24,7 +24,6 @@ export default class UpdateProduct implements IUpdateProduct {
   async execute(productId: string, productData: Partial<ProductDTO>, files?: Express.Multer.File[]): Promise<Partial<Product> | null> {
     try {
       const currentProduct = await this.iProductRepository.findByIdInSystem(productId);
-      console.log('Producto actual:', currentProduct?.dataValues);
 
       if (!currentProduct) {
         throw new BoomError({
@@ -46,20 +45,14 @@ export default class UpdateProduct implements IUpdateProduct {
       }
 
       if (files && files.length > 0) {
-        console.log('Archivos recibidos:', files);
         const currentPhotos = currentProduct.dataValues.imageGallery || [];
-        console.log('Fotos actuales:', currentPhotos);
 
-        // Eliminar fotos actuales de S3
         await Promise.all(
           currentPhotos.map(photoUrl => {
-            console.log('Procesando URL:', photoUrl);
             if (!photoUrl) {
-              console.log('URL es null o undefined');
               return Promise.resolve();
             }
             const photoKey = photoUrl.split('/').pop() || '';
-            console.log('PhotoKey extraído:', photoKey);
             if (photoKey) {
               return this.deleteProductPhoto.execute(currentProduct.dataValues.userId, photoKey);
             }
@@ -67,7 +60,6 @@ export default class UpdateProduct implements IUpdateProduct {
           })
         );
 
-        // Subir nuevas fotos a S3
         const photos = await Promise.all(
           files.map(async file => {
             const fileName = `${uuidv4()}${path.extname(file.originalname)}`;
@@ -76,13 +68,11 @@ export default class UpdateProduct implements IUpdateProduct {
             return photoUrl;
           })
         );
-        console.log('Nuevas fotos a guardar:', photos);
         await this.iProductRepository.updatePhotos(productId, photos);
       }
 
       return result;
     } catch (error) {
-      console.log('Error completo:', error);
       if (error instanceof BoomError) {
         throw error;
       }

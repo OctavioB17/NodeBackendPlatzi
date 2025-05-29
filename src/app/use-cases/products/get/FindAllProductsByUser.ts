@@ -48,7 +48,6 @@ export default class FindAllProductsByUser implements IFindAllProductsByUser {
 
       return PaginationMapper.paginationResponseMapper(products, validatedLimit, validatedOffset);
     } catch (error) {
-      console.log('Use Case - Error:', error);
       if (error instanceof BoomError) {
         throw error;
       }

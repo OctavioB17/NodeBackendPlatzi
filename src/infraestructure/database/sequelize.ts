@@ -14,6 +14,7 @@ const URI = `postgres://${USER}:${PASSWORD}@${process.env.DB_HOST}:${process.env
 const sequelize = new Sequelize(URI, {
   dialect: 'postgres',
   models: [UserModel, ProductModel, CategoriesModel, OrdersModel, OrderHasProductsModel],
+  logging: false
 } as any);
 
 ProductModel.belongsTo(UserModel, {
