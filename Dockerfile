@@ -1,33 +1,20 @@
-# Construct
-FROM node:20-alpine AS builder
-
-WORKDIR /app
-
-# Copy files
-COPY package*.json ./
-COPY tsconfig.json ./
-
-# Install dependencies
-RUN npm ci
-
-# Copy source code
-COPY src/ ./src/
-
-# Compile TypeScript
-RUN npm run build
-
-# Production stage
+# Usar la imagen oficial de Node.js como base
 FROM node:20-alpine
 
+# Crear y establecer el directorio de trabajo
 WORKDIR /app
 
-# Copy necessary files from the build stage
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
+# Copiar el package.json y package-lock.json
 COPY package*.json ./
 
-# Expose port
+# Instalar las dependencias
+RUN npm install
+
+# Copiar el resto del código fuente al contenedor
+COPY . .
+
+# Exponer el puerto en el que corre la aplicación
 EXPOSE 3000
 
-# Command to start the application
-CMD ["node", "dist/index.js"]
+# Comando para iniciar la aplicación usando tsx
+CMD ["npx", "tsx", "src/index.ts"]

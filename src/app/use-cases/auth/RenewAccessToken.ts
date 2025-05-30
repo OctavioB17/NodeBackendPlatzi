@@ -27,7 +27,7 @@ export default class RenewAccessToken implements IRenewAccessToken {
       const userRefreshToken = await this.userRepository.getRefreshToken(payload.id);
       if (userRefreshToken !== refreshToken) {
         throw new BoomError({
-          message: 'Refresh token inválido',
+          message: 'Invalid refresh token',
           type: ErrorType.UNAUTHORIZED,
           statusCode: 401,
         });
@@ -37,8 +37,12 @@ export default class RenewAccessToken implements IRenewAccessToken {
 
       return newAccessToken;
     } catch (error) {
+      if (error instanceof BoomError) {
+        throw error;
+      }
+
       throw new BoomError({
-        message: 'Error al renovar el token',
+        message: 'Error renewing the token',
         type: ErrorType.INTERNAL_ERROR,
         statusCode: 500,
       });

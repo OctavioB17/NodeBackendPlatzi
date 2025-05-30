@@ -32,10 +32,10 @@ export default class DeleteUser implements IDeleteUser {
         });
       }
 
-      const products = await this.findAllProductsByUserId.execute(id);
+      const products = await this.findAllProductsByUserId.execute(id, 1000, 0, 999999999, 0, true);
       if (products && products.data.length > 0) {
         for (const product of products.data) {
-          await this.deleteProduct.execute(user.getId(), product.id);
+          await this.deleteProduct.execute(user.getId(), [product.id]);
         }
       }
 

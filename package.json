@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "bash start-dev.bash",
     "start": "nodemon --exec tsx ./src/Index.ts",
-    "build": "tsc",
+    "build": "tsc && copy .env dist\\",
     "migration:generate": "sequelize-cli migration:generate --name",
     "migration:run": "sequelize-cli db:migrate --debug",
     "migration:revert": "sequelize-cli db:migrate:undo",

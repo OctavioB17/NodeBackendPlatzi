@@ -35,7 +35,7 @@ export default class SendPasswordResetRequest implements ISendPasswordResetReque
           statusCode: 404
         })
       }
-      const token = this.jwtServices.signToken({ id: user.id, role: user.role as keyof UserRoles})
+      const token = this.jwtServices.signToken({ id: user.id, role: user.role as keyof UserRoles}, '6h')
       const emailSend = this.sendPassResetMail.execute(user, token)
 
       return !!emailSend

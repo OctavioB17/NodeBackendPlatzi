@@ -72,7 +72,6 @@ export default class CreateProduct implements ICreateProduct {
         id: productUuid,
         userId: userId,
         imageGallery: photosUpload,
-        thumbnailUrl: photoThumbnailUpload
       }
 
       const dtoToModel = await this.productMapper.dtoToProduct(newProduct)

@@ -20,13 +20,14 @@ export default class AuthController implements IAuthController {
   }
 
   async renewToken(req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { refreshToken } = req.body;
-
-    if (!refreshToken) {
-      res.status(401).json({ message: 'Refresh token no proporcionado' });
-    }
-
     try {
+
+      const { refreshToken } = req.body;
+
+      if (!refreshToken) {
+        res.status(401).json({ message: 'Refresh token is required' });
+      }
+
       const newAccessToken = await this.renewAccessToken.execute(refreshToken, '15m');
       res.status(200).json({ accessToken: newAccessToken });
     } catch (error) {
